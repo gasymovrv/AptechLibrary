@@ -17,13 +17,13 @@
                             </ul>
                         </div>
                     </li>
-                    <li><a href="flows/auth">Login</a></li>
+                    <li><a href="${contextPath}flows/auth">Login</a></li>
                 </ul>
             </div>
         </div>
         <nav id="mainmenu" class="mainmenu">
             <ul>
-                <li class="logo-wrapper"><a href="index.html"><img src="${contextPathToRes}img/mPurpose-logo.png" alt="Multipurpose Twitter Bootstrap Template"></a></li>
+                <li class="logo-wrapper"><a href="index.html"><img src="${contextPathToRes}img/logo2.png" alt="Изображение не найдено"></a></li>
                 <li>
                     <a href="index.html">Home</a>
                 </li>

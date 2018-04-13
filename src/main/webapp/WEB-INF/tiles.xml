@@ -13,13 +13,19 @@
         <put-attribute name="footer" value="/WEB-INF/views/footer.jsp"/>
     </definition>
 
-    <!-- Home Page -->
-    <definition name="home-page" extends="base-layout">
+    <!-- Home Page - books list -->
+    <definition name="home-page-list-books" extends="base-layout">
         <put-attribute name="title" value="Домашняя страница"/>
-        <put-attribute name="main" value="/WEB-INF/views/main.jsp"/>
+        <put-attribute name="main" value="/WEB-INF/views/books.jsp"/>
     </definition>
 
-    <!-- ContactUs Page -->
+    <!-- Home Page - one book -->
+    <definition name="home-page-one-book" extends="base-layout">
+        <put-attribute name="title" value="Информация о книге"/>
+        <put-attribute name="main" value="/WEB-INF/views/book.jsp"/>
+    </definition>
+
+    <!-- Login Page -->
     <definition name="auth-page" extends="base-layout">
         <put-attribute name="title" value="Авторизация"/>
         <put-attribute name="sidebar" value=""/>

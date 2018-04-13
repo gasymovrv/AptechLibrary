@@ -25,9 +25,21 @@ public class MainController {
 
     @RequestMapping(value = "home", method = RequestMethod.GET)
     public ModelAndView home() {
-        List<String> list = new ArrayList<String>(Arrays.asList("раз", "два", "три", "четыре"));
-        return new ModelAndView("home-page", "list", list);
+        return new ModelAndView("home-page-list-books");
     }
+
+    @RequestMapping(value = "info", method = RequestMethod.GET)
+    public ModelAndView info(@RequestParam(value = "bookId", required = false) String bookId) {
+        return new ModelAndView("home-page-one-book");
+    }
+
+
+
+
+
+
+
+
 
 
     @RequestMapping(value = "books", method = RequestMethod.GET)
