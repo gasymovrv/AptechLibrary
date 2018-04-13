@@ -6,4 +6,5 @@
 .idea
 *.iml
 target
-/db
+src/main/resources/db/dump(struct-and-data).sql
+src/test/
