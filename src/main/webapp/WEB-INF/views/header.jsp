@@ -23,22 +23,21 @@
         </div>
         <nav id="mainmenu" class="mainmenu">
             <ul>
-                <li class="logo-wrapper"><a href="index.html"><img src="${contextPathToRes}img/logo2.png" alt="Изображение не найдено"></a></li>
+                <li class="logo-wrapper"><a href="${contextPath}home"><img src="${contextPathToRes}img/logo2.png" alt="Изображение не найдено"></a></li>
                 <li>
-                    <a href="index.html">Home</a>
+                    <a href="${contextPath}home">Все книги</a>
                 </li>
                 <li>
-                    <a href="features.html">Features</a>
+                    <a href="${contextPath}home">Авторы</a>
                 </li>
                 <li class="has-submenu active">
-                    <a href="#">Pages +</a>
+                    <a href="#">Подробнее</a>
                     <div class="mainmenu-submenu">
                         <div class="mainmenu-submenu-inner">
                             <div>
                                 <h4>Homepage</h4>
                                 <ul>
-                                    <li><a href="index.html">Homepage (Sample 1)</a></li>
-                                    <li><a href="page-homepage-sample.html">Homepage (Sample 2)</a></li>
+                                    <li><a href="${contextPath}home">Homepage</a></li>
                                 </ul>
                                 <h4>Services & Pricing</h4>
                                 <ul>
@@ -100,7 +99,7 @@
                     </div><!-- /mainmenu-submenu -->
                 </li>
                 <li>
-                    <a href="credits.html">Credits</a>
+                    <a href="credits.html">О нас</a>
                 </li>
             </ul>
         </nav>
