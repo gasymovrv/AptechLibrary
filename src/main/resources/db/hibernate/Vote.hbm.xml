@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="ru.aptech.library.entities.Vote" table="vote" schema="aplib">
+        <id name="id">
+            <column name="id" sql-type="bigint(20)"/>
+        </id>
+        <property name="value">
+            <column name="value" sql-type="int(5)" not-null="true"/>
+        </property>
+        <property name="bookId">
+            <column name="book_id" sql-type="bigint(20)"/>
+        </property>
+        <property name="username">
+            <column name="username" sql-type="varchar(100)" length="100"/>
+        </property>
+    </class>
+</hibernate-mapping>
