@@ -7,7 +7,7 @@
             <div class="extras">
                 <ul>
                     <li class="shopping-cart-items"><i class="glyphicon glyphicon-shopping-cart icon-white"></i> <a href="page-shopping-cart.html"><b>3 книги</b></a></li>
-                    <li><i class="glyphicon glyphicon-user icon-white"></i> <a href="${contextPath}flows/auth">Регистрация</a></li>
+                    <li><i class="glyphicon glyphicon-user icon-white"></i> <a href="${contextPath}flows/auth">Авторизация</a></li>
                 </ul>
             </div>
         </div>

@@ -19,10 +19,26 @@
                 <div class="price">
                     $999.99
                 </div>
-                <!-- Add to Cart Button -->
+                <!-- Operations -->
                 <div class="actions">
-                    <a href="page-product-details.html" class="btn btn-small"><i
-                            class="icon-shopping-cart icon-white"></i> Add to Cart</a>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="В корзину"><i
+                                    class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
+
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Читать"><i
+                                    class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                        </div>
+                    </div>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="Изменить"><i
+                                    class="glyphicon glyphicon-pencil icon-white"></i></a>
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Удалить"><i
+                                    class="glyphicon glyphicon-trash icon-white"></i></a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <!-- End Product -->
@@ -43,10 +59,26 @@
                 <div class="price">
                     $999.99
                 </div>
-                <!-- Add to Cart Button -->
+                <!-- Operations -->
                 <div class="actions">
-                    <a href="page-product-details.html" class="btn btn-small"><i
-                            class="icon-shopping-cart icon-white"></i> Add to Cart</a>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="В корзину"><i
+                                    class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
+
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Читать"><i
+                                    class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                        </div>
+                    </div>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="Изменить"><i
+                                    class="glyphicon glyphicon-pencil icon-white"></i></a>
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Удалить"><i
+                                    class="glyphicon glyphicon-trash icon-white"></i></a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <!-- End Product -->
@@ -67,10 +99,26 @@
                 <div class="price">
                     $999.99
                 </div>
-                <!-- Add to Cart Button -->
+                <!-- Operations -->
                 <div class="actions">
-                    <a href="page-product-details.html" class="btn btn-small"><i
-                            class="icon-shopping-cart icon-white"></i> Add to Cart</a>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="В корзину"><i
+                                    class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
+
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Читать"><i
+                                    class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                        </div>
+                    </div>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="Изменить"><i
+                                    class="glyphicon glyphicon-pencil icon-white"></i></a>
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Удалить"><i
+                                    class="glyphicon glyphicon-trash icon-white"></i></a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <!-- End Product -->
@@ -91,108 +139,26 @@
                 <div class="price">
                     $999.99
                 </div>
-                <!-- Add to Cart Button -->
+                <!-- Operations -->
                 <div class="actions">
-                    <a href="page-product-details.html" class="btn btn-small"><i
-                            class="icon-shopping-cart icon-white"></i> Add to Cart</a>
-                </div>
-            </div>
-            <!-- End Product -->
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3 col-sm-6">
-            <!-- Product -->
-            <div class="shop-item">
-                <!-- Product Image -->
-                <div class="shop-item-image">
-                    <a href="${contextPath}info?bookId=1"><img src="${contextPathToRes}img/product1.jpg"
-                                                               alt="Item Name"></a>
-                </div>
-                <!-- Product Title -->
-                <div class="title">
-                    <h3><a href="${contextPath}info?bookId=1">Lorem ipsum dolor</a></h3>
-                </div>
-                <!-- Product Price-->
-                <div class="price">
-                    $999.99
-                </div>
-                <!-- Add to Cart Button -->
-                <div class="actions">
-                    <a href="page-product-details.html" class="btn btn-small"><i
-                            class="icon-shopping-cart icon-white"></i> Add to Cart</a>
-                </div>
-            </div>
-            <!-- End Product -->
-        </div>
-        <div class="col-md-3 col-sm-6">
-            <!-- Product -->
-            <div class="shop-item">
-                <!-- Product Image -->
-                <div class="shop-item-image">
-                    <a href="${contextPath}info?bookId=1"><img src="${contextPathToRes}img/product1.jpg"
-                                                               alt="Item Name"></a>
-                </div>
-                <!-- Product Title -->
-                <div class="title">
-                    <h3><a href="${contextPath}info?bookId=1">Lorem ipsum dolor</a></h3>
-                </div>
-                <!-- Product Price-->
-                <div class="price">
-                    $999.99
-                </div>
-                <!-- Add to Cart Button -->
-                <div class="actions">
-                    <a href="page-product-details.html" class="btn btn-small"><i
-                            class="icon-shopping-cart icon-white"></i> Add to Cart</a>
-                </div>
-            </div>
-            <!-- End Product -->
-        </div>
-        <div class="col-md-3 col-sm-6">
-            <!-- Product -->
-            <div class="shop-item">
-                <!-- Product Image -->
-                <div class="shop-item-image">
-                    <a href="${contextPath}info?bookId=1"><img src="${contextPathToRes}img/product1.jpg"
-                                                               alt="Item Name"></a>
-                </div>
-                <!-- Product Title -->
-                <div class="title">
-                    <h3><a href="${contextPath}info?bookId=1">Lorem ipsum dolor</a></h3>
-                </div>
-                <!-- Product Price-->
-                <div class="price">
-                    $999.99
-                </div>
-                <!-- Add to Cart Button -->
-                <div class="actions">
-                    <a href="page-product-details.html" class="btn btn-small"><i
-                            class="icon-shopping-cart icon-white"></i> Add to Cart</a>
-                </div>
-            </div>
-            <!-- End Product -->
-        </div>
-        <div class="col-md-3 col-sm-6">
-            <!-- Product -->
-            <div class="shop-item">
-                <!-- Product Image -->
-                <div class="shop-item-image">
-                    <a href="${contextPath}info?bookId=1"><img src="${contextPathToRes}img/product1.jpg"
-                                                               alt="Item Name"></a>
-                </div>
-                <!-- Product Title -->
-                <div class="title">
-                    <h3><a href="${contextPath}info?bookId=1">Lorem ipsum dolor</a></h3>
-                </div>
-                <!-- Product Price-->
-                <div class="price">
-                    $999.99
-                </div>
-                <!-- Add to Cart Button -->
-                <div class="actions">
-                    <a href="page-product-details.html" class="btn btn-small"><i
-                            class="icon-shopping-cart icon-white"></i> Add to Cart</a>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="В корзину"><i
+                                    class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
+
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Читать"><i
+                                    class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                        </div>
+                    </div>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="Изменить"><i
+                                    class="glyphicon glyphicon-pencil icon-white"></i></a>
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Удалить"><i
+                                    class="glyphicon glyphicon-trash icon-white"></i></a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <!-- End Product -->
@@ -215,10 +181,26 @@
                 <div class="price">
                     $999.99
                 </div>
-                <!-- Add to Cart Button -->
+                <!-- Operations -->
                 <div class="actions">
-                    <a href="page-product-details.html" class="btn btn-small"><i
-                            class="icon-shopping-cart icon-white"></i> Add to Cart</a>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="В корзину"><i
+                                    class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
+
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Читать"><i
+                                    class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                        </div>
+                    </div>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="Изменить"><i
+                                    class="glyphicon glyphicon-pencil icon-white"></i></a>
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Удалить"><i
+                                    class="glyphicon glyphicon-trash icon-white"></i></a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <!-- End Product -->
@@ -239,10 +221,26 @@
                 <div class="price">
                     $999.99
                 </div>
-                <!-- Add to Cart Button -->
+                <!-- Operations -->
                 <div class="actions">
-                    <a href="page-product-details.html" class="btn btn-small"><i
-                            class="icon-shopping-cart icon-white"></i> Add to Cart</a>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="В корзину"><i
+                                    class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
+
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Читать"><i
+                                    class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                        </div>
+                    </div>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="Изменить"><i
+                                    class="glyphicon glyphicon-pencil icon-white"></i></a>
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Удалить"><i
+                                    class="glyphicon glyphicon-trash icon-white"></i></a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <!-- End Product -->
@@ -263,10 +261,26 @@
                 <div class="price">
                     $999.99
                 </div>
-                <!-- Add to Cart Button -->
+                <!-- Operations -->
                 <div class="actions">
-                    <a href="page-product-details.html" class="btn btn-small"><i
-                            class="icon-shopping-cart icon-white"></i> Add to Cart</a>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="В корзину"><i
+                                    class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
+
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Читать"><i
+                                    class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                        </div>
+                    </div>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="Изменить"><i
+                                    class="glyphicon glyphicon-pencil icon-white"></i></a>
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Удалить"><i
+                                    class="glyphicon glyphicon-trash icon-white"></i></a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <!-- End Product -->
@@ -287,10 +301,188 @@
                 <div class="price">
                     $999.99
                 </div>
-                <!-- Add to Cart Button -->
+                <!-- Operations -->
                 <div class="actions">
-                    <a href="page-product-details.html" class="btn btn-small"><i
-                            class="icon-shopping-cart icon-white"></i> Add to Cart</a>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="В корзину"><i
+                                    class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
+
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Читать"><i
+                                    class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                        </div>
+                    </div>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="Изменить"><i
+                                    class="glyphicon glyphicon-pencil icon-white"></i></a>
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Удалить"><i
+                                    class="glyphicon glyphicon-trash icon-white"></i></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- End Product -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-sm-6">
+            <!-- Product -->
+            <div class="shop-item">
+                <!-- Product Image -->
+                <div class="shop-item-image">
+                    <a href="${contextPath}info?bookId=1"><img src="${contextPathToRes}img/product1.jpg"
+                                                               alt="Item Name"></a>
+                </div>
+                <!-- Product Title -->
+                <div class="title">
+                    <h3><a href="${contextPath}info?bookId=1">Lorem ipsum dolor</a></h3>
+                </div>
+                <!-- Product Price-->
+                <div class="price">
+                    $999.99
+                </div>
+                <!-- Operations -->
+                <div class="actions">
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="В корзину"><i
+                                    class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
+
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Читать"><i
+                                    class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                        </div>
+                    </div>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="Изменить"><i
+                                    class="glyphicon glyphicon-pencil icon-white"></i></a>
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Удалить"><i
+                                    class="glyphicon glyphicon-trash icon-white"></i></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- End Product -->
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <!-- Product -->
+            <div class="shop-item">
+                <!-- Product Image -->
+                <div class="shop-item-image">
+                    <a href="${contextPath}info?bookId=1"><img src="${contextPathToRes}img/product1.jpg"
+                                                               alt="Item Name"></a>
+                </div>
+                <!-- Product Title -->
+                <div class="title">
+                    <h3><a href="${contextPath}info?bookId=1">Lorem ipsum dolor</a></h3>
+                </div>
+                <!-- Product Price-->
+                <div class="price">
+                    $999.99
+                </div>
+                <!-- Operations -->
+                <div class="actions">
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="В корзину"><i
+                                    class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
+
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Читать"><i
+                                    class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                        </div>
+                    </div>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="Изменить"><i
+                                    class="glyphicon glyphicon-pencil icon-white"></i></a>
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Удалить"><i
+                                    class="glyphicon glyphicon-trash icon-white"></i></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- End Product -->
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <!-- Product -->
+            <div class="shop-item">
+                <!-- Product Image -->
+                <div class="shop-item-image">
+                    <a href="${contextPath}info?bookId=1"><img src="${contextPathToRes}img/product1.jpg"
+                                                               alt="Item Name"></a>
+                </div>
+                <!-- Product Title -->
+                <div class="title">
+                    <h3><a href="${contextPath}info?bookId=1">Lorem ipsum dolor</a></h3>
+                </div>
+                <!-- Product Price-->
+                <div class="price">
+                    $999.99
+                </div>
+                <!-- Operations -->
+                <div class="actions">
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="В корзину"><i
+                                    class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
+
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Читать"><i
+                                    class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                        </div>
+                    </div>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="Изменить"><i
+                                    class="glyphicon glyphicon-pencil icon-white"></i></a>
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Удалить"><i
+                                    class="glyphicon glyphicon-trash icon-white"></i></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- End Product -->
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <!-- Product -->
+            <div class="shop-item">
+                <!-- Product Image -->
+                <div class="shop-item-image">
+                    <a href="${contextPath}info?bookId=1"><img src="${contextPathToRes}img/product1.jpg"
+                                                               alt="Item Name"></a>
+                </div>
+                <!-- Product Title -->
+                <div class="title">
+                    <h3><a href="${contextPath}info?bookId=1">Lorem ipsum dolor</a></h3>
+                </div>
+                <!-- Product Price-->
+                <div class="price">
+                    $999.99
+                </div>
+                <!-- Operations -->
+                <div class="actions">
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="В корзину"><i
+                                    class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
+
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Читать"><i
+                                    class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                        </div>
+                    </div>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group-lg" role="group" aria-label="First group">
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top" title="Изменить"><i
+                                    class="glyphicon glyphicon-pencil icon-white"></i></a>
+                            <a href="${contextPath}info?bookId=1" class="btn" role="button" data-toggle="tooltip" data-placement="top"  title="Удалить"><i
+                                    class="glyphicon glyphicon-trash icon-white"></i></a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <!-- End Product -->

@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="${contextPathToRes}css/leaflet.ie.css"/>
     <![endif]-->
     <link rel="stylesheet" href="${contextPathToRes}css/main.css">
+    <link rel="stylesheet" href="${contextPathToRes}css/aptech-lib-styles.css">
     <script src="${contextPathToRes}js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 </head>
 
@@ -36,6 +37,11 @@
         <div class="row">
             <tiles:insertAttribute name="top-panel"/>
         </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <tiles:insertAttribute name="letters"/>
     </div>
 </div>
 <div class="section">
