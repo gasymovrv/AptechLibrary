@@ -23,7 +23,7 @@
         </div>
         <nav id="mainmenu" class="mainmenu">
             <ul>
-                <li class="logo-wrapper"><a href="${contextPath}home"><img src="${contextPathToRes}img/logo2.png" alt="Изображение не найдено"></a></li>
+                <li class="logo-wrapper"><a href="${contextPath}home"><img src="${contextPathToRes}img/BeSmart-logo.png" alt="Изображение не найдено"></a></li>
                 <li>
                     <a href="${contextPath}home">Все книги</a>
                 </li>

@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ru.aptech.library.dao.BookDAOImpl;
+import ru.aptech.library.dao.GenreDAOImpl;
 import ru.aptech.library.entities.Author;
 import ru.aptech.library.entities.Book;
 import ru.aptech.library.entities.Genre;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -21,25 +21,30 @@ import java.util.List;
 public class MainController {
     @Autowired
     private BookDAOImpl bookDAO;
+    @Autowired
+    private GenreDAOImpl genreDAO;
 
 
     @RequestMapping(value = "home", method = RequestMethod.GET)
     public ModelAndView home() {
-        return new ModelAndView("home-page-list-books");
+        ModelAndView modelAndView = new ModelAndView("home-page-list-books");
+        addGenreList(modelAndView);
+        return modelAndView;
     }
+
 
     @RequestMapping(value = "info", method = RequestMethod.GET)
     public ModelAndView info(@RequestParam(value = "bookId", required = false) String bookId) {
-        return new ModelAndView("home-page-one-book");
+        ModelAndView modelAndView = new ModelAndView("home-page-one-book");
+        addGenreList(modelAndView);
+        return modelAndView;
     }
 
 
-
-
-
-
-
-
+    private void addGenreList(ModelAndView modelAndView) {
+        List<Genre> genres = genreDAO.getGenres();
+        modelAndView.addObject("genreList", genres);
+    }
 
 
     @RequestMapping(value = "books", method = RequestMethod.GET)
