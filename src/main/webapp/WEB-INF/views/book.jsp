@@ -1,7 +1,7 @@
 <%@include file="../../include.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- Main box -->
-<div class="col-sm-8">
+<div class="col-sm-9">
     <div class="col-sm-6">
         <div class="product-image-large">
             <img src="${contextPathToRes}img/product3.jpg" alt="Item Name">

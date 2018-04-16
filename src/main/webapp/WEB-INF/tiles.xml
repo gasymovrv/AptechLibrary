@@ -8,6 +8,7 @@
     <definition name="base-layout" template="/WEB-INF/views/base-layout.jsp">
         <put-attribute name="title" value=""/>
         <put-attribute name="header" value="/WEB-INF/views/header.jsp"/>
+        <put-attribute name="top-panel" value="/WEB-INF/views/top-panel-search.jsp"/>
         <put-attribute name="sidebar" value="/WEB-INF/views/sidebar.jsp"/>
         <put-attribute name="main" value=""/>
         <put-attribute name="footer" value="/WEB-INF/views/footer.jsp"/>
@@ -28,6 +29,7 @@
     <!-- Login Page -->
     <definition name="auth-page" extends="base-layout">
         <put-attribute name="title" value="Авторизация"/>
+        <put-attribute name="top-panel" value="/WEB-INF/views/top-panel-login.jsp"/>
         <put-attribute name="sidebar" value=""/>
         <put-attribute name="main" value="/WEB-INF/views/login.jsp"/>
     </definition>

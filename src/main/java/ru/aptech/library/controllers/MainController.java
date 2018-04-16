@@ -12,6 +12,8 @@ import ru.aptech.library.dao.GenreDAOImpl;
 import ru.aptech.library.entities.Author;
 import ru.aptech.library.entities.Book;
 import ru.aptech.library.entities.Genre;
+import ru.aptech.library.enums.SearchType;
+import ru.aptech.library.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +25,16 @@ public class MainController {
     private BookDAOImpl bookDAO;
     @Autowired
     private GenreDAOImpl genreDAO;
+    @Autowired
+    private Utils utils;
 
 
     @RequestMapping(value = "home", method = RequestMethod.GET)
     public ModelAndView home() {
         ModelAndView modelAndView = new ModelAndView("home-page-list-books");
         addGenreList(modelAndView);
+        addLetters(modelAndView);
+        addSearchTypes(modelAndView);
         return modelAndView;
     }
 
@@ -37,6 +43,8 @@ public class MainController {
     public ModelAndView info(@RequestParam(value = "bookId", required = false) String bookId) {
         ModelAndView modelAndView = new ModelAndView("home-page-one-book");
         addGenreList(modelAndView);
+        addLetters(modelAndView);
+        addSearchTypes(modelAndView);
         return modelAndView;
     }
 
@@ -45,6 +53,22 @@ public class MainController {
         List<Genre> genres = genreDAO.getGenres();
         modelAndView.addObject("genreList", genres);
     }
+
+    private void addLetters(ModelAndView modelAndView) {
+        Character[] letters = utils.getLetters();
+        modelAndView.addObject("letters", letters);
+    }
+
+    private void addSearchTypes(ModelAndView modelAndView) {
+        List<SearchType> searchTypeList = utils.getSearchTypeList();
+        SearchType selectedSearchType = utils.getSelectedSearchType();
+        modelAndView.addObject("searchTypeList", searchTypeList);
+        modelAndView.addObject("selectedSearchType", selectedSearchType);
+    }
+
+
+
+
 
 
     @RequestMapping(value = "books", method = RequestMethod.GET)

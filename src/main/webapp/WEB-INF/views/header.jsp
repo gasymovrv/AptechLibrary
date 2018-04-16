@@ -6,18 +6,8 @@
         <div class="menuextras">
             <div class="extras">
                 <ul>
-                    <li class="shopping-cart-items"><i class="glyphicon glyphicon-shopping-cart icon-white"></i> <a href="page-shopping-cart.html"><b>3 items</b></a></li>
-                    <li>
-                        <div class="dropdown choose-country">
-                            <a class="#" data-toggle="dropdown" href="#"><img src="${contextPathToRes}img/flags/gb.png" alt="Great Britain"> UK</a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li role="menuitem"><a href="#"><img src="${contextPathToRes}img/flags/us.png" alt="United States"> US</a></li>
-                                <li role="menuitem"><a href="#"><img src="${contextPathToRes}img/flags/de.png" alt="Germany"> DE</a></li>
-                                <li role="menuitem"><a href="#"><img src="${contextPathToRes}img/flags/es.png" alt="Spain"> ES</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li><a href="${contextPath}flows/auth">Login</a></li>
+                    <li class="shopping-cart-items"><i class="glyphicon glyphicon-shopping-cart icon-white"></i> <a href="page-shopping-cart.html"><b>3 книги</b></a></li>
+                    <li><i class="glyphicon glyphicon-user icon-white"></i> <a href="${contextPath}flows/auth">Регистрация</a></li>
                 </ul>
             </div>
         </div>
@@ -103,16 +93,5 @@
                 </li>
             </ul>
         </nav>
-    </div>
-</div>
-
-<!-- Page Title -->
-<div class="section section-breadcrumbs">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>Blog Post (Left Sidebar)</h1>
-            </div>
-        </div>
     </div>
 </div>

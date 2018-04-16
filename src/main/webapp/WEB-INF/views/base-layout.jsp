@@ -31,6 +31,13 @@
 <![endif]-->
 
 <tiles:insertAttribute name="header"/>
+<div class="section section-breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <tiles:insertAttribute name="top-panel"/>
+        </div>
+    </div>
+</div>
 <div class="section">
     <div class="container">
         <div class="row">
