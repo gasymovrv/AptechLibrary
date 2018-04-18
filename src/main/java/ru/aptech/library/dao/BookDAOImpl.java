@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.aptech.library.entities.Author;
 import ru.aptech.library.entities.Book;
 import ru.aptech.library.entities.Genre;
+import ru.aptech.library.util.SearchCriteria;
 
 import java.util.List;
 
@@ -99,7 +100,11 @@ public class BookDAOImpl {
         return books;
     }
 
-
+    @Transactional
+    public List<Book> getBooks(SearchCriteria criteria) {
+        List<Book> books = getBooks(criteria.getLetter());
+        return books;
+    }
 //    @Transactional
 //    public List<Book> getBooks() {
 //        //Сессия

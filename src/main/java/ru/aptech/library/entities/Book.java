@@ -1,10 +1,11 @@
 package ru.aptech.library.entities;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
 //@Entity
-public class Book {
+public class Book implements Serializable {
     private long id;
     private String name;
     private byte[] content;

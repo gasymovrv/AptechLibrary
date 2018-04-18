@@ -1,5 +1,6 @@
 <%@include file="../../include.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<c:set var="home" value="${contextPath}home"/>
 <!-- Navigation & Logo-->
 <div class="mainmenu-wrapper">
     <div class="container">
@@ -13,12 +14,12 @@
         </div>
         <nav id="mainmenu" class="mainmenu">
             <ul>
-                <li class="logo-wrapper"><a href="${contextPath}home"><img src="${contextPathToRes}img/BeSmart-logo.png" alt="Изображение не найдено"></a></li>
+                <li class="logo-wrapper"><a href="${home}"><img src="${contextPathToRes}img/BeSmart-logo.png" alt="Изображение не найдено"></a></li>
                 <li>
-                    <a href="${contextPath}home">Все книги</a>
+                    <a href="${home}">Все книги</a>
                 </li>
                 <li>
-                    <a href="${contextPath}home">Авторы</a>
+                    <a href="${home}">Авторы</a>
                 </li>
                 <li class="has-submenu active">
                     <a href="#">Подробнее</a>
@@ -27,7 +28,7 @@
                             <div>
                                 <h4>Homepage</h4>
                                 <ul>
-                                    <li><a href="${contextPath}home">Homepage</a></li>
+                                    <li><a href="${home}">Homepage</a></li>
                                 </ul>
                                 <h4>Services & Pricing</h4>
                                 <ul>

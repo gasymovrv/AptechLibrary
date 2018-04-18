@@ -1,9 +1,10 @@
 package ru.aptech.library.entities;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 //@Entity
-public class Vote {
+public class Vote implements Serializable {
     private long id;
     private Integer value;
     private long bookId;

@@ -3,6 +3,7 @@ package ru.aptech.library.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,6 +14,7 @@ import ru.aptech.library.entities.Author;
 import ru.aptech.library.entities.Book;
 import ru.aptech.library.entities.Genre;
 import ru.aptech.library.enums.SearchType;
+import ru.aptech.library.util.SearchCriteria;
 import ru.aptech.library.util.Utils;
 
 import java.util.ArrayList;
@@ -32,9 +34,21 @@ public class MainController {
     @RequestMapping(value = "home", method = RequestMethod.GET)
     public ModelAndView home() {
         ModelAndView modelAndView = new ModelAndView("home-page-list-books");
-        addGenreList(modelAndView);
-        addLetters(modelAndView);
-        addSearchTypes(modelAndView);
+        addAtributesForSearch(modelAndView);
+
+        List<Book> books = bookDAO.getBooks();
+        modelAndView.addObject("bookList", books);
+        return modelAndView;
+    }
+
+
+    @RequestMapping(value = "home/searchResult", method = RequestMethod.GET)
+    public ModelAndView searchResult(@ModelAttribute("criteria") SearchCriteria criteria) {
+        ModelAndView modelAndView = new ModelAndView("home-page-list-books");
+        addAtributesForSearch(modelAndView);
+
+        List<Book> books = bookDAO.getBooks(criteria);
+        modelAndView.addObject("bookList", books);
         return modelAndView;
     }
 
@@ -42,33 +56,22 @@ public class MainController {
     @RequestMapping(value = "info", method = RequestMethod.GET)
     public ModelAndView info(@RequestParam(value = "bookId", required = false) String bookId) {
         ModelAndView modelAndView = new ModelAndView("home-page-one-book");
-        addGenreList(modelAndView);
-        addLetters(modelAndView);
-        addSearchTypes(modelAndView);
+        addAtributesForSearch(modelAndView);
         return modelAndView;
     }
 
 
-    private void addGenreList(ModelAndView modelAndView) {
+    private void addAtributesForSearch(ModelAndView modelAndView) {
         List<Genre> genres = genreDAO.getGenres();
-        modelAndView.addObject("genreList", genres);
-    }
-
-    private void addLetters(ModelAndView modelAndView) {
         Character[] letters = utils.getLetters();
-        modelAndView.addObject("letters", letters);
-    }
-
-    private void addSearchTypes(ModelAndView modelAndView) {
         List<SearchType> searchTypeList = utils.getSearchTypeList();
         SearchType selectedSearchType = utils.getSelectedSearchType();
+
+        modelAndView.addObject("genreList", genres);
+        modelAndView.addObject("letters", letters);
         modelAndView.addObject("searchTypeList", searchTypeList);
         modelAndView.addObject("selectedSearchType", selectedSearchType);
     }
-
-
-
-
 
 
     @RequestMapping(value = "books", method = RequestMethod.GET)

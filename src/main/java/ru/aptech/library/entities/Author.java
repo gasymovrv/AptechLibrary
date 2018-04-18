@@ -1,12 +1,13 @@
 package ru.aptech.library.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.Objects;
 
 //@Entity
 //@Table(name = "author")
-public class Author {
+public class Author implements Serializable {
     private long id;
     private String fio;
     private Date birthday;
