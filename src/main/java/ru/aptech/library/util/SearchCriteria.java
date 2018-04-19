@@ -1,9 +1,6 @@
 package ru.aptech.library.util;
 
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-import ru.aptech.library.entities.Genre;
 import ru.aptech.library.enums.SearchType;
 
 import java.io.Serializable;
@@ -12,11 +9,11 @@ public class SearchCriteria implements Serializable{
 
     private String text;
 
-    private SearchType searchType;
+    private SearchType searchType = SearchType.TITLE;
 
     private Character letter;
 
-    private Genre genre;
+    private Long genreId;
 
 
     public String getText() {
@@ -43,11 +40,11 @@ public class SearchCriteria implements Serializable{
         this.letter = letter;
     }
 
-    public Genre getGenre() {
-        return genre;
+    public Long getGenreId() {
+        return genreId;
     }
 
-    public void setGenre(Genre genre) {
-        this.genre = genre;
+    public void setGenreId(Long genreId) {
+        this.genreId = genreId;
     }
 }

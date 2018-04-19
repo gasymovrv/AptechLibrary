@@ -1,9 +1,5 @@
 <%@include file="../../include.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<c:set var="info" value="${contextPath}info"/>
-<%--<c:set var="booksFromAuthor" value="${contextPath}..." scope="request"/>--%>
-<%--<c:set var="booksFromPublisher" value="${contextPath}..." scope="request"/>--%>
-<c:set var="bookId" value="bookId" scope="request"/>
 
 <!-- Main box -->
 <div class="col-sm-9">

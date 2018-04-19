@@ -1,6 +1,5 @@
 <%@include file="../../include.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<c:set var="searchResult" value="${contextPath}home/searchResult"/>
 
 <!-- Letters -->
 <div class="col-sm-12">

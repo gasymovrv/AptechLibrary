@@ -1,6 +1,6 @@
 <%@include file="../../include.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<c:set var="home" value="${contextPath}home"/>
+
 <!-- Navigation & Logo-->
 <div class="mainmenu-wrapper">
     <div class="container">

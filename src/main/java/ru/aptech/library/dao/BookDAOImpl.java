@@ -2,13 +2,13 @@ package ru.aptech.library.dao;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.aptech.library.entities.Author;
 import ru.aptech.library.entities.Book;
 import ru.aptech.library.entities.Genre;
+import ru.aptech.library.enums.SearchType;
 import ru.aptech.library.util.SearchCriteria;
 
 import java.util.List;
@@ -35,6 +35,8 @@ public class BookDAOImpl {
     private final String ORDER_BY_NAME = " order by b.name";
     @Autowired
     private SessionFactory sessionFactory;
+    @Autowired
+    private GenreDAOImpl genreDAO;
 
 
     @Transactional
@@ -50,8 +52,7 @@ public class BookDAOImpl {
     public Book getBooks(long id) {
         Session session = sessionFactory.getCurrentSession();
         Book book = session.createQuery(BOOKS_WITHOUT_CONTENT
-                        + " where b.id=:id"
-                        + ORDER_BY_NAME,
+                        + " where b.id=:id",
                 Book.class).setParameter("id", id).getSingleResult();
         return book;
     }
@@ -100,9 +101,41 @@ public class BookDAOImpl {
         return books;
     }
 
+
     @Transactional
-    public List<Book> getBooks(SearchCriteria criteria) {
-        List<Book> books = getBooks(criteria.getLetter());
+    public List<Book> getBooksByCriteria(SearchCriteria criteria) {
+        Session session = sessionFactory.getCurrentSession();
+        Long genreId = criteria.getGenreId();
+        Genre genre = genreId != null ? genreDAO.getGenres(genreId) : null;
+        Character letter = criteria.getLetter();
+        String text = criteria.getText();
+        SearchType searchType = criteria.getSearchType();
+
+        String textVariants = null;
+        switch (searchType) {
+            case TITLE:
+                textVariants = " b.name ";
+                break;
+            case AUTHOR:
+                textVariants = " b.author.fio ";
+                break;
+            case GENRE:
+                textVariants = " b.genre.name ";
+                break;
+            case PUBLISHER:
+                textVariants = " b.publisher.name ";
+                break;
+        }
+        List<Book> books = session.createQuery(BOOKS_WITHOUT_CONTENT
+                        + " where b.genre.name like CONCAT('%', :genre, '%') or b.name like CONCAT(:letter, '%') or "
+                        + textVariants
+                        + " like CONCAT('%', :text, '%')"
+                        + ORDER_BY_NAME,
+                Book.class)
+                .setParameter("genre", genre != null ? genre.getName() : null)
+                .setParameter("letter", letter)
+                .setParameter("text", text)
+                .getResultList();
         return books;
     }
 //    @Transactional

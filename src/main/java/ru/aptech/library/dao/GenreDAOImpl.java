@@ -26,5 +26,13 @@ public class GenreDAOImpl {
         return genreList;
     }
 
+    @Transactional
+    public Genre getGenres(Long id) {
+        Session session = sessionFactory.getCurrentSession();
+        Genre genre = session.createQuery(GENRES + " where g.id=:id",
+                Genre.class).setParameter("id", id).getSingleResult();
+        return genre;
+    }
+
 
 }
