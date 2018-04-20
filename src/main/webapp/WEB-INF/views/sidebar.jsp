@@ -5,9 +5,9 @@
 <!-- Sidebar -->
 <div class="col-sm-3 blog-sidebar">
     <h4>Жанры</h4>
-    <ul class="blog-categories">
+    <ul id="sidebar-genres" class="blog-categories">
         <c:forEach var="g" items="${genreList}">
-            <li><a href="${searchResult}?genreId=${g.id}">${g.name}</a></li>
+            <li><a id="${g.id}" href="#">${g.name}</a></li>
         </c:forEach>
     </ul>
 </div>

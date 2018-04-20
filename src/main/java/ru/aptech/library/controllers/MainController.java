@@ -3,19 +3,16 @@ package ru.aptech.library.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.aptech.library.dao.BookDAOImpl;
 import ru.aptech.library.dao.GenreDAOImpl;
-import ru.aptech.library.entities.Author;
 import ru.aptech.library.entities.Book;
 import ru.aptech.library.entities.Genre;
 import ru.aptech.library.enums.SearchType;
 import ru.aptech.library.util.SearchCriteria;
 import ru.aptech.library.util.Utils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -41,21 +38,18 @@ public class MainController {
     }
 
 
+    @RequestMapping(value = "home/searchByCriteria", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    public @ResponseBody List<Book> searchByText(@RequestBody SearchCriteria criteria) {
+        return bookDAO.getBooks(criteria);
+    }
+
+
+//Для тестового аджакс запроса - функция testGetBooks()
 //    @RequestMapping(value = "home/searchResult", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-//    @ResponseBody
-//    public List<Book> searchResult(@ModelAttribute("criteria") SearchCriteria criteria, ModelAndView modelAndView) {
-//        List<Book> books = bookDAO.getBooksByCriteria(criteria);
+//    public @ResponseBody List<Book> searchResult() {
+//        List<Book> books = bookDAO.getBooks();
 //        return books;
 //    }
-
-    @RequestMapping(value = "home/searchResult", method = RequestMethod.GET)
-    public ModelAndView searchResult(@ModelAttribute("criteria") SearchCriteria criteria) {
-        ModelAndView modelAndView = new ModelAndView("home-page-list-books");
-        addAtributesForSearch(modelAndView);
-        List<Book> books = bookDAO.getBooksByCriteria(criteria);
-        modelAndView.addObject("bookList", books);
-        return modelAndView;
-    }
 
 
     @RequestMapping(value = "info", method = RequestMethod.GET)

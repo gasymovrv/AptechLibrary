@@ -3,29 +3,24 @@
 
 <!-- Search -->
 <div class="col-md-12">
-    <form:form modelAttribute="criteria" action="${searchResult}" method="get">
+    <form id="top-panel-form">
         <div class="form-row">
             <div class="form-group col-md-2">
                 <h1>Поиск книг</h1>
             </div>
             <div class="form-group col-md-6">
-                <form:input id="searchField"
-                            path="text"
-                            type="text"
-                            class="form-control"
-                            placeholder="Введите текст для выполнения поиска"/>
+                <input type="text" id="top-panel-form-text" class="form-control" placeholder="Введите текст для выполнения поиска">
             </div>
             <div class="form-group col-md-3">
-                <form:select id="selectionField"
-                             path="searchType"
-                             class="form-control"
-                >
-                    <form:options items="${searchTypeList}" itemLabel="text"/>
-                </form:select>
+                <select id="top-panel-form-select" class="form-control" name="searchType">
+                    <c:forEach var="st" items="${searchTypeList}">
+                        <option value="${st}">${st.text}</option>
+                    </c:forEach>
+                </select>
             </div>
             <div class="form-group col-md-1">
-                <button type="submit" class="btn btn-md">Поиск</button>
+                <button id="top-panel-search-button" type="submit" class="btn btn-md">Поиск</button>
             </div>
         </div>
-    </form:form>
+    </form>
 </div>

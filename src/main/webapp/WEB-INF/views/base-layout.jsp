@@ -1,7 +1,7 @@
 <%@include file="../../include.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:set var="home" value="${contextPath}home" scope="request"/>
-<c:set var="searchResult" value="${contextPath}home/searchResult" scope="request"/>
+<c:set var="searchResult" value="${contextPath}home/searchResult" scope="page"/>
 <c:set var="info" value="${contextPath}info" scope="request"/>
 <%--<c:set var="booksFromAuthor" value="${contextPath}..." scope="request"/>--%>
 <%--<c:set var="booksFromPublisher" value="${contextPath}..." scope="request"/>--%>
@@ -29,28 +29,9 @@
     <![endif]-->
     <link rel="stylesheet" href="${contextPathToRes}css/main.css">
     <link rel="stylesheet" href="${contextPathToRes}css/aptech-lib-styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="${contextPathToRes}js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#butt1').click(function () {
-                var par1=$('#inp1').val();
-                $.ajax({
-                    type:'POST',//тип запроса
-                    contentType: 'application/json', //тип получаемого из контроллера ответа
-                    dataType: 'json', //тип отправляемого отсюда ответа
-                    data:JSON.stringify(),//параметры запроса
-                    url:"${searchResult}",//url адрес обработчика
-                    success: function(data){//возвращаемый результат от сервера
-                        $("#editId").text(data.id);
-                        $("#editTitle").val(data.title);
-                        $("#editDescription").text(data.description);
-                        $("#editDate").val(data.date);
-                        $("select#editStatus").val(data.status);
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="${contextPathToRes}js/ajax.js"></script>
 </head>
 
 <body>

@@ -3,13 +3,13 @@
 
 <!-- Letters -->
 <div class="col-sm-12">
-    <form:form modelAttribute="criteria" action="${searchResult}" method="get">
+    <div id="letters-form">
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group-sm" role="group" aria-label="First group">
                 <c:forEach var="ch" items="${letters}">
-                    <input value="${ch}" name="letter" type="submit" role="button" class="btn btn-sm"/>
+                    <button id="${ch}" class="btn btn-sm">${ch}</button>
                 </c:forEach>
             </div>
         </div>
-    </form:form>
+    </div>
 </div>

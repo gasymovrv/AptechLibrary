@@ -4,77 +4,85 @@
 <!-- Main box -->
 <div class="col-sm-9">
     <div class="row">
-        <div class="col-sm-offset-8"><h3>Найдено книг: ${bookList.size()}</h3></div>
+        <div class="col-sm-8" id="books-count"><h3>Найдено книг: ${bookList.size()}</h3></div>
     </div>
-    <c:set var="i" value="0" scope="page"/>
-    <c:forEach var="k" begin="1" end="${bookList.size()}" step="3">
-        <div class="row">
-            <c:forEach var="j" begin="0" end="2">
-                <c:if test="${(i+j)<bookList.size()}">
-                    <div class="col-sm-4">
-                        <!-- Product -->
-                        <div class="shop-item">
-                            <!-- Product Image -->
-                            <div class="shop-item-image">
-                                <a href="${info}?${bookId}=${bookList.get(i+j).id}"><img
-                                        src="${contextPathToRes}img/product1.jpg"
-                                        alt="Item Name"></a>
-                            </div>
-                            <!-- Product Title -->
-                            <div class="title">
-                                <h3><a href="${info}?${bookId}=${bookList.get(i+j).id}">${bookList.get(i+j).name} i = ${i} j = ${j} k = ${k}</a></h3>
-                            </div>
-                            <!-- Product author -->
-                            <div class="title">
-                                <h3><a href="#">${bookList.get(i+j).author.fio}</a></h3>
-                            </div>
-                            <div class="title">
-                                <h3>Издательство: <a href="#">${bookList.get(i+j).publisher.name}</a></h3>
-                            </div>
-                            <div class="title">
-                                <h3>Год издания: ${bookList.get(i+j).publishYear}</h3>
-                            </div>
-                            <!-- Product Price-->
-                            <div class="price">
-                                $999.99
-                            </div>
-                            <!-- Operations -->
-                            <div class="actions">
-                                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-                                    <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">
-                                        <a href="${contextPath}info?bookId=1" class="btn" role="button"
-                                           data-toggle="tooltip"
-                                           data-placement="top" title="В корзину"><i
-                                                class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
-
-                                        <a href="${contextPath}info?bookId=1" class="btn" role="button"
-                                           data-toggle="tooltip"
-                                           data-placement="top" title="Читать"><i
-                                                class="glyphicon glyphicon-eye-open icon-white"></i></a>
-                                    </div>
+    <div id="box-with-rows-for-books">
+        <c:set var="i" value="0" scope="page"/>
+        <c:forEach begin="1" end="${bookList.size()}" step="3">
+            <div class="row">
+                <c:forEach var="j" begin="0" end="2">
+                    <c:if test="${(i+j)<bookList.size()}">
+                        <div class="col-sm-4">
+                            <!-- Product -->
+                            <div class="shop-item">
+                                <!-- Product Image -->
+                                <div class="shop-item-image">
+                                    <a href="${info}?${bookId}=${bookList.get(i+j).id}"><img
+                                            src="${contextPathToRes}img/product1.jpg"
+                                            alt="Item Name"></a>
                                 </div>
-                                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-                                    <div class="btn-group-lg" role="group" aria-label="First group">
-                                        <a href="${contextPath}info?bookId=1" class="btn" role="button"
-                                           data-toggle="tooltip"
-                                           data-placement="top" title="Изменить"><i
-                                                class="glyphicon glyphicon-pencil icon-white"></i></a>
-                                        <a href="${contextPath}info?bookId=1" class="btn" role="button"
-                                           data-toggle="tooltip"
-                                           data-placement="top" title="Удалить"><i
-                                                class="glyphicon glyphicon-trash icon-white"></i></a>
-                                    </div>
+                                <!-- Product Title -->
+                                <div class="title">
+                                    <h3>
+                                        <a href="${info}?${bookId}=${bookList.get(i+j).id}">${bookList.get(i+j).name}</a>
+                                    </h3>
                                 </div>
+                                <!-- Product author -->
+                                <div class="title">
+                                    <h3><a href="#">${bookList.get(i+j).author.fio}</a></h3>
+                                </div>
+                                <div class="title">
+                                    <h3>Издательство: <a href="#">${bookList.get(i+j).publisher.name}</a></h3>
+                                </div>
+                                <div class="title">
+                                    <h3>Год издания: ${bookList.get(i+j).publishYear}</h3>
+                                </div>
+                                <!-- Product Price-->
+                                <div class="price">
+                                    $999.99
+                                </div>
+                                <!-- Operations -->
+                                <div class="actions">
+                                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                                        <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">
+                                            <a href="${info}?${bookId}=${bookList.get(i+j).id}" class="btn"
+                                               role="button"
+                                               data-toggle="tooltip"
+                                               data-placement="top" title="В корзину"><i
+                                                    class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
 
+                                            <a href="${info}?${bookId}=${bookList.get(i+j).id}" class="btn"
+                                               role="button"
+                                               data-toggle="tooltip"
+                                               data-placement="top" title="Читать"><i
+                                                    class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                                        <div class="btn-group-lg" role="group" aria-label="First group">
+                                            <a href="${info}?${bookId}=${bookList.get(i+j).id}" class="btn"
+                                               role="button"
+                                               data-toggle="tooltip"
+                                               data-placement="top" title="Изменить"><i
+                                                    class="glyphicon glyphicon-pencil icon-white"></i></a>
+                                            <a href="${info}?${bookId}=${bookList.get(i+j).id}" class="btn"
+                                               role="button"
+                                               data-toggle="tooltip"
+                                               data-placement="top" title="Удалить"><i
+                                                    class="glyphicon glyphicon-trash icon-white"></i></a>
+                                        </div>
+                                    </div>
+
+                                </div>
                             </div>
+                            <!-- End Product -->
                         </div>
-                        <!-- End Product -->
-                    </div>
-                </c:if>
-            </c:forEach>
-            <c:set var="i" value="${i+3}" scope="page"/>
-        </div>
-    </c:forEach>
+                    </c:if>
+                </c:forEach>
+                <c:set var="i" value="${i+3}" scope="page"/>
+            </div>
+        </c:forEach>
+    </div>
     <div class="pagination-wrapper ">
         <ul class="pagination pagination-md">
             <li class="disabled"><a href="#">Previous</a></li>

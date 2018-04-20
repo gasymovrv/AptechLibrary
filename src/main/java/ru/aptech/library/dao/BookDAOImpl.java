@@ -103,7 +103,7 @@ public class BookDAOImpl {
 
 
     @Transactional
-    public List<Book> getBooksByCriteria(SearchCriteria criteria) {
+    public List<Book> getBooks(SearchCriteria criteria) {
         Session session = sessionFactory.getCurrentSession();
         Long genreId = criteria.getGenreId();
         Genre genre = genreId != null ? genreDAO.getGenres(genreId) : null;
