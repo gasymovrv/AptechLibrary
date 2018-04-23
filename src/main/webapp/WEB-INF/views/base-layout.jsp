@@ -1,11 +1,5 @@
 <%@include file="../../include.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<c:set var="home" value="${contextPath}home" scope="request"/>
-<c:set var="searchResult" value="${contextPath}home/searchResult" scope="page"/>
-<c:set var="info" value="${contextPath}info" scope="request"/>
-<%--<c:set var="booksFromAuthor" value="${contextPath}..." scope="request"/>--%>
-<%--<c:set var="booksFromPublisher" value="${contextPath}..." scope="request"/>--%>
-<c:set var="bookId" value="bookId" scope="request"/>
 
 
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->

@@ -1,16 +1,17 @@
 <%@include file="../../include.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!-- Main box -->
-<div class="col-sm-9">
-    <div class="col-sm-6">
-        <div class="product-image-large">
-            <img src="${contextPathToRes}img/product3.jpg" alt="Item Name">
+<div id="main-box" class="col-sm-9">
+    <div class="col-sm-3">
+        <div class="image">
+            <img  class="img-rounded" src="${contextPath}showBookImage?${bookId}=${book.id}" alt="Item Name">
         </div>
     </div>
     <!-- End Product Image & Available Colors -->
     <!-- Product Summary & Options -->
-    <div class="col-sm-6 product-details">
-        <h4>LOREM IPSUM DOLOR</h4>
+    <div class="col-sm-7 product-details">
+        <h4>${book.name}</h4>
         <div class="price">
             <span class="price-was">$959.99</span> $999.99
         </div>
@@ -21,40 +22,6 @@
             fermentum justo vel venenatis eleifend. Fusce id magna eros.
         </p>
         <table class="shop-item-selections">
-            <!-- Color Selector -->
-            <tr>
-                <td><b>Color:</b></td>
-                <td>
-                    <div class="dropdown choose-item-color">
-                        <a class="btn btn-sm btn-grey" data-toggle="dropdown" href="#"><span
-                                class="color-orange"></span>
-                            Orange <b class="caret"></b></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li role="menuitem"><a href="#"><span class="color-white"></span> White</a></li>
-                            <li role="menuitem"><a href="#"><span class="color-black"></span> Black</a></li>
-                            <li role="menuitem"><a href="#"><span class="color-blue"></span> Blue</a></li>
-                            <li role="menuitem"><a href="#"><span class="color-orange"></span> Orange</a></li>
-                            <li role="menuitem"><a href="#"><span class="color-green"></span> Green</a></li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
-            <!-- Size Selector -->
-            <tr>
-                <td><b>Size:</b></td>
-                <td>
-                    <div class="dropdown">
-                        <a class="btn btn-sm btn-grey" data-toggle="dropdown" href="#">XXL <b class="caret"></b></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li role="menuitem"><a href="#">XS</a></li>
-                            <li role="menuitem"><a href="#">S</a></li>
-                            <li role="menuitem"><a href="#">M</a></li>
-                            <li role="menuitem"><a href="#">L</a></li>
-                            <li role="menuitem"><a href="#">XXL</a></li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
             <!-- Quantity -->
             <tr>
                 <td><b>Quantity:</b></td>

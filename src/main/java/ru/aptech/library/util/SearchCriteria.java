@@ -15,6 +15,10 @@ public class SearchCriteria implements Serializable{
 
     private Long genreId;
 
+    private Long publisherId;
+
+    private Long authorId;
+
 
     public String getText() {
         return text;
@@ -46,5 +50,25 @@ public class SearchCriteria implements Serializable{
 
     public void setGenreId(Long genreId) {
         this.genreId = genreId;
+    }
+
+
+    public Long getPublisherId() {
+        return publisherId;
+    }
+
+
+    public void setPublisherId(Long publisherId) {
+        this.publisherId = publisherId;
+    }
+
+
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
     }
 }

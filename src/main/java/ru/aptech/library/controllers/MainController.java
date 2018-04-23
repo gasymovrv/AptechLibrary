@@ -1,7 +1,6 @@
 package ru.aptech.library.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -13,6 +12,10 @@ import ru.aptech.library.enums.SearchType;
 import ru.aptech.library.util.SearchCriteria;
 import ru.aptech.library.util.Utils;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -29,7 +32,7 @@ public class MainController {
     @RequestMapping(value = "home", method = RequestMethod.GET)
     public ModelAndView home() {
         ModelAndView modelAndView = new ModelAndView("home-page-list-books");
-        addAtributesForSearch(modelAndView);
+        addAttributesForCriteria(modelAndView);
 
         List<Book> books = bookDAO.getBooks();
         modelAndView.addObject("bookList", books);
@@ -39,29 +42,33 @@ public class MainController {
 
 
     @RequestMapping(value = "home/searchByCriteria", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-    public @ResponseBody List<Book> searchByText(@RequestBody SearchCriteria criteria) {
+    public @ResponseBody
+    List<Book> searchByText(@RequestBody SearchCriteria criteria) {
         return bookDAO.getBooks(criteria);
     }
 
 
-//Для тестового аджакс запроса - функция testGetBooks()
-//    @RequestMapping(value = "home/searchResult", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public @ResponseBody List<Book> searchResult() {
-//        List<Book> books = bookDAO.getBooks();
-//        return books;
-//    }
-
-
     @RequestMapping(value = "info", method = RequestMethod.GET)
-    public ModelAndView info(@RequestParam(value = "bookId", required = false) String bookId) {
+    public ModelAndView info(@RequestParam(value = "bookId", required = false) Long bookId) {
         ModelAndView modelAndView = new ModelAndView("home-page-one-book");
-        addAtributesForSearch(modelAndView);
+        addAttributesForCriteria(modelAndView);
+        modelAndView.addObject("book", bookDAO.getBooks(bookId));
         modelAndView.addObject("criteria", new SearchCriteria());
         return modelAndView;
     }
 
 
-    private void addAtributesForSearch(ModelAndView modelAndView) {
+    @RequestMapping(value = "showBookImage", method = RequestMethod.GET)
+    public void showImage(@RequestParam("bookId") Long bookId, HttpServletResponse response, HttpServletRequest request)
+            throws ServletException, IOException {
+        Book book = bookDAO.getBooks(bookId);
+        response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
+        response.getOutputStream().write(book.getImage());
+        response.getOutputStream().close();
+    }
+
+
+    private void addAttributesForCriteria(ModelAndView modelAndView) {
         List<Genre> genres = genreDAO.getGenres();
         Character[] letters = utils.getLetters();
         SearchType[] searchTypeList = SearchType.values();
@@ -70,6 +77,13 @@ public class MainController {
         modelAndView.addObject("letters", letters);
         modelAndView.addObject("searchTypeList", searchTypeList);
     }
+
+//Для тестового аджакс запроса - функция testGetBooks()
+//    @RequestMapping(value = "home/searchResult", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public @ResponseBody List<Book> searchResult() {
+//        List<Book> books = bookDAO.getBooks();
+//        return books;
+//    }
 
 
 //    @RequestMapping(value = "books", method = RequestMethod.GET)

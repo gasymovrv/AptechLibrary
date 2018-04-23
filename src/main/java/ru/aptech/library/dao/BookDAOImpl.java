@@ -105,34 +105,40 @@ public class BookDAOImpl {
     @Transactional
     public List<Book> getBooks(SearchCriteria criteria) {
         Session session = sessionFactory.getCurrentSession();
+        //получаем все критерии
         Long genreId = criteria.getGenreId();
-        Genre genre = genreId != null ? genreDAO.getGenres(genreId) : null;
+        Long publisherId = criteria.getPublisherId();
+        Long authorId = criteria.getAuthorId();
         Character letter = criteria.getLetter();
         String text = criteria.getText();
         SearchType searchType = criteria.getSearchType();
 
-        String textVariants = null;
+        String stringSearchType = null;
         switch (searchType) {
             case TITLE:
-                textVariants = " b.name ";
+                stringSearchType = " b.name ";
                 break;
             case AUTHOR:
-                textVariants = " b.author.fio ";
+                stringSearchType = " b.author.fio ";
                 break;
             case GENRE:
-                textVariants = " b.genre.name ";
+                stringSearchType = " b.genre.name ";
                 break;
             case PUBLISHER:
-                textVariants = " b.publisher.name ";
+                stringSearchType = " b.publisher.name ";
                 break;
         }
         List<Book> books = session.createQuery(BOOKS_WITHOUT_CONTENT
-                        + " where b.genre.name like CONCAT('%', :genre, '%') or b.name like CONCAT(:letter, '%') or "
-                        + textVariants
-                        + " like CONCAT('%', :text, '%')"
+                        + " where b.genre.id=:genre " +
+                        "or b.publisher.id=:publisher " +
+                        "or b.author.id=:author " +
+                        "or b.name like CONCAT(:letter, '%') " +
+                        "or " + stringSearchType + " like CONCAT('%', :text, '%')"
                         + ORDER_BY_NAME,
                 Book.class)
-                .setParameter("genre", genre != null ? genre.getName() : null)
+                .setParameter("genre", genreId)
+                .setParameter("publisher", publisherId)
+                .setParameter("author", authorId)
                 .setParameter("letter", letter)
                 .setParameter("text", text)
                 .getResultList();
