@@ -89,6 +89,10 @@ function searchAndPrintHtmlByAjax(object, foundResultText) {
 }
 
 function createHtmlWithBookList(bookList, foundResultText) {
+    let showPdf = getContextPath() + '/showBookContent?bookId=';
+    let showImg = getContextPath() + '/showBookImage?bookId=';
+    let info = getContextPath() + '/info?bookId=';
+
     let rowId = 'row-with-books_0';
     $('#main-box').html(
         '   <div class="row">\n' +
@@ -111,13 +115,13 @@ function createHtmlWithBookList(bookList, foundResultText) {
                 '<div class="col-sm-4">\n' +
                 '    <div class="shop-item">\n' +
                 '        <div class="image">\n' +
-                '            <a href="' + getContextPath() + '/info?bookId=' + bookList[i].id + '"><img class="img-rounded"\n' +
+                '            <a href="' + info + bookList[i].id + '"><img class="img-rounded"\n' +
                 // '                    src="data:image/jpeg;base64,' + bookList[i].image + '"\n' + //вариант без вложенного аджакса и без контроллера
-                '                    src="' + getContextPath() + '/showBookImage?bookId='+bookList[i].id+'"\n' +
+                '                    src="' + showImg + bookList[i].id + '"\n' +
                 '                     alt="Изображение отсутствует"></a>\n' +
                 '        </div>\n' +
                 '        <div class="title">\n' +
-                '            <h3><a href="' + getContextPath() + '/info?bookId=' + bookList[i].id + '">' + bookList[i].name + '</a></h3>\n' +
+                '            <h3><a href="' + info + bookList[i].id + '">' + bookList[i].name + '</a></h3>\n' +
                 '        </div>\n' +
                 '        <div class="title">\n' +
                 '            <h3><a class="author-link" id="' + bookList[i].author.id + '" href="#">' + bookList[i].author.fio + '</a></h3>\n' +
@@ -133,12 +137,12 @@ function createHtmlWithBookList(bookList, foundResultText) {
                 '        <div class="actions">\n' +
                 '            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">\n' +
                 '                <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">\n' +
-                '                    <a href="' + getContextPath() + '/info?bookId=' + bookList[i].id + '" class="btn" role="button"\n' +
+                '                    <a href="' + info + bookList[i].id + '" class="btn" role="button"\n' +
                 '                       data-toggle="tooltip"\n' +
                 '                       data-placement="top" title="В корзину"><i\n' +
                 '                            class="glyphicon glyphicon-shopping-cart icon-white"></i></a>\n' +
                 '\n' +
-                '                    <a href="' + getContextPath() + '/info?bookId=' + bookList[i].id + '" class="btn" role="button"\n' +
+                '                    <a href="' + showPdf + bookList[i].id + '" class="btn" role="button"\n' +
                 '                       data-toggle="tooltip"\n' +
                 '                       data-placement="top" title="Читать"><i\n' +
                 '                            class="glyphicon glyphicon-eye-open icon-white"></i></a>\n' +
@@ -146,11 +150,11 @@ function createHtmlWithBookList(bookList, foundResultText) {
                 '            </div>\n' +
                 '            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">\n' +
                 '                <div class="btn-group-lg" role="group" aria-label="First group">\n' +
-                '                    <a href="' + getContextPath() + '/info?bookId=' + bookList[i].id + '" class="btn" role="button"\n' +
+                '                    <a href="' + info + bookList[i].id + '" class="btn" role="button"\n' +
                 '                       data-toggle="tooltip"\n' +
                 '                       data-placement="top" title="Изменить"><i\n' +
                 '                            class="glyphicon glyphicon-pencil icon-white"></i></a>\n' +
-                '                    <a href="' + getContextPath() + '/info?bookId=' + bookList[i].id + '" class="btn" role="button"\n' +
+                '                    <a href="' + info + bookList[i].id + '" class="btn" role="button"\n' +
                 '                       data-toggle="tooltip"\n' +
                 '                       data-placement="top" title="Удалить"><i\n' +
                 '                            class="glyphicon glyphicon-trash icon-white"></i></a>\n' +

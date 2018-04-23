@@ -19,7 +19,7 @@
                                 <!-- Product Image -->
                                 <div class="image">
                                     <a href="${info}?${bookId}=${book.id}"><img class="img-rounded"
-                                            src="${contextPath}showBookImage?${bookId}=${book.id}"
+                                            src="${showImg}?${bookId}=${book.id}"
                                             alt="Изображение отсутствует"></a>
                                 </div>
                                 <!-- Product Title -->
@@ -51,7 +51,7 @@
                                                data-placement="top" title="В корзину"><i
                                                     class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
 
-                                            <a href="${info}?${bookId}=${book.id}" class="btn"
+                                            <a href="${showPdf}?${bookId}=${book.id}" class="btn"
                                                role="button"
                                                data-toggle="tooltip"
                                                data-placement="top" title="Читать"><i

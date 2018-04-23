@@ -5,7 +5,7 @@
 <div id="main-box" class="col-sm-9">
     <div class="col-sm-3">
         <div class="image">
-            <img  class="img-rounded" src="${contextPath}showBookImage?${bookId}=${book.id}" alt="Item Name">
+            <img  class="img-rounded" src="${showImg}?${bookId}=${book.id}" alt="Item Name">
         </div>
     </div>
     <!-- End Product Image & Available Colors -->

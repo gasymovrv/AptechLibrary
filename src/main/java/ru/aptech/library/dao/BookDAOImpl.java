@@ -39,6 +39,7 @@ public class BookDAOImpl {
     private GenreDAOImpl genreDAO;
 
 
+
     @Transactional
     public List<Book> getBooks() {
         Session session = sessionFactory.getCurrentSession();
@@ -144,6 +145,16 @@ public class BookDAOImpl {
                 .getResultList();
         return books;
     }
+
+
+    @Transactional
+    public Book getBookWithContent(long id) {
+        Session session = sessionFactory.getCurrentSession();
+        Book book = session.createQuery("select b from Book b where b.id=:id",
+                Book.class).setParameter("id", id).getSingleResult();
+        return book;
+    }
+
 //    @Transactional
 //    public List<Book> getBooks() {
 //        //Сессия

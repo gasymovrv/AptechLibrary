@@ -68,6 +68,16 @@ public class MainController {
     }
 
 
+    @RequestMapping(value = "showBookContent", method = RequestMethod.GET)
+    public void showPdf(@RequestParam("bookId") Long bookId, HttpServletResponse response, HttpServletRequest request)
+            throws ServletException, IOException {
+        Book book = bookDAO.getBookWithContent(bookId);
+        response.setContentType("application/pdf");
+        response.getOutputStream().write(book.getContent());
+        response.getOutputStream().close();
+    }
+
+
     private void addAttributesForCriteria(ModelAndView modelAndView) {
         List<Genre> genres = genreDAO.getGenres();
         Character[] letters = utils.getLetters();
