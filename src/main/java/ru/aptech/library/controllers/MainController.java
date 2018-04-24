@@ -71,9 +71,9 @@ public class MainController {
     @RequestMapping(value = "showBookContent", method = RequestMethod.GET)
     public void showPdf(@RequestParam("bookId") Long bookId, HttpServletResponse response, HttpServletRequest request)
             throws ServletException, IOException {
-        Book book = bookDAO.getBookWithContent(bookId);
+        byte[] content = bookDAO.getBookContent(bookId);
         response.setContentType("application/pdf");
-        response.getOutputStream().write(book.getContent());
+        response.getOutputStream().write(content);
         response.getOutputStream().close();
     }
 

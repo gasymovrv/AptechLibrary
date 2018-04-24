@@ -148,11 +148,11 @@ public class BookDAOImpl {
 
 
     @Transactional
-    public Book getBookWithContent(long id) {
+    public byte[] getBookContent(long id) {
         Session session = sessionFactory.getCurrentSession();
-        Book book = session.createQuery("select b from Book b where b.id=:id",
-                Book.class).setParameter("id", id).getSingleResult();
-        return book;
+        byte[] content = (byte[])session.createQuery("select b.content from Book b where b.id=:id")
+                .setParameter("id", id).getSingleResult();
+        return content;
     }
 
 //    @Transactional
