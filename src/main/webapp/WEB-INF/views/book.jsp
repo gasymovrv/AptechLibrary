@@ -3,9 +3,9 @@
 
 <!-- Main box -->
 <div id="main-box" class="col-sm-9">
-    <div class="col-sm-3">
-        <div class="image">
-            <img  class="img-rounded" src="${showImg}?${bookId}=${book.id}" alt="Item Name">
+    <div class="col-sm-4">
+        <div class="product-image-large">
+            <img class="img-rounded" src="${showImg}?${bookId}=${book.id}" alt="Item Name">
         </div>
     </div>
     <!-- End Product Image & Available Colors -->
@@ -15,28 +15,36 @@
         <div class="price">
             <span class="price-was">$959.99</span> $999.99
         </div>
-        <h5>Quick Overview</h5>
+        <h5>Краткое описание</h5>
         <p>
-            Morbi eleifend congue elit nec sagittis. Praesent aliquam lobortis tellus, nec consequat massa ornare vitae.
-            Ut
-            fermentum justo vel venenatis eleifend. Fusce id magna eros.
+            ${book.descr}
         </p>
-        <table class="shop-item-selections">
-            <!-- Quantity -->
-            <tr>
-                <td><b>Quantity:</b></td>
-                <td>
-                    <input type="text" class="form-control input-sm input-micro" value="1">
-                </td>
-            </tr>
-            <!-- Add to Cart Button -->
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <a href="#" class="btn btn"><i class="icon-shopping-cart icon-white"></i> Add to Cart</a>
-                </td>
-            </tr>
-        </table>
+        <h5>Действия</h5>
+        <!-- Operations -->
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">
+                <a href="${info}?${bookId}=${book.id}" class="btn"
+                   role="button"
+                   data-toggle="tooltip"
+                   data-placement="top" title="В корзину"><i
+                        class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
+                <a href="${showPdf}?${bookId}=${book.id}" class="btn"
+                   role="button"
+                   data-toggle="tooltip"
+                   data-placement="top" title="Читать"><i
+                        class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                <a href="${info}?${bookId}=${book.id}" class="btn"
+                   role="button"
+                   data-toggle="tooltip"
+                   data-placement="top" title="Изменить"><i
+                        class="glyphicon glyphicon-pencil icon-white"></i></a>
+                <a href="${info}?${bookId}=${book.id}" class="btn"
+                   role="button"
+                   data-toggle="tooltip"
+                   data-placement="top" title="Удалить"><i
+                        class="glyphicon glyphicon-trash icon-white"></i></a>
+            </div>
+        </div>
     </div>
     <!-- End Product Summary & Options -->
 
@@ -45,79 +53,51 @@
         <div class="tabbable">
             <!-- Tabs -->
             <ul class="nav nav-tabs product-details-nav">
-                <li class="active"><a href="#tab1" data-toggle="tab">Description</a></li>
-                <li><a href="#tab2" data-toggle="tab">Specification</a></li>
+                <li class="active"><a href="#tab1" data-toggle="tab">Описание</a></li>
+                <li><a href="#tab2" data-toggle="tab">Сведения</a></li>
             </ul>
             <!-- Tab Content (Full Description) -->
             <div class="tab-content product-detail-info">
                 <div class="tab-pane active" id="tab1">
-                    <h4>Product Description</h4>
+                    <h4>Рецензия</h4>
                     <p>
-                        Donec hendrerit massa metus, a ultrices elit iaculis eu. Pellentesque ullamcorper augue lacus.
-                        Phasellus et est quis diam iaculis fringilla id nec sapien. Sed tempor ornare felis, non
-                        vulputate
-                        dolor. Etiam ornare diam vitae ligula malesuada tempor. Vestibulum nec odio vel libero
-                        ullamcorper
-                        euismod et in sapien. Suspendisse potenti.
-                    </p>
-                    <h4>Product Highlights</h4>
-                    <ul>
-                        <li>Nullam dictum augue nec iaculis rhoncus. Aenean lobortis fringilla orci, vitae varius purus
-                            eleifend vitae.
-                        </li>
-                        <li>Nunc ornare, dolor a ultrices ultricies, magna dolor convallis enim, sed volutpat quam sem
-                            sed
-                            tellus.
-                        </li>
-                        <li>Aliquam malesuada cursus urna a rutrum. Ut ultricies facilisis suscipit.</li>
-                        <li>Duis a magna iaculis, aliquam metus in, luctus eros.</li>
-                        <li>Aenean nisi nibh, imperdiet sit amet eleifend et, gravida vitae sem.</li>
-                        <li>Donec quis nisi congue, ultricies massa ut, bibendum velit.</li>
-                    </ul>
-                    <h4>Usage Information</h4>
-                    <p>
-                        Donec hendrerit massa metus, a ultrices elit iaculis eu. Pellentesque ullamcorper augue lacus.
-                        Phasellus et est quis diam iaculis fringilla id nec sapien. Sed tempor ornare felis, non
-                        vulputate
-                        dolor. Etiam ornare diam vitae ligula malesuada tempor. Vestibulum nec odio vel libero
-                        ullamcorper
-                        euismod et in sapien. Suspendisse potenti.
+                        ${book.descr}
                     </p>
                 </div>
                 <!-- Tab Content (Specification) -->
                 <div class="tab-pane" id="tab2">
                     <table>
                         <tr>
-                            <td>Total sensor Pixels (megapixels)</td>
-                            <td>Approx. 16.7</td>
+                            <td>Автор</td>
+                            <td>${book.author.fio}</td>
                         </tr>
                         <tr>
-                            <td>Effective Pixels (megapixels)</td>
-                            <td>Approx. 16.1</td>
+                            <td>Жанр</td>
+                            <td>${book.genre.name}</td>
                         </tr>
                         <tr>
-                            <td>Automatic White Balance</td>
-                            <td>YES</td>
+                            <td>Издательство</td>
+                            <td>${book.publisher.name}</td>
                         </tr>
                         <tr>
-                            <td>White balance: preset selection</td>
-                            <td>Daylight, Shade, Cloudy, Incandescent, Fluorescent, Flash</td>
+                            <td>Год издания</td>
+                            <td>${book.publishYear}</td>
                         </tr>
                         <tr>
-                            <td>White balance: custom setting</td>
-                            <td>YES</td>
+                            <td>Количество страниц</td>
+                            <td>${book.pageCount}</td>
                         </tr>
                         <tr>
-                            <td>White balance: types of color temperature</td>
-                            <td>YES (G7 to M7,15-step) (A7 to B7,15-step)</td>
+                            <td>ISBN</td>
+                            <td>${book.isbn}</td>
                         </tr>
                         <tr>
-                            <td>White balance bracketing</td>
-                            <td>NO</td>
+                            <td>Рейтинг</td>
+                            <td>${book.rating}</td>
                         </tr>
                         <tr>
-                            <td>ISO Sensitivity Setting</td>
-                            <td>ISO100 - 25600 equivalent</td>
+                            <td>Количестов голосов</td>
+                            <td>${book.voteCount}</td>
                         </tr>
                     </table>
                 </div>
