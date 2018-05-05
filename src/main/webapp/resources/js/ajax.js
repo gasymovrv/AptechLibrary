@@ -94,7 +94,7 @@ function createHtmlWithBookList(bookList, foundResultText) {
     let info = getContextPath() + '/info?bookId=';
 
     let rowId = 'row-with-books_0';
-    $('#main-box').html(
+    $('#books-box').html(
         '   <div class="row">\n' +
         '       <div class="col-sm-8" id="books-count"><h3>' + foundResultText + bookList.length + '</h3></div>\n' +
         '   </div>\n' +

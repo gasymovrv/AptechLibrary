@@ -41,10 +41,17 @@ public class BookDAOImpl {
 
 
     @Transactional
-    public List<Book> getBooks() {
+    public List<Book> getBooks(Integer booksOnPage, Integer selectedPage) {
+        if (booksOnPage == null) {
+            booksOnPage = 5;
+        }
+        if (selectedPage == null) {
+            selectedPage = 1;
+        }
+        int init = ((selectedPage - 1) * booksOnPage);
         Session session = sessionFactory.getCurrentSession();
         List<Book> bookList = session.createQuery(BOOKS_WITHOUT_CONTENT + ORDER_BY_NAME,
-                Book.class).getResultList();
+                Book.class).setFirstResult(init).setMaxResults(booksOnPage).getResultList();
         return bookList;
     }
 
@@ -56,50 +63,6 @@ public class BookDAOImpl {
                         + " where b.id=:id",
                 Book.class).setParameter("id", id).getSingleResult();
         return book;
-    }
-
-
-    @Transactional
-    public List<Book> getBooks(Author author) {
-        Session session = sessionFactory.getCurrentSession();
-        List<Book> books = session.createQuery(BOOKS_WITHOUT_CONTENT
-                        + " where b.author.fio like CONCAT('%', :author, '%')"
-                        + ORDER_BY_NAME,
-                Book.class).setParameter("author", author.getFio()).getResultList();
-        return books;
-    }
-
-
-    @Transactional
-    public List<Book> getBooks(String bookName) {
-        Session session = sessionFactory.getCurrentSession();
-        List<Book> books = session.createQuery(BOOKS_WITHOUT_CONTENT
-                        + " where b.name like CONCAT('%', :name, '%')"
-                        + ORDER_BY_NAME,
-                Book.class).setParameter("name", bookName.toLowerCase()).getResultList();
-        return books;
-    }
-
-
-    @Transactional
-    public List<Book> getBooks(Genre genre) {
-        Session session = sessionFactory.getCurrentSession();
-        List<Book> books = session.createQuery(BOOKS_WITHOUT_CONTENT
-                        + " where b.genre.name like CONCAT('%', :genre, '%')"
-                        + ORDER_BY_NAME,
-                Book.class).setParameter("genre", genre.getName()).getResultList();
-        return books;
-    }
-
-
-    @Transactional
-    public List<Book> getBooks(Character letter) {
-        Session session = sessionFactory.getCurrentSession();
-        List<Book> books = session.createQuery(BOOKS_WITHOUT_CONTENT
-                        + " where b.name like CONCAT(:letter, '%')"
-                        + ORDER_BY_NAME,
-                Book.class).setParameter("letter", letter).getResultList();
-        return books;
     }
 
 
@@ -155,6 +118,25 @@ public class BookDAOImpl {
         return content;
     }
 
+    public Long getQuantityPages(Long quantityBooks, Integer booksOnPage) {
+        if (booksOnPage == null) {
+            booksOnPage = 5;
+        }
+        if (quantityBooks == null) {
+            quantityBooks = getQuantityBooks();
+        }
+        if (quantityBooks % booksOnPage > 0) {
+            return quantityBooks / booksOnPage + 1;
+        }
+        return quantityBooks / booksOnPage;
+    }
+
+    @Transactional
+    public Long getQuantityBooks() {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("select count(*) from Book", Long.class).getSingleResult();
+    }
+
 //    @Transactional
 //    public List<Book> getBooks() {
 //        //Сессия
@@ -173,5 +155,48 @@ public class BookDAOImpl {
 //        return query.getSingleResult();
 //    }
 
-
+//
+//
+//    @Transactional
+//    public List<Book> getBooks(Author author) {
+//        Session session = sessionFactory.getCurrentSession();
+//        List<Book> books = session.createQuery(BOOKS_WITHOUT_CONTENT
+//                        + " where b.author.fio like CONCAT('%', :author, '%')"
+//                        + ORDER_BY_NAME,
+//                Book.class).setParameter("author", author.getFio()).getResultList();
+//        return books;
+//    }
+//
+//
+//    @Transactional
+//    public List<Book> getBooks(String bookName) {
+//        Session session = sessionFactory.getCurrentSession();
+//        List<Book> books = session.createQuery(BOOKS_WITHOUT_CONTENT
+//                        + " where b.name like CONCAT('%', :name, '%')"
+//                        + ORDER_BY_NAME,
+//                Book.class).setParameter("name", bookName.toLowerCase()).getResultList();
+//        return books;
+//    }
+//
+//
+//    @Transactional
+//    public List<Book> getBooks(Genre genre) {
+//        Session session = sessionFactory.getCurrentSession();
+//        List<Book> books = session.createQuery(BOOKS_WITHOUT_CONTENT
+//                        + " where b.genre.name like CONCAT('%', :genre, '%')"
+//                        + ORDER_BY_NAME,
+//                Book.class).setParameter("genre", genre.getName()).getResultList();
+//        return books;
+//    }
+//
+//
+//    @Transactional
+//    public List<Book> getBooks(Character letter) {
+//        Session session = sessionFactory.getCurrentSession();
+//        List<Book> books = session.createQuery(BOOKS_WITHOUT_CONTENT
+//                        + " where b.name like CONCAT(:letter, '%')"
+//                        + ORDER_BY_NAME,
+//                Book.class).setParameter("letter", letter).getResultList();
+//        return books;
+//    }
 }

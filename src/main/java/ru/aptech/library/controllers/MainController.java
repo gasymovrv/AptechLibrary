@@ -30,13 +30,17 @@ public class MainController {
 
 
     @RequestMapping(value = "home", method = RequestMethod.GET)
-    public ModelAndView home() {
+    public ModelAndView home(@RequestParam(required = false) Integer selectedPage, @RequestParam(required = false) Integer booksOnPage) {
         ModelAndView modelAndView = new ModelAndView("home-page-list-books");
         addAttributesForCriteria(modelAndView);
-
-        List<Book> books = bookDAO.getBooks();
+        List<Book> books = bookDAO.getBooks(booksOnPage, selectedPage);
+        long quantBooks = bookDAO.getQuantityBooks();
+        long pages = bookDAO.getQuantityPages(quantBooks, booksOnPage);
         modelAndView.addObject("bookList", books);
         modelAndView.addObject("criteria", new SearchCriteria());
+        modelAndView.addObject("booksOnPage", booksOnPage);
+        modelAndView.addObject("selectedPage", selectedPage);
+        modelAndView.addObject("quantityPages", pages);
         return modelAndView;
     }
 
