@@ -27,7 +27,7 @@ public class MainController {
     private GenreDAOImpl genreDAO;
     @Autowired
     private Utils utils;
-    public static final int PAGE_SIZE_VALUE = 6;
+    private static final int PAGE_SIZE_VALUE = 6;
 
     @RequestMapping(value = "home", method = RequestMethod.GET)
     public ModelAndView home(@RequestParam(required = false) Integer selectedPage, @RequestParam(required = false) Integer booksOnPage, HttpServletRequest request) {
@@ -44,23 +44,38 @@ public class MainController {
         modelAndView.addObject("bookList", books);
         modelAndView.addObject("criteria", new SearchCriteria());
         modelAndView.addObject("booksOnPage", booksOnPage);
-//        modelAndView.addObject("quantBooks", quantBooks);
-        request.getSession().setAttribute("quantBooks",quantBooks);
+        modelAndView.addObject("quantBooks", quantBooks);
         return modelAndView;
     }
 
 
     @RequestMapping(value = "home/pages", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public @ResponseBody List<Book> pagination(@RequestParam(required = false) Integer selectedPage, @RequestParam(required = false) Integer booksOnPage) {
-        List<Book> books = bookDAO.getBooks(booksOnPage, selectedPage);
-        return books;
+        if (selectedPage == null) {
+            selectedPage = 1;
+        }
+        if (booksOnPage == null) {
+            booksOnPage = PAGE_SIZE_VALUE;
+        }
+        return bookDAO.getBooks(booksOnPage, selectedPage);
     }
 
     @RequestMapping(value = "home/searchByCriteria", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-    public @ResponseBody List<Book> searchByText(@RequestBody SearchCriteria criteria) {
-        return bookDAO.getBooks(criteria);
+    public @ResponseBody List<Book> searchByText(@RequestBody SearchCriteria criteria, @RequestParam(required = false) Integer selectedPage, @RequestParam(required = false) Integer booksOnPage) {
+        if (selectedPage == null) {
+            selectedPage = 1;
+        }
+        if (booksOnPage == null) {
+            booksOnPage = PAGE_SIZE_VALUE;
+        }
+        return bookDAO.getBooks(criteria, booksOnPage, selectedPage);
     }
 
+    @RequestMapping(value = "getQuantityBooks", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    public @ResponseBody Long quantityBooks(@RequestBody SearchCriteria criteria) {
+        Long l = bookDAO.getQuantityBooks(criteria);
+        return l;
+    }
 
     @RequestMapping(value = "info", method = RequestMethod.GET)
     public ModelAndView info(@RequestParam(value = "bookId", required = false) Long bookId) {

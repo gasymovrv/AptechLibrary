@@ -61,16 +61,65 @@ public class BookDAOImpl {
 
 
     @Transactional
-    public List<Book> getBooks(SearchCriteria criteria) {
+    public List<Book> getBooks(SearchCriteria criteria, Integer booksOnPage, Integer selectedPage) {
+        int init = (selectedPage - 1) * booksOnPage;
         Session session = sessionFactory.getCurrentSession();
-        //получаем все критерии
-        Long genreId = criteria.getGenreId();
-        Long publisherId = criteria.getPublisherId();
-        Long authorId = criteria.getAuthorId();
-        Character letter = criteria.getLetter();
-        String text = criteria.getText();
-        SearchType searchType = criteria.getSearchType();
+        List<Book> books = session.createQuery(BOOKS_WITHOUT_CONTENT +
+                        " where b.genre.id=:genre" +
+                        " or b.publisher.id=:publisher" +
+                        " or b.author.id=:author" +
+                        " or b.name like CONCAT(:letter, '%')" +
+                        " or " + getSqlBySearchType(criteria.getSearchType()) +
+                        " like CONCAT('%', :text, '%')" +
+                        ORDER_BY_NAME,
+                Book.class)
+                .setParameter("genre", criteria.getGenreId())
+                .setParameter("publisher", criteria.getPublisherId())
+                .setParameter("author", criteria.getAuthorId())
+                .setParameter("letter", criteria.getLetter())
+                .setParameter("text", criteria.getText())
+                .setFirstResult(init).setMaxResults(booksOnPage).getResultList();
+        return books;
+    }
 
+
+    @Transactional
+    public byte[] getBookContent(long id) {
+        Session session = sessionFactory.getCurrentSession();
+        byte[] content = (byte[])session.createQuery("select b.content from Book b where b.id=:id")
+                .setParameter("id", id).getSingleResult();
+        return content;
+    }
+
+
+    @Transactional
+    public Long getQuantityBooks() {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("select count(*) from Book", Long.class).getSingleResult();
+    }
+
+    @Transactional
+    public Long getQuantityBooks(SearchCriteria criteria) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Long result = session.createQuery("select count(*) from Book b" +
+                        " where b.genre.id=:genre" +
+                        " or b.publisher.id=:publisher" +
+                        " or b.author.id=:author" +
+                        " or b.name like CONCAT(:letter, '%')" +
+                        " or " + getSqlBySearchType(criteria.getSearchType()) +
+                        " like CONCAT('%', :text, '%')",
+                Long.class)
+                .setParameter("genre", criteria.getGenreId())
+                .setParameter("publisher", criteria.getPublisherId())
+                .setParameter("author", criteria.getAuthorId())
+                .setParameter("letter", criteria.getLetter())
+                .setParameter("text", criteria.getText())
+                .getSingleResult();
+        return result;
+    }
+
+    private String getSqlBySearchType(SearchType searchType){
         String stringSearchType = null;
         switch (searchType) {
             case TITLE:
@@ -86,51 +135,8 @@ public class BookDAOImpl {
                 stringSearchType = " b.publisher.name ";
                 break;
         }
-        List<Book> books = session.createQuery(BOOKS_WITHOUT_CONTENT
-                        + " where b.genre.id=:genre " +
-                        "or b.publisher.id=:publisher " +
-                        "or b.author.id=:author " +
-                        "or b.name like CONCAT(:letter, '%') " +
-                        "or " + stringSearchType + " like CONCAT('%', :text, '%')"
-                        + ORDER_BY_NAME,
-                Book.class)
-                .setParameter("genre", genreId)
-                .setParameter("publisher", publisherId)
-                .setParameter("author", authorId)
-                .setParameter("letter", letter)
-                .setParameter("text", text)
-                .getResultList();
-        return books;
+        return stringSearchType;
     }
-
-
-    @Transactional
-    public byte[] getBookContent(long id) {
-        Session session = sessionFactory.getCurrentSession();
-        byte[] content = (byte[])session.createQuery("select b.content from Book b where b.id=:id")
-                .setParameter("id", id).getSingleResult();
-        return content;
-    }
-
-    public Long getQuantityPages(Long quantityBooks, Integer booksOnPage) {
-        if (booksOnPage == null) {
-            booksOnPage = 5;
-        }
-        if (quantityBooks == null) {
-            quantityBooks = getQuantityBooks();
-        }
-        if (quantityBooks % booksOnPage > 0) {
-            return quantityBooks / booksOnPage + 1;
-        }
-        return quantityBooks / booksOnPage;
-    }
-
-    @Transactional
-    public Long getQuantityBooks() {
-        Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("select count(*) from Book", Long.class).getSingleResult();
-    }
-
 //    @Transactional
 //    public List<Book> getBooks() {
 //        //Сессия

@@ -28,64 +28,79 @@ $(document).ready(function () {
 function searchByText() {
     $(document).on('submit', '#top-panel-form', function (event) {
         event.preventDefault();
-        let object = {'text': $('#top-panel-form-text').val(), 'searchType': $('#top-panel-form-select').val()};
-        searchAndPrintHtmlByAjax(object, "Найдено книг по Вашему запросу: ");
+        let criteria = {'text': $('#top-panel-form-text').val(), 'searchType': $('#top-panel-form-select').val()};
+        getBooksByAjax(criteria, "Найдено книг по Вашему запросу: ");
     });
 }
 
 
 function searchByLetter() {
     $(document).on('click', '#letters-form button', function () {//то же что и метод click, но работает всегда
-        let object = {'letter': $(this).prop('id')};
-        searchAndPrintHtmlByAjax(object, "Найдено книг, начинающихся на '" + object['letter'] + "': ");
+        let criteria = {'letter': $(this).prop('id')};
+        getBooksByAjax(criteria, "Найдено книг, начинающихся на '" + criteria['letter'] + "': ");
     });
 }
 
 
 function searchByGenre() {
     $(document).on('click', 'a.genre-link', function () {//то же что и метод click, но работает всегда
-        let object = {'genreId': $(this).prop('id')};
+        let criteria = {'genreId': $(this).prop('id')};
         let genreName = $(this).text();
-        searchAndPrintHtmlByAjax(object, "Найдено книг жанра '" + genreName + "': ");
+        getBooksByAjax(criteria, "Найдено книг жанра '" + genreName + "': ");
     });
 }
 
 function searchByPublisher() {
     $(document).on('click', 'a.publisher-link', function () {//то же что и метод click, но работает всегда
-        let object = {'publisherId': $(this).prop('id')};
+        let criteria = {'publisherId': $(this).prop('id')};
         let publisherName = $(this).text();
-        searchAndPrintHtmlByAjax(object, "Найдено книг издательства '" + publisherName + "': ");
+        getBooksByAjax(criteria, "Найдено книг издательства '" + publisherName + "': ");
     });
 }
 
 function searchByAuthor() {
     $(document).on('click', 'a.author-link', function () {//то же что и метод click, но работает всегда
-        let object = {'authorId': $(this).prop('id')};
+        let criteria = {'authorId': $(this).prop('id')};
         let authorName = $(this).text();
-        searchAndPrintHtmlByAjax(object, "Найдено книг автора " + authorName + ": ");
+        getBooksByAjax(criteria, "Найдено книг автора " + authorName + ": ");
     });
 }
+//todo попробуй перенести в books.jsp
+function getBooksByAjax(criteria, foundResultText) {
+    booksSearchPagination(10, 5, foundResultText);
 
-function searchAndPrintHtmlByAjax(object, foundResultText) {
-    $.ajax({
-        type: 'POST',//тип запроса
-        contentType: 'application/json', //отправляемый тип
-        dataType: 'json',//принимаемый тип (из контроллера)
-        data: JSON.stringify(object),//отправляемое отсюда (Request)
-        url: getContextPath() + '/home/searchByCriteria',//url адрес обработчика
-        success: function (data) {//принимаемое от сервера (Response)
-            console.log("SUCCESS: ", data);
-            createHtmlWithBookList(data, foundResultText);
-            window.history.pushState(null, null, getContextPath() + '/home');
-        },
-        error: function (e) { // Данные не отправлены
-            console.log("ERROR: ", e);
-            alert('Ошибка. Данные не отправлены.');
-        },
-        done: function () {
-            console.log("DONE");
-        }
-    });
+    // let quantityBooks = 0;
+    // $.ajax({//получить количество книг
+    //     type: 'POST',//тип запроса
+    //     contentType: 'application/json', //отправляемый тип
+    //     dataType: 'json',//принимаемый тип (из контроллера)
+    //     data: JSON.stringify(criteria),//отправляемое отсюда (Request)
+    //     url: getContextPath() + '/getQuantityBooks',//url адрес обработчика
+    //     async: false,
+    //     success: function (data) {
+    //         $('.pagination').empty();
+    //
+    //     },
+    //     error: function () {
+    //         alert('Ошибка в getBooksByAjax()/ajax1');
+    //     }
+    // });
+    // $.ajax({
+    //     type: 'POST',//тип запроса
+    //     contentType: 'application/json', //отправляемый тип
+    //     dataType: 'json',//принимаемый тип (из контроллера)
+    //     data: JSON.stringify(criteria),//отправляемое отсюда (Request)
+    //     url: getContextPath() + '/home/searchByCriteria',//url адрес обработчика
+    //     success: function (data) {//принимаемое от сервера (Response)
+    //         destroyPaginator();
+    //         createHtmlWithBookList(data, foundResultText);
+    //         window.history.pushState(null, null, getContextPath() + '/home');
+    //     },
+    //     error: function (e) { // Данные не отправлены
+    //         console.log("ERROR: ", e);
+    //         alert('Ошибка. Данные не отправлены.');
+    //     }
+    // });
 }
 
 function createHtmlWithBookList(bookList, foundResultText) {
@@ -180,6 +195,63 @@ function createHtmlWithBookList(bookList, foundResultText) {
             }
         });
     }
+}
+
+
+function booksHomePagination(itemsCount, booksOnPage) {
+    $('.pagination').pagination({
+        items: itemsCount,
+        prevText: "Предыдущая",
+        nextText: "Следующая",
+        itemsOnPage: booksOnPage,
+        onPageClick: function (pageNumber, event) {
+            $.ajax({
+                type: 'POST',//тип запроса
+                contentType: 'application/json', //отправляемый тип
+                dataType: 'json',//принимаемый тип (из контроллера)
+                url: getContextPath() + '/home/pages?selectedPage=' + pageNumber + '&booksOnPage=' + booksOnPage,//url адрес обработчика
+                success: function (data) {//принимаемое от сервера (Response)
+                    createHtmlWithBookList(data);
+                },
+                error: function () {
+                    alert('Ошибка в booksHomePagination()/pagination()/onPageClick()/ajax');
+                }
+            });
+            redrawPaginator();
+        }
+    });
+}
+
+function booksSearchPagination(itemsCount, booksOnPage, foundResultText) {
+    $('.pagination').pagination({
+        items: itemsCount,
+        prevText: "Предыдущая",
+        nextText: "Следующая",
+        itemsOnPage: booksOnPage,
+        onPageClick: function (pageNumber, event) {
+            $.ajax({
+                type: 'POST',//тип запроса
+                contentType: 'application/json', //отправляемый тип
+                dataType: 'json',//принимаемый тип (из контроллера)
+                url: getContextPath() + '/home/searchByCriteria?selectedPage=' + pageNumber + '&booksOnPage=' + booksOnPage,//url адрес обработчика
+                success: function (data) {//принимаемое от сервера (Response)
+                    createHtmlWithBookList(data, foundResultText);
+                },
+                error: function () {
+                    alert('Ошибка в booksSearchPagination()/pagination()/onPageClick()/ajax');
+                }
+            });
+            redrawPaginator();
+        }
+    });
+}
+
+function destroyPaginator() {
+    $('.pagination').pagination('destroy');
+}
+
+function redrawPaginator() {
+    $('.pagination').pagination('redraw');
 }
 
 //метод для получения контекстного пути '/aptech-library'

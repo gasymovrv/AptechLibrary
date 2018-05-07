@@ -87,7 +87,7 @@
         </div>
     </div>
     <div class="pagination-wrapper ">
-        <ul class="pagination pagination-md"> </ul>
+        <ul class="pagination pagination-md"></ul>
         <form class="form-inline">
             <div class="form-group mb-2">
                 Книг на странице:
@@ -99,31 +99,5 @@
 </div>
 
 <script>
-    let booksOnPage = ${booksOnPage};
-    let itemsCount = ${sessionScope.quantBooks};
-    addPaginator(itemsCount, booksOnPage);
-
-    function addPaginator(itemsCount, booksOnPage) {
-        $('.pagination').pagination({
-            items: itemsCount,
-            prevText: "Предыдущая",
-            nextText: "Следующая",
-            itemsOnPage: booksOnPage,
-            onPageClick: function (pageNumber, event) {
-                $.ajax({
-                    type: 'POST',//тип запроса
-                    contentType: 'application/json', //отправляемый тип
-                    dataType: 'json',//принимаемый тип (из контроллера)
-                    url: getContextPath() + '/home/pages?selectedPage=' + pageNumber + '&booksOnPage=' + booksOnPage,//url адрес обработчика
-                    success: function (data) {//принимаемое от сервера (Response)
-                        createHtmlWithBookList(data);
-                    },
-                    error: function () {
-                        alert('Ошибка в addPaginator()/pagination()/onPageClick()/ajax');
-                    }
-                });
-                $('.pagination').pagination('redraw');
-            }
-        });
-    }
+    booksHomePagination(${quantBooks}, ${booksOnPage});
 </script>
