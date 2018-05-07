@@ -207,6 +207,7 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysqlconnector-version}</version>
         </dependency>
+
     </dependencies>
 
 

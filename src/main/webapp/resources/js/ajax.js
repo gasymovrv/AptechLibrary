@@ -94,13 +94,20 @@ function createHtmlWithBookList(bookList, foundResultText) {
     let info = getContextPath() + '/info?bookId=';
 
     let rowId = 'row-with-books_0';
-    $('#books-box').html(
-        '   <div class="row">\n' +
-        '       <div class="col-sm-8" id="books-count"><h3>' + foundResultText + bookList.length + '</h3></div>\n' +
-        '   </div>\n' +
-        '   <div id="box-with-rows-for-books" class="row">' +
-        '       <div id="' + rowId + '" class="row"></div>' +
-        '   </div>');
+    if (foundResultText) {//если параметр foundResultText передали
+        $('#books-box').html(
+            '   <div class="row">\n' +
+            '       <div class="col-sm-8" id="books-count"><h3>' + foundResultText + bookList.length + '</h3></div>\n' +
+            '   </div>\n' +
+            '   <div id="box-with-rows-for-books" class="row">' +
+            '       <div id="' + rowId + '" class="row"></div>' +
+            '   </div>\n');
+    } else {
+        $('#books-box').html(
+            '   <div id="box-with-rows-for-books" class="row">' +
+            '       <div id="' + rowId + '" class="row"></div>' +
+            '   </div>\n');
+    }
 
     let j = 0;
     for (let i = 0; i < bookList.length; i++) {

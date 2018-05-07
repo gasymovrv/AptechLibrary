@@ -10,6 +10,4 @@
 <c:set var="info" value="${contextPath}info" scope="request"/>
 <c:set var="showImg" value="${contextPath}showBookImage" scope="request"/>
 <c:set var="showPdf" value="${contextPath}showBookContent" scope="request"/>
-<%--<c:set var="booksFromAuthor" value="${contextPath}..." scope="request"/>--%>
-<%--<c:set var="booksFromPublisher" value="${contextPath}..." scope="request"/>--%>
 <c:set var="bookId" value="bookId" scope="request"/>

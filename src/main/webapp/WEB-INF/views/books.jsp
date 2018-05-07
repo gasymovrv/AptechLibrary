@@ -87,42 +87,7 @@
         </div>
     </div>
     <div class="pagination-wrapper ">
-        <c:if test="${empty booksOnPage}">
-            <% request.setAttribute("booksOnPage", 5); %>
-        </c:if>
-        <c:if test="${empty selectedPage}">
-            <% request.setAttribute("selectedPage", 1); %>
-        </c:if>
-        <ul class="pagination pagination-md">
-            <c:choose>
-                <c:when test="${selectedPage<=1}">
-                    <li class="disabled"><a href="#">Предыдущая</a></li>
-                </c:when>
-                <c:otherwise>
-                    <li><a href="${home}?selectedPage=${selectedPage-1}&booksOnPage=${booksOnPage}">Предыдущая</a></li>
-                </c:otherwise>
-            </c:choose>
-
-            <c:forEach var="page" begin="1" end="${quantityPages}">
-                <c:choose>
-                    <c:when test="${selectedPage==page}">
-                        <li class="active"><a href="${home}?selectedPage=${page}&booksOnPage=${booksOnPage}">${page}</a></li>
-                    </c:when>
-                    <c:otherwise>
-                        <li><a href="${home}?selectedPage=${page}&booksOnPage=${booksOnPage}">${page}</a></li>
-                    </c:otherwise>
-                </c:choose>
-            </c:forEach>
-
-            <c:choose>
-                <c:when test="${selectedPage>=quantityPages}">
-                    <li class="disabled"><a href="#">Следующая</a></li>
-                </c:when>
-                <c:otherwise>
-                    <li><a href="${home}?selectedPage=${selectedPage+1}&booksOnPage=${booksOnPage}">Следующая</a></li>
-                </c:otherwise>
-            </c:choose>
-        </ul>
+        <ul class="pagination pagination-md"> </ul>
         <form class="form-inline">
             <div class="form-group mb-2">
                 Книг на странице:
@@ -132,3 +97,33 @@
         </form>
     </div>
 </div>
+
+<script>
+    let booksOnPage = ${booksOnPage};
+    let itemsCount = ${sessionScope.quantBooks};
+    addPaginator(itemsCount, booksOnPage);
+
+    function addPaginator(itemsCount, booksOnPage) {
+        $('.pagination').pagination({
+            items: itemsCount,
+            prevText: "Предыдущая",
+            nextText: "Следующая",
+            itemsOnPage: booksOnPage,
+            onPageClick: function (pageNumber, event) {
+                $.ajax({
+                    type: 'POST',//тип запроса
+                    contentType: 'application/json', //отправляемый тип
+                    dataType: 'json',//принимаемый тип (из контроллера)
+                    url: getContextPath() + '/home/pages?selectedPage=' + pageNumber + '&booksOnPage=' + booksOnPage,//url адрес обработчика
+                    success: function (data) {//принимаемое от сервера (Response)
+                        createHtmlWithBookList(data);
+                    },
+                    error: function () {
+                        alert('Ошибка в addPaginator()/pagination()/onPageClick()/ajax');
+                    }
+                });
+                $('.pagination').pagination('redraw');
+            }
+        });
+    }
+</script>

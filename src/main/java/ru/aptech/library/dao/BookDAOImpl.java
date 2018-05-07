@@ -42,13 +42,7 @@ public class BookDAOImpl {
 
     @Transactional
     public List<Book> getBooks(Integer booksOnPage, Integer selectedPage) {
-        if (booksOnPage == null) {
-            booksOnPage = 5;
-        }
-        if (selectedPage == null) {
-            selectedPage = 1;
-        }
-        int init = ((selectedPage - 1) * booksOnPage);
+        int init = (selectedPage - 1) * booksOnPage;
         Session session = sessionFactory.getCurrentSession();
         List<Book> bookList = session.createQuery(BOOKS_WITHOUT_CONTENT + ORDER_BY_NAME,
                 Book.class).setFirstResult(init).setMaxResults(booksOnPage).getResultList();

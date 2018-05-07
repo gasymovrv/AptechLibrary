@@ -27,27 +27,37 @@ public class MainController {
     private GenreDAOImpl genreDAO;
     @Autowired
     private Utils utils;
-
+    public static final int PAGE_SIZE_VALUE = 6;
 
     @RequestMapping(value = "home", method = RequestMethod.GET)
-    public ModelAndView home(@RequestParam(required = false) Integer selectedPage, @RequestParam(required = false) Integer booksOnPage) {
-        ModelAndView modelAndView = new ModelAndView("home-page-list-books");
-        addAttributesForCriteria(modelAndView);
+    public ModelAndView home(@RequestParam(required = false) Integer selectedPage, @RequestParam(required = false) Integer booksOnPage, HttpServletRequest request) {
+        if (selectedPage == null) {
+            selectedPage = 1;
+        }
+        if (booksOnPage == null) {
+            booksOnPage = PAGE_SIZE_VALUE;
+        }
         List<Book> books = bookDAO.getBooks(booksOnPage, selectedPage);
         long quantBooks = bookDAO.getQuantityBooks();
-        long pages = bookDAO.getQuantityPages(quantBooks, booksOnPage);
+        ModelAndView modelAndView = new ModelAndView("home-page-list-books");
+        addAttributesForCriteria(modelAndView);
         modelAndView.addObject("bookList", books);
         modelAndView.addObject("criteria", new SearchCriteria());
         modelAndView.addObject("booksOnPage", booksOnPage);
-        modelAndView.addObject("selectedPage", selectedPage);
-        modelAndView.addObject("quantityPages", pages);
+//        modelAndView.addObject("quantBooks", quantBooks);
+        request.getSession().setAttribute("quantBooks",quantBooks);
         return modelAndView;
     }
 
 
+    @RequestMapping(value = "home/pages", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    public @ResponseBody List<Book> pagination(@RequestParam(required = false) Integer selectedPage, @RequestParam(required = false) Integer booksOnPage) {
+        List<Book> books = bookDAO.getBooks(booksOnPage, selectedPage);
+        return books;
+    }
+
     @RequestMapping(value = "home/searchByCriteria", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-    public @ResponseBody
-    List<Book> searchByText(@RequestBody SearchCriteria criteria) {
+    public @ResponseBody List<Book> searchByText(@RequestBody SearchCriteria criteria) {
         return bookDAO.getBooks(criteria);
     }
 
