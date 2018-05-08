@@ -30,51 +30,68 @@ public class MainController {
     private static final int PAGE_SIZE_VALUE = 6;
 
     @RequestMapping(value = "home", method = RequestMethod.GET)
-    public ModelAndView home(@RequestParam(required = false) Integer selectedPage, @RequestParam(required = false) Integer booksOnPage, HttpServletRequest request) {
-        if (selectedPage == null) {
-            selectedPage = 1;
-        }
-        if (booksOnPage == null) {
-            booksOnPage = PAGE_SIZE_VALUE;
-        }
-        List<Book> books = bookDAO.getBooks(booksOnPage, selectedPage);
-        long quantBooks = bookDAO.getQuantityBooks();
+    public ModelAndView home(HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView("home-page-list-books");
         addAttributesForCriteria(modelAndView);
-        modelAndView.addObject("bookList", books);
-        modelAndView.addObject("criteria", new SearchCriteria());
-        modelAndView.addObject("booksOnPage", booksOnPage);
-        modelAndView.addObject("quantBooks", quantBooks);
+        if(request.getSession().getAttribute("booksOnPage")==null) {
+            request.getSession().setAttribute("booksOnPage", PAGE_SIZE_VALUE);
+        }
         return modelAndView;
     }
 
 
-    @RequestMapping(value = "home/pages", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-    public @ResponseBody List<Book> pagination(@RequestParam(required = false) Integer selectedPage, @RequestParam(required = false) Integer booksOnPage) {
-        if (selectedPage == null) {
-            selectedPage = 1;
-        }
-        if (booksOnPage == null) {
-            booksOnPage = PAGE_SIZE_VALUE;
-        }
-        return bookDAO.getBooks(booksOnPage, selectedPage);
-    }
-
     @RequestMapping(value = "home/searchByCriteria", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-    public @ResponseBody List<Book> searchByText(@RequestBody SearchCriteria criteria, @RequestParam(required = false) Integer selectedPage, @RequestParam(required = false) Integer booksOnPage) {
+    public @ResponseBody List<Book> searchByCriteria(@RequestParam(required = false) Integer selectedPage,
+                                                 @RequestParam(required = false) Integer booksOnPage,
+                                                 @RequestBody SearchCriteria criteria) {
         if (selectedPage == null) {
             selectedPage = 1;
         }
         if (booksOnPage == null) {
             booksOnPage = PAGE_SIZE_VALUE;
+        }
+        if(criteria.getText()==null
+                && criteria.getAuthorId() == null
+                && criteria.getGenreId() == null
+                && criteria.getLetter() == null
+                && criteria.getPublisherId() == null){
+            return bookDAO.getBooks(booksOnPage, selectedPage);
         }
         return bookDAO.getBooks(criteria, booksOnPage, selectedPage);
+
     }
 
     @RequestMapping(value = "getQuantityBooks", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public @ResponseBody Long quantityBooks(@RequestBody SearchCriteria criteria) {
-        Long l = bookDAO.getQuantityBooks(criteria);
-        return l;
+        if(criteria.getText() == null
+                && criteria.getAuthorId() == null
+                && criteria.getGenreId() == null
+                && criteria.getLetter() == null
+                && criteria.getPublisherId() == null){
+            return bookDAO.getQuantityBooks();
+        }
+        return bookDAO.getQuantityBooks(criteria);
+    }
+
+    @RequestMapping(value = "saveBooksOnPageValue", method = RequestMethod.POST, consumes = "application/json")
+    public void saveSearchCriterions(@RequestParam(required = false) Integer booksOnPage,
+                                     @RequestParam(required = false) String foundResultText,
+                                     @RequestBody(required = false) SearchCriteria criteria,
+                                     HttpServletRequest request) {
+
+        if (booksOnPage != null) {
+            request.getSession().setAttribute("booksOnPage", booksOnPage);
+        }
+        if (criteria.getText() != null
+                || criteria.getAuthorId() != null
+                || criteria.getGenreId() != null
+                || criteria.getLetter() != null
+                || criteria.getPublisherId() != null) {
+                    request.getSession().setAttribute("criteria", criteria);
+        }
+        if (foundResultText != null) {
+            request.getSession().setAttribute("foundResultText", foundResultText);
+        }
     }
 
     @RequestMapping(value = "info", method = RequestMethod.GET)
