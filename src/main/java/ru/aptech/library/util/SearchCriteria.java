@@ -71,4 +71,12 @@ public class SearchCriteria implements Serializable{
     public void setAuthorId(Long authorId) {
         this.authorId = authorId;
     }
+
+    public boolean isEmpty(){
+        return getText() == null
+                && getAuthorId() == null
+                && getGenreId() == null
+                && getLetter() == null
+                && getPublisherId() == null;
+    }
 }

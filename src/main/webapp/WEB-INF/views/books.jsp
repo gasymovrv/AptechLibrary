@@ -20,20 +20,16 @@
 </div>
 
 <script>
+    $(document).on('click', '#books-on-page-button', function () {
+        let booksOnPage = $('#books-on-page-input').val();
+        printItemsWithPagination(getCriteria(), booksOnPage);
+    });
     //начальный экран - при загрузке home
-    printItemsWithPagination({}, ${sessionScope.booksOnPage});
-
+    printItemsWithPagination({}, getBooksOnPage());
     //экраны поиска
-    searchByAuthor(printItemsWithPagination, ${sessionScope.booksOnPage});
-    searchByPublisher(printItemsWithPagination, ${sessionScope.booksOnPage});
-    searchByGenre(printItemsWithPagination, ${sessionScope.booksOnPage});
-    searchByLetter(printItemsWithPagination, ${sessionScope.booksOnPage});
-    searchByText(printItemsWithPagination, ${sessionScope.booksOnPage});
-
-
-    <%--$(document).on('click', '#books-on-page-button', function (event) {--%>
-        <%--let booksOnPage = $('#books-on-page-input').val();--%>
-        <%--saveSearchCriterion(booksOnPage);--%>
-        <%--printItemsWithPagination(${sessionScope.criteria}, ${sessionScope.booksOnPage}, ${sessionScope.foundResultText})--%>
-    <%--});--%>
+    searchByAuthor(printItemsWithPagination);
+    searchByPublisher(printItemsWithPagination);
+    searchByGenre(printItemsWithPagination);
+    searchByLetter(printItemsWithPagination);
+    searchByText(printItemsWithPagination);
 </script>

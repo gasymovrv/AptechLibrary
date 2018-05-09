@@ -70,7 +70,6 @@
 <script src="${contextPathToRes}js/jquery.bxslider.js"></script>
 <script src="${contextPathToRes}js/main-menu.js"></script>
 <script src="${contextPathToRes}js/template.js"></script>
-<%--<script src="${contextPathToRes}js/jquery.twbsPagination.min.js"></script>--%>
 <script src="${contextPathToRes}js/jquery.simplePagination.js"></script>
 </body>
 </html>
