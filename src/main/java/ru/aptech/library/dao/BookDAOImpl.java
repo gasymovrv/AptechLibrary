@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.aptech.library.entities.Author;
 import ru.aptech.library.entities.Book;
 import ru.aptech.library.entities.Genre;
+import ru.aptech.library.entities.Publisher;
 import ru.aptech.library.enums.SearchType;
 import ru.aptech.library.util.SearchCriteria;
 
@@ -136,6 +137,38 @@ public class BookDAOImpl {
                 break;
         }
         return stringSearchType;
+    }
+
+
+    @Transactional
+    public boolean addBook(Book book) {
+        Session session = sessionFactory.getCurrentSession();
+        book.setAuthor(session.get(Author.class, 18L));
+        book.setGenre(session.find(Genre.class, 14L));
+        book.setPublisher(session.find(Publisher.class, 9L));
+        book.setPublishYear(2010);
+        book.setContent(new byte[10]);
+
+        boolean result;
+        try {
+            result = (session.save(book) != null);
+        } catch (Exception e) {
+            result = false;
+        }
+        return result;
+    }
+
+    @Transactional
+    public boolean deleteBook(Long bookId) {
+        Session session = sessionFactory.getCurrentSession();
+        boolean result;
+        try {
+            session.delete(getBooks(bookId));
+            result = true;
+        } catch (Exception e) {
+            result = false;
+        }
+        return result;
     }
 //    @Transactional
 //    public List<Book> getBooks() {

@@ -3,7 +3,7 @@
 
 <!-- Main box -->
 <div class="col-sm-9">
-    <div id="books-box">
+    <div id="main-box">
         <div id="box-with-rows-for-books" class="row">
             <%--template--%>
         </div>

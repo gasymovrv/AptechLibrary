@@ -50,6 +50,12 @@ function searchByAuthor() {
 }
 
 function printItemsWithPagination(criteria, itemsOnPage) {
+    let $elem = $('.pagination-wrapper');
+    if(!$elem.is(':visible')){
+        //если пагинатор был скрыт (как например на странице bookInfo)
+        //то показываем
+        $elem.show();
+    }
     if(!itemsOnPage){
         //если аргумент не передан, то берем значение из сессии
         itemsOnPage = getBooksOnPage();
@@ -107,25 +113,38 @@ function getItemsByAjax(page, itemsOnPage, criteria, async, items) {
 }
 
 function createHtmlItemsList(bookList, items) {
+    //костыль для того чтобы при обновлении после аджакс-поиска всегда
+    window.history.pushState(null, null, getContextPath() + '/home');
+
     let showPdf = getContextPath() + '/showBookContent?bookId=';
     let showImg = getContextPath() + '/showBookImage?bookId=';
-    let info = getContextPath() + '/info?bookId=';
+    let bookInfo = getContextPath() + '/bookInfo?bookId=';
+    let deleteBook = getContextPath() + '/deleteBook?bookId=';
+    let addBook = getContextPath() + '/addBookView';
     let foundResultText = getFoundResultText();
     let rowId = 'row-with-books_0';
     if (foundResultText) {//если атрибут foundResultText пустой
-        $('#books-box').html(
+        $('#main-box').html(
             '   <div class="row">\n' +
             '       <div class="col-sm-8" id="books-count"><h3>' + foundResultText + ' ' + items + '</h3></div>\n' +
-            '   </div>\n' +
-            '   <div id="box-with-rows-for-books" class="row">' +
-            '       <div id="' + rowId + '" class="row"></div>' +
+            '       <div class="col-sm-2 admin-element">\n' +
+            '           <a href="' + addBook + '" type="button" role="button" class="btn btn-md admin-button">Добавить книгу</a>\n' +
+            '       </div>' +
             '   </div>\n');
     } else {
-        $('#books-box').html(
-            '   <div id="box-with-rows-for-books" class="row">' +
-            '       <div id="' + rowId + '" class="row"></div>' +
+        $('#main-box').html(
+            '   <div class="row">\n' +
+            '       <div class="col-sm-2 admin-element">\n' +
+            '           <a href="' + addBook + '" type="button" role="button" class="btn btn-md admin-button">Добавить книгу</a>\n' +
+            '       </div>' +
             '   </div>\n');
     }
+    $('#main-box').append(
+        '   <div id="box-with-rows-for-books" class="row">' +
+        '       <div id="' + rowId + '" class="row"></div>' +
+        '   </div>\n');
+
+
 
     let j = 0;
     for (let i = 0; i < bookList.length; i++) {
@@ -140,13 +159,13 @@ function createHtmlItemsList(bookList, items) {
                 '<div class="col-sm-4">\n' +
                 '    <div class="shop-item">\n' +
                 '        <div class="image">\n' +
-                '            <a href="' + info + bookList[i].id + '"><img class="img-rounded"\n' +
+                '            <a href="' + bookInfo + bookList[i].id + '"><img class="img-rounded"\n' +
                 // '                    src="data:image/jpeg;base64,' + bookList[i].image + '"\n' + //вариант без вложенного аджакса и без контроллера
                 '                    src="' + showImg + bookList[i].id + '"\n' +
                 '                     alt="Изображение отсутствует"></a>\n' +
                 '        </div>\n' +
                 '        <div class="title">\n' +
-                '            <h3><a href="' + info + bookList[i].id + '">' + bookList[i].name + '</a></h3>\n' +
+                '            <h3><a href="' + bookInfo + bookList[i].id + '">' + bookList[i].name + '</a></h3>\n' +
                 '        </div>\n' +
                 '        <div class="title">\n' +
                 '            <h3><a class="author-link" id="' + bookList[i].author.id + '" href="#">' + bookList[i].author.fio + '</a></h3>\n' +
@@ -162,7 +181,7 @@ function createHtmlItemsList(bookList, items) {
                 '        <div class="actions">\n' +
                 '            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">\n' +
                 '                <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">\n' +
-                '                    <a href="' + info + bookList[i].id + '" class="btn" role="button"\n' +
+                '                    <a href="' + bookInfo + bookList[i].id + '" class="btn" role="button"\n' +
                 '                       data-toggle="tooltip"\n' +
                 '                       data-placement="top" title="В корзину"><i\n' +
                 '                            class="glyphicon glyphicon-shopping-cart icon-white"></i></a>\n' +
@@ -173,13 +192,13 @@ function createHtmlItemsList(bookList, items) {
                 '                            class="glyphicon glyphicon-eye-open icon-white"></i></a>\n' +
                 '                </div>\n' +
                 '            </div>\n' +
-                '            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">\n' +
+                '            <div class="btn-toolbar admin-element" role="toolbar" aria-label="Toolbar with button groups">\n' +
                 '                <div class="btn-group-lg" role="group" aria-label="First group">\n' +
-                '                    <a href="' + info + bookList[i].id + '" class="btn" role="button"\n' +
+                '                    <a href="' + bookInfo + bookList[i].id + '" class="btn admin-button" role="button"\n' +
                 '                       data-toggle="tooltip"\n' +
                 '                       data-placement="top" title="Изменить"><i\n' +
                 '                            class="glyphicon glyphicon-pencil icon-white"></i></a>\n' +
-                '                    <a href="' + info + bookList[i].id + '" class="btn" role="button"\n' +
+                '                    <a href="' + deleteBook + bookList[i].id + '" class="btn admin-button" role="button"\n' +
                 '                       data-toggle="tooltip"\n' +
                 '                       data-placement="top" title="Удалить"><i\n' +
                 '                            class="glyphicon glyphicon-trash icon-white"></i></a>\n' +
@@ -269,4 +288,3 @@ function getCriteria() {
 function getContextPath() {
     return window.location.pathname.substring(0, window.location.pathname.indexOf("/", 2));
 }
-

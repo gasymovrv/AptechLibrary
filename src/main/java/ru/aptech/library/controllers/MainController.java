@@ -12,8 +12,6 @@ import ru.aptech.library.enums.SearchType;
 import ru.aptech.library.util.SearchCriteria;
 import ru.aptech.library.util.Utils;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -66,39 +64,59 @@ public class MainController {
         }
         return bookDAO.getQuantityBooks(criteria);
     }
-
-
     @RequestMapping(value = "saveFoundResultText", method = RequestMethod.POST, consumes = "application/json")
     public void saveFoundResultText(@RequestParam String foundResultText, HttpSession session) {
         session.setAttribute("foundResultText", foundResultText);
     }
-
     @RequestMapping(value = "getCriteria", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody SearchCriteria getCriteria(HttpSession session) {
         return (SearchCriteria)session.getAttribute("criteria");
     }
     @RequestMapping(value = "getBooksOnPage", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody Object getBooksOnPage(HttpSession session) {
-        return session.getAttribute("booksOnPage");
+        Object o = session.getAttribute("booksOnPage");
+        if (o == null) {
+            return PAGE_SIZE_VALUE;
+        }
+        return o;
     }
     @RequestMapping(value = "getFoundResultText", method = RequestMethod.GET, produces = "text/html; charset=utf-8")
     public @ResponseBody String getFoundResultText(HttpSession session) {
         return (String)session.getAttribute("foundResultText");
     }
 
-    @RequestMapping(value = "info", method = RequestMethod.GET)
-    public ModelAndView info(@RequestParam(value = "bookId", required = false) Long bookId) {
+    @RequestMapping(value = "bookInfo", method = RequestMethod.GET)
+    public ModelAndView bookInfo(@RequestParam(value = "bookId") Long bookId) {
         ModelAndView modelAndView = new ModelAndView("home-page-one-book");
         addAttributesForCriteria(modelAndView);
         modelAndView.addObject("book", bookDAO.getBooks(bookId));
-        modelAndView.addObject("criteria", new SearchCriteria());
         return modelAndView;
     }
 
+    @RequestMapping(value = "addBookView", method = RequestMethod.GET)
+    public ModelAndView addBookView() {
+        ModelAndView modelAndView = new ModelAndView("add-book-page");
+        modelAndView.addObject("book", new Book());
+        modelAndView.addObject("successAdded", null);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "addBookAction", method = RequestMethod.POST)
+    public ModelAndView addBookAction(@ModelAttribute Book book) {
+        ModelAndView modelAndView = new ModelAndView("add-book-page");
+        modelAndView.addObject("book", book);
+        modelAndView.addObject("successAdded", bookDAO.addBook(book));
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "deleteBook", method = RequestMethod.GET)
+    public String deleteBook(@RequestParam(value = "bookId") Long bookId) {
+        bookDAO.deleteBook(bookId);
+        return "redirect:home";
+    }
 
     @RequestMapping(value = "showBookImage", method = RequestMethod.GET)
-    public void showImage(@RequestParam("bookId") Long bookId, HttpServletResponse response, HttpServletRequest request)
-            throws ServletException, IOException {
+    public void showImage(@RequestParam("bookId") Long bookId, HttpServletResponse response) throws IOException {
         Book book = bookDAO.getBooks(bookId);
         response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
         response.getOutputStream().write(book.getImage());
@@ -107,8 +125,7 @@ public class MainController {
 
 
     @RequestMapping(value = "showBookContent", method = RequestMethod.GET)
-    public void showPdf(@RequestParam("bookId") Long bookId, HttpServletResponse response, HttpServletRequest request)
-            throws ServletException, IOException {
+    public void showPdf(@RequestParam("bookId") Long bookId, HttpServletResponse response) throws IOException {
         byte[] content = bookDAO.getBookContent(bookId);
         response.setContentType("application/pdf");
         response.getOutputStream().write(content);
