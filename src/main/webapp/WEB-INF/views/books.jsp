@@ -5,6 +5,7 @@
 <div class="col-sm-9">
     <div id="books-box">
         <div id="box-with-rows-for-books" class="row">
+            <%--template--%>
         </div>
     </div>
     <div class="pagination-wrapper ">
@@ -25,11 +26,11 @@
         printItemsWithPagination(getCriteria(), booksOnPage);
     });
     //начальный экран - при загрузке home
-    printItemsWithPagination({}, getBooksOnPage());
+    printItemsWithPagination();
     //экраны поиска
-    searchByAuthor(printItemsWithPagination);
-    searchByPublisher(printItemsWithPagination);
-    searchByGenre(printItemsWithPagination);
-    searchByLetter(printItemsWithPagination);
-    searchByText(printItemsWithPagination);
+    searchByAuthor();
+    searchByPublisher();
+    searchByGenre();
+    searchByLetter();
+    searchByText();
 </script>
