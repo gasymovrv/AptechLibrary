@@ -14,6 +14,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <title><tiles:getAsString name="title"/></title>
+    <link href="${contextPathToRes}img/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
     <link rel="stylesheet" href="${contextPathToRes}css/bootstrap.min.css">
     <link rel="stylesheet" href="${contextPathToRes}css/icomoon-social.css">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,800' rel='stylesheet' type='text/css'>
