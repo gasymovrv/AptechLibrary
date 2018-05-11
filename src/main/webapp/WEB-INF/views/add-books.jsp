@@ -19,16 +19,16 @@
 
 <!-- Main box -->
 <div class="col-sm-10 mx-auto">
-    <c:if test="${not empty successAdded}">
+    <c:if test="${not empty isAdded}">
         <c:choose>
-            <c:when test="${successAdded}">
+            <c:when test="${isAdded}">
                 <div class="alert alert-success" role="alert">
                     Книга успешно добавлена!
                 </div>
             </c:when>
             <c:otherwise>
                 <div class="alert alert-danger" role="alert">
-                    Произошла ошибка при добавлении!
+                    Произошла ошибка при добавлении! Возможно такая книга уже существует
                 </div>
             </c:otherwise>
         </c:choose>
@@ -52,24 +52,29 @@
                 <form:input id='isbn' name='isbn' path="isbn" type="text" class="form-control"/>
             </div>
         </div>
+
+        <div class="form-group row">
+            <label for="genre" class="col-sm-2 col-form-label">Жанр</label>
+            <div class="col-sm-10">
+                <select id="genre" class="form-control" name="genre.id">
+                    <c:forEach var="g" items="${genreList}">
+                        <option value="${g.id}">${g.name}</option>
+                    </c:forEach>
+                </select>
+            </div>
+        </div>
+        <%--<div class="form-group row">--%>
+        <%--<label for="pageCount" class="col-sm-2 col-form-label">Количество страниц</label>--%>
+        <%--<div class="col-sm-10">--%>
+        <%--<form:input id='pageCount' name='pageCount' path="pageCount" type="text" class="form-control" />--%>
+        <%--</div>--%>
+        <%--</div>--%>
+        <%--<div class="form-group row">--%>
+        <%--<label for="pageCount" class="col-sm-2 col-form-label">Количество страниц</label>--%>
+        <%--<div class="col-sm-10">--%>
+        <%--<form:input id='pageCount' name='pageCount' path="pageCount" type="text" class="form-control" />--%>
+        <%--</div>--%>
+        <%--</div>--%>
         <button type="submit" class="btn pull-right">Добавить</button>
-        <%--<div class="form-group row">--%>
-        <%--<label for="pageCount" class="col-sm-2 col-form-label">Количество страниц</label>--%>
-        <%--<div class="col-sm-10">--%>
-        <%--<form:input id='pageCount' name='pageCount' path="pageCount" type="text" class="form-control" />--%>
-        <%--</div>--%>
-        <%--</div>--%>
-        <%--<div class="form-group row">--%>
-        <%--<label for="pageCount" class="col-sm-2 col-form-label">Количество страниц</label>--%>
-        <%--<div class="col-sm-10">--%>
-        <%--<form:input id='pageCount' name='pageCount' path="pageCount" type="text" class="form-control" />--%>
-        <%--</div>--%>
-        <%--</div>--%>
-        <%--<div class="form-group row">--%>
-        <%--<label for="pageCount" class="col-sm-2 col-form-label">Количество страниц</label>--%>
-        <%--<div class="col-sm-10">--%>
-        <%--<form:input id='pageCount' name='pageCount' path="pageCount" type="text" class="form-control" />--%>
-        <%--</div>--%>
-        <%--</div>--%>
     </form:form>
 </div>

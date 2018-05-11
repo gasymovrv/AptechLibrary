@@ -29,17 +29,17 @@
                        data-toggle="tooltip"
                        data-placement="top" title="В корзину"><i
                             class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
-                    <a href="${bookInfo}?${bookId}=${book.id}" class="btn"
+                    <a href="${showPdf}?${bookId}=${book.id}" class="btn"
                        role="button"
                        data-toggle="tooltip"
                        data-placement="top" title="Читать"><i
                             class="glyphicon glyphicon-eye-open icon-white"></i></a>
-                    <a href="${bookInfo}?${bookId}=${book.id}" class="btn"
+                    <a href="${bookInfo}?${bookId}=${book.id}" class="btn admin-button"
                        role="button"
                        data-toggle="tooltip"
                        data-placement="top" title="Изменить"><i
                             class="glyphicon glyphicon-pencil icon-white"></i></a>
-                    <a href="${deleteBook}?${bookId}=${book.id}" class="btn"
+                    <a href="#" id="${book.id}" class="btn admin-button delete-book"
                        role="button"
                        data-toggle="tooltip"
                        data-placement="top" title="Удалить"><i
@@ -118,16 +118,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    $(document).on('click', '#books-on-page-button', function () {
-        let booksOnPage = $('#books-on-page-input').val();
-        printItemsWithPagination(getCriteria(), booksOnPage);
-    });
-    //экраны поиска
-    searchByAuthor();
-    searchByPublisher();
-    searchByGenre();
-    searchByLetter();
-    searchByText();
-</script>

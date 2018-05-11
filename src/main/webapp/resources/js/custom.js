@@ -1,3 +1,21 @@
+$(document).ready(function () {
+    //изменение количества книг на странице
+    $(document).on('click', '#books-on-page-button', function () {
+        let booksOnPage = $('#books-on-page-input').val();
+        printItemsWithPagination(getCriteria(), booksOnPage);
+    });
+
+    //обновление списка книг при поиске
+    searchByAuthor();
+    searchByPublisher();
+    searchByGenre();
+    searchByLetter();
+    searchByText();
+
+    //подтверждение удаления книги
+    confirmDeleteBook();
+});
+
 function searchByText() {
     $(document).on('submit', '#top-panel-form', function (event) {
         event.preventDefault();
@@ -185,7 +203,6 @@ function createHtmlItemsList(bookList, items) {
                 '                       data-toggle="tooltip"\n' +
                 '                       data-placement="top" title="В корзину"><i\n' +
                 '                            class="glyphicon glyphicon-shopping-cart icon-white"></i></a>\n' +
-                '\n' +
                 '                    <a href="' + showPdf + bookList[i].id + '" class="btn" role="button"\n' +
                 '                       data-toggle="tooltip"\n' +
                 '                       data-placement="top" title="Читать"><i\n' +
@@ -198,16 +215,15 @@ function createHtmlItemsList(bookList, items) {
                 '                       data-toggle="tooltip"\n' +
                 '                       data-placement="top" title="Изменить"><i\n' +
                 '                            class="glyphicon glyphicon-pencil icon-white"></i></a>\n' +
-                '                    <a href="' + deleteBook + bookList[i].id + '" class="btn admin-button" role="button"\n' +
+                '                    <a href="#" id="'+bookList[i].id+'" class="btn admin-button delete-book" role="button"\n' +
                 '                       data-toggle="tooltip"\n' +
                 '                       data-placement="top" title="Удалить"><i\n' +
                 '                            class="glyphicon glyphicon-trash icon-white"></i></a>\n' +
                 '                </div>\n' +
                 '            </div>\n' +
-                '\n' +
                 '        </div>\n' +
                 '    </div>\n' +
-                '</div>';
+                '</div>\n';
             $('#' + rowId).append(html);
             j++;
             if (j === 3) {
@@ -281,6 +297,28 @@ function getCriteria() {
         }
     });
     return result;
+}
+
+function confirmDeleteBook() {
+    // let result;
+    // $.ajax({
+    //     type: 'GET',//тип запроса
+    //     dataType: 'json',//принимаемый тип (из контроллера)
+    //     url: getContextPath() + '/getBooksOnPage',//url адрес обработчика
+    //     async: false,
+    //     success: function (itemsOnPage) {//принимаемое от сервера (Response)
+    //         result = itemsOnPage;
+    //     },
+    //     error: function () {
+    //         alert('Ошибка в script getBooksOnPage');
+    //     }
+    // });
+    $(document).on('click', 'a.delete-book', function () {
+        let bookId = $(this).prop('id');
+        if (confirm("Уверены что хотите удалить книгу ?")) {
+            document.location.href =(getContextPath()+'/deleteBook?bookId='+bookId);
+        }
+    });
 }
 
 //метод для получения контекстного пути '/aptech-library'

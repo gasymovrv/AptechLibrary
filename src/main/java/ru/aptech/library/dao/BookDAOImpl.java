@@ -141,35 +141,22 @@ public class BookDAOImpl {
 
 
     @Transactional
-    public boolean addBook(Book book) {
+    public void addBook(Book book) {
         Session session = sessionFactory.getCurrentSession();
         book.setAuthor(session.get(Author.class, 18L));
-        book.setGenre(session.find(Genre.class, 14L));
         book.setPublisher(session.find(Publisher.class, 9L));
         book.setPublishYear(2010);
         book.setContent(new byte[10]);
-
-        boolean result;
-        try {
-            result = (session.save(book) != null);
-        } catch (Exception e) {
-            result = false;
-        }
-        return result;
+        session.save(book);
     }
 
     @Transactional
-    public boolean deleteBook(Long bookId) {
+    public void deleteBook(Long bookId) {
         Session session = sessionFactory.getCurrentSession();
-        boolean result;
-        try {
-            session.delete(getBooks(bookId));
-            result = true;
-        } catch (Exception e) {
-            result = false;
-        }
-        return result;
+        session.delete(getBooks(bookId));
     }
+
+
 //    @Transactional
 //    public List<Book> getBooks() {
 //        //Сессия

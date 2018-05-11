@@ -4,6 +4,14 @@
 <!-- Main box -->
 <div class="col-sm-9">
     <div id="main-box">
+        <script>
+            if(${isDeleted}){
+                alert("Книга успешно удалена!");
+            }else {
+                alert("Произошла ошибка при удалении!");
+            }
+            <% pageContext.getRequest().setAttribute("isDeleted", null);%>
+        </script>
         <div id="box-with-rows-for-books" class="row">
             <%--template--%>
         </div>
@@ -21,16 +29,6 @@
 </div>
 
 <script>
-    $(document).on('click', '#books-on-page-button', function () {
-        let booksOnPage = $('#books-on-page-input').val();
-        printItemsWithPagination(getCriteria(), booksOnPage);
-    });
     //начальный экран - при загрузке home
     printItemsWithPagination();
-    //экраны поиска
-    searchByAuthor();
-    searchByPublisher();
-    searchByGenre();
-    searchByLetter();
-    searchByText();
 </script>
