@@ -11,9 +11,6 @@ $(document).ready(function () {
     searchByGenre();
     searchByLetter();
     searchByText();
-
-    //подтверждение удаления книги
-    confirmDeleteBook();
 });
 
 function searchByText() {
@@ -215,7 +212,7 @@ function createHtmlItemsList(bookList, items) {
                 '                       data-toggle="tooltip"\n' +
                 '                       data-placement="top" title="Изменить"><i\n' +
                 '                            class="glyphicon glyphicon-pencil icon-white"></i></a>\n' +
-                '                    <a href="#" id="'+bookList[i].id+'" class="btn admin-button delete-book" role="button"\n' +
+                '                    <a href="#" onclick="confirmDeleteBook('+bookList[i].id+', \''+bookList[i].name+'\')" class="btn admin-button" role="button"\n' +
                 '                       data-toggle="tooltip"\n' +
                 '                       data-placement="top" title="Удалить"><i\n' +
                 '                            class="glyphicon glyphicon-trash icon-white"></i></a>\n' +
@@ -299,26 +296,10 @@ function getCriteria() {
     return result;
 }
 
-function confirmDeleteBook() {
-    // let result;
-    // $.ajax({
-    //     type: 'GET',//тип запроса
-    //     dataType: 'json',//принимаемый тип (из контроллера)
-    //     url: getContextPath() + '/getBooksOnPage',//url адрес обработчика
-    //     async: false,
-    //     success: function (itemsOnPage) {//принимаемое от сервера (Response)
-    //         result = itemsOnPage;
-    //     },
-    //     error: function () {
-    //         alert('Ошибка в script getBooksOnPage');
-    //     }
-    // });
-    $(document).on('click', 'a.delete-book', function () {
-        let bookId = $(this).prop('id');
-        if (confirm("Уверены что хотите удалить книгу ?")) {
-            document.location.href =(getContextPath()+'/deleteBook?bookId='+bookId);
-        }
-    });
+function confirmDeleteBook(bookId, bookName) {
+    if (confirm("Уверены что хотите удалить книгу '" + bookName + "'?")) {
+        window.location = (getContextPath() + '/deleteBook?bookId=' + bookId);
+    }
 }
 
 //метод для получения контекстного пути '/aptech-library'

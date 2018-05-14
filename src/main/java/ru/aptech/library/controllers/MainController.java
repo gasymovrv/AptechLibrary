@@ -1,6 +1,7 @@
 package ru.aptech.library.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,9 +13,14 @@ import ru.aptech.library.enums.SearchType;
 import ru.aptech.library.util.SearchCriteria;
 import ru.aptech.library.util.Utils;
 
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Controller
@@ -142,10 +148,20 @@ public class MainController {
     }
 
     @RequestMapping(value = "showBookImage", method = RequestMethod.GET)
-    public void showImage(@RequestParam("bookId") Long bookId, HttpServletResponse response) throws IOException {
+    public void showImage(@RequestParam("bookId") Long bookId, HttpServletResponse response, HttpServletRequest request) throws IOException {
         Book book = bookDAO.getBooks(bookId);
+        //получаем дефолтное изображение из статических ресурсов
+        String path = request.getSession().getServletContext().getRealPath("/resources/img/nophoto.jpg");
+        InputStream inputStream = new FileSystemResource(new File(path)).getInputStream();
+        byte[] defaultImage = new byte[inputStream.available()];
+        inputStream.read(defaultImage);
+
         response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
-        response.getOutputStream().write(book.getImage());
+        if(book.getImage()==null){
+            response.getOutputStream().write(defaultImage);
+        } else {
+            response.getOutputStream().write(book.getImage());
+        }
         response.getOutputStream().close();
     }
 

@@ -39,7 +39,8 @@
                        data-toggle="tooltip"
                        data-placement="top" title="Изменить"><i
                             class="glyphicon glyphicon-pencil icon-white"></i></a>
-                    <a href="#" id="${book.id}" class="btn admin-button delete-book"
+                    <a href="#" id="${book.id}" class="btn admin-button"
+                       onclick="confirmDeleteBook(${book.id}, '${book.name}')"
                        role="button"
                        data-toggle="tooltip"
                        data-placement="top" title="Удалить"><i
