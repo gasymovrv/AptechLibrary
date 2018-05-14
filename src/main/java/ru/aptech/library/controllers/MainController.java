@@ -4,23 +4,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import ru.aptech.library.dao.AuthorDAOImpl;
 import ru.aptech.library.dao.BookDAOImpl;
 import ru.aptech.library.dao.GenreDAOImpl;
+import ru.aptech.library.dao.PublisherDAOImpl;
+import ru.aptech.library.entities.Author;
 import ru.aptech.library.entities.Book;
 import ru.aptech.library.entities.Genre;
+import ru.aptech.library.entities.Publisher;
 import ru.aptech.library.enums.SearchType;
 import ru.aptech.library.util.SearchCriteria;
 import ru.aptech.library.util.Utils;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @Controller
@@ -30,6 +33,10 @@ public class MainController {
     private BookDAOImpl bookDAO;
     @Autowired
     private GenreDAOImpl genreDAO;
+    @Autowired
+    private AuthorDAOImpl authorDAO;
+    @Autowired
+    private PublisherDAOImpl publisherDAO;
     @Autowired
     private Utils utils;
     private static final int PAGE_SIZE_VALUE = 6;
@@ -109,26 +116,26 @@ public class MainController {
     @RequestMapping(value = "addBookView", method = RequestMethod.GET)
     public ModelAndView addBookView() {
         ModelAndView modelAndView = new ModelAndView("add-book-page");
-        List<Genre> genres = genreDAO.getGenres();
-        modelAndView.addObject("book", new Book());
-        modelAndView.addObject("genreList", genres);
+        addAttributesForAddBook(modelAndView);
         return modelAndView;
     }
 
     @RequestMapping(value = "addBookAction", method = RequestMethod.POST)
-    public ModelAndView addBookAction(@ModelAttribute Book book) {
+    public ModelAndView addBookAction(@ModelAttribute Book book,
+                                      @RequestParam("file1") MultipartFile content,
+                                      @RequestParam("file2") MultipartFile image) {
         ModelAndView modelAndView = new ModelAndView("add-book-page");
-        List<Genre> genres = genreDAO.getGenres();
         boolean isAdded;
         try {
+            book.setContent(content.getBytes());
+            book.setImage(image.getBytes());
             bookDAO.addBook(book);
             isAdded = true;
         } catch (Exception e){
             isAdded = false;
         }
         modelAndView.addObject("isAdded", isAdded);
-        modelAndView.addObject("book", new Book());
-        modelAndView.addObject("genreList", genres);
+        addAttributesForAddBook(modelAndView);
         return modelAndView;
     }
 
@@ -157,7 +164,7 @@ public class MainController {
         inputStream.read(defaultImage);
 
         response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
-        if(book.getImage()==null){
+        if(book.getImage()==null || book.getImage().length==0){
             response.getOutputStream().write(defaultImage);
         } else {
             response.getOutputStream().write(book.getImage());
@@ -179,10 +186,18 @@ public class MainController {
         List<Genre> genres = genreDAO.getGenres();
         Character[] letters = utils.getLetters();
         SearchType[] searchTypeList = SearchType.values();
-
         modelAndView.addObject("genreList", genres);
         modelAndView.addObject("letters", letters);
         modelAndView.addObject("searchTypeList", searchTypeList);
+    }
+    private void addAttributesForAddBook(ModelAndView modelAndView) {
+        List<Publisher> publishers = publisherDAO.getPublishers();
+        List<Genre> genres = genreDAO.getGenres();
+        List<Author> authors = authorDAO.getAuthors();
+        modelAndView.addObject("book", new Book());
+        modelAndView.addObject("genreList", genres);
+        modelAndView.addObject("authorList", authors);
+        modelAndView.addObject("publisherList", publishers);
     }
 
 //Для тестового аджакс запроса - функция testGetBooks()

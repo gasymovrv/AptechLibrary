@@ -33,11 +33,25 @@
             </c:otherwise>
         </c:choose>
     </c:if>
-    <form:form id="addBookForm" method="post" modelAttribute="book" action="${contextPath}addBookAction">
+    <form:form id="addBookForm" method="post" modelAttribute="book" action="${contextPath}addBookAction"  enctype="multipart/form-data">
         <div class="form-group row">
             <label for="name" class="col-sm-2 col-form-label">Название</label>
             <div class="col-sm-10">
                 <form:input id='name' name='name' path="name" type="text" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="content" class="col-sm-2 col-form-label">Загрузите книгу (в формате .pdf)</label>
+            <div class="col-sm-10">
+                <%--загружаем файл, используя библиотеку commons-fileupload и бин multipartResolver--%>
+                <input id="content" type="file" name="file1" class="form-control-file"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="image" class="col-sm-2 col-form-label">Загрузите изображение для обложки</label>
+            <div class="col-sm-10">
+                <%--загружаем файл, используя библиотеку commons-fileupload и бин multipartResolver--%>
+                <input id="image" type="file" name="file2" class="form-control-file"/>
             </div>
         </div>
         <div class="form-group row">
@@ -52,6 +66,12 @@
                 <form:input id='isbn' name='isbn' path="isbn" type="text" class="form-control"/>
             </div>
         </div>
+        <div class="form-group row">
+            <label for="publishYear" class="col-sm-2 col-form-label">Год издательства</label>
+            <div class="col-sm-10">
+                <form:input id='publishYear' name='publishYear' path="publishYear" type="number" class="form-control"/>
+            </div>
+        </div>
 
         <div class="form-group row">
             <label for="genre" class="col-sm-2 col-form-label">Жанр</label>
@@ -63,18 +83,35 @@
                 </select>
             </div>
         </div>
-        <%--<div class="form-group row">--%>
-        <%--<label for="pageCount" class="col-sm-2 col-form-label">Количество страниц</label>--%>
-        <%--<div class="col-sm-10">--%>
-        <%--<form:input id='pageCount' name='pageCount' path="pageCount" type="text" class="form-control" />--%>
-        <%--</div>--%>
-        <%--</div>--%>
-        <%--<div class="form-group row">--%>
-        <%--<label for="pageCount" class="col-sm-2 col-form-label">Количество страниц</label>--%>
-        <%--<div class="col-sm-10">--%>
-        <%--<form:input id='pageCount' name='pageCount' path="pageCount" type="text" class="form-control" />--%>
-        <%--</div>--%>
-        <%--</div>--%>
+
+        <div class="form-group row">
+            <label for="author" class="col-sm-2 col-form-label">Автор</label>
+            <div class="col-sm-10">
+                <select id="author" class="form-control" name="author.id">
+                    <c:forEach var="a" items="${authorList}">
+                        <option value="${a.id}">${a.fio}</option>
+                    </c:forEach>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="publisher" class="col-sm-2 col-form-label">Издательство</label>
+            <div class="col-sm-10">
+                <select id="publisher" class="form-control" name="publisher.id">
+                    <c:forEach var="p" items="${publisherList}">
+                        <option value="${p.id}">${p.name}</option>
+                    </c:forEach>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="descr" class="col-sm-2 col-form-label">Описание</label>
+            <div class="col-sm-10">
+                <form:input id='descr' name='descr' path="descr" type="text" class="form-control"/>
+            </div>
+        </div>
         <button type="submit" class="btn pull-right">Добавить</button>
     </form:form>
 </div>

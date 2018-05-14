@@ -143,10 +143,6 @@ public class BookDAOImpl {
     @Transactional
     public void addBook(Book book) {
         Session session = sessionFactory.getCurrentSession();
-        book.setAuthor(session.get(Author.class, 18L));
-        book.setPublisher(session.find(Publisher.class, 9L));
-        book.setPublishYear(2010);
-        book.setContent(new byte[10]);
         session.save(book);
     }
 
