@@ -34,7 +34,7 @@
                        data-toggle="tooltip"
                        data-placement="top" title="Читать"><i
                             class="glyphicon glyphicon-eye-open icon-white"></i></a>
-                    <a href="${bookInfo}?${bookId}=${book.id}" class="btn admin-button"
+                    <a href="${editBook}?${bookId}=${book.id}" class="btn admin-button"
                        role="button"
                        data-toggle="tooltip"
                        data-placement="top" title="Изменить"><i

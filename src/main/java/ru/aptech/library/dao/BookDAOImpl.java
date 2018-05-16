@@ -60,6 +60,12 @@ public class BookDAOImpl {
         return book;
     }
 
+    @Transactional
+    public Book getBooksWithContent(long id) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.get(Book.class, id);
+    }
+
 
     @Transactional
     public List<Book> getBooks(SearchCriteria criteria, Integer booksOnPage, Integer selectedPage) {
@@ -141,9 +147,15 @@ public class BookDAOImpl {
 
 
     @Transactional
-    public void addBook(Book book) {
+    public void saveBook(Book book) {
         Session session = sessionFactory.getCurrentSession();
         session.save(book);
+    }
+
+    @Transactional
+    public void updateBook(Book book) {
+        Session session = sessionFactory.getCurrentSession();
+        session.update(book);
     }
 
     @Transactional

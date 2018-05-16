@@ -134,7 +134,7 @@ function createHtmlItemsList(bookList, items) {
     let showPdf = getContextPath() + '/showBookContent?bookId=';
     let showImg = getContextPath() + '/showBookImage?bookId=';
     let bookInfo = getContextPath() + '/bookInfo?bookId=';
-    let deleteBook = getContextPath() + '/deleteBook?bookId=';
+    let editBook = getContextPath() + '/editBookView?bookId=';
     let addBook = getContextPath() + '/addBookView';
     let foundResultText = getFoundResultText();
     let rowId = 'row-with-books_0';
@@ -208,7 +208,7 @@ function createHtmlItemsList(bookList, items) {
                 '            </div>\n' +
                 '            <div class="btn-toolbar admin-element" role="toolbar" aria-label="Toolbar with button groups">\n' +
                 '                <div class="btn-group-lg" role="group" aria-label="First group">\n' +
-                '                    <a href="' + bookInfo + bookList[i].id + '" class="btn admin-button" role="button"\n' +
+                '                    <a href="' + editBook + bookList[i].id + '" class="btn admin-button" role="button"\n' +
                 '                       data-toggle="tooltip"\n' +
                 '                       data-placement="top" title="Изменить"><i\n' +
                 '                            class="glyphicon glyphicon-pencil icon-white"></i></a>\n' +

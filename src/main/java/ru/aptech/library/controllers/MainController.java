@@ -116,7 +116,8 @@ public class MainController {
     @RequestMapping(value = "addBookView", method = RequestMethod.GET)
     public ModelAndView addBookView() {
         ModelAndView modelAndView = new ModelAndView("add-book-page");
-        addAttributesForAddBook(modelAndView);
+        modelAndView.addObject("book", new Book());
+        addAttributesForAddOrEditBook(modelAndView);
         return modelAndView;
     }
 
@@ -125,17 +126,31 @@ public class MainController {
                                       @RequestParam("file1") MultipartFile content,
                                       @RequestParam("file2") MultipartFile image) {
         ModelAndView modelAndView = new ModelAndView("add-book-page");
-        boolean isAdded;
-        try {
-            book.setContent(content.getBytes());
-            book.setImage(image.getBytes());
-            bookDAO.addBook(book);
-            isAdded = true;
-        } catch (Exception e){
-            isAdded = false;
-        }
+        boolean isAdded = saveBook(book, content, image);
         modelAndView.addObject("isAdded", isAdded);
-        addAttributesForAddBook(modelAndView);
+        addAttributesForAddOrEditBook(modelAndView);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "editBookView", method = RequestMethod.GET)
+    public ModelAndView editBookView(@RequestParam Long bookId) {
+        ModelAndView modelAndView = new ModelAndView("edit-book-page");
+        Book book = bookDAO.getBooks(bookId);
+        modelAndView.addObject("book", book);
+        addAttributesForAddOrEditBook(modelAndView);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "editBookAction", method = RequestMethod.POST)
+    public ModelAndView editBookAction(@ModelAttribute Book book,
+                                      @RequestParam("file1") MultipartFile content,
+                                      @RequestParam("file2") MultipartFile image,
+                                       @RequestParam Long bookId) {
+        ModelAndView modelAndView = new ModelAndView("edit-book-page");
+        boolean isEdited = updateBook(book, content, image, bookId);
+        modelAndView.addObject("isEdited", isEdited);
+        modelAndView.addObject("book", bookDAO.getBooks(bookId));
+        addAttributesForAddOrEditBook(modelAndView);
         return modelAndView;
     }
 
@@ -190,55 +205,49 @@ public class MainController {
         modelAndView.addObject("letters", letters);
         modelAndView.addObject("searchTypeList", searchTypeList);
     }
-    private void addAttributesForAddBook(ModelAndView modelAndView) {
+
+
+    private void addAttributesForAddOrEditBook(ModelAndView modelAndView) {
         List<Publisher> publishers = publisherDAO.getPublishers();
         List<Genre> genres = genreDAO.getGenres();
         List<Author> authors = authorDAO.getAuthors();
-        modelAndView.addObject("book", new Book());
         modelAndView.addObject("genreList", genres);
         modelAndView.addObject("authorList", authors);
         modelAndView.addObject("publisherList", publishers);
     }
 
-//Для тестового аджакс запроса - функция testGetBooks()
-//    @RequestMapping(value = "home/searchResult", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public @ResponseBody List<Book> searchResult() {
-//        List<Book> books = bookDAO.getBooks();
-//        return books;
-//    }
+
+    private boolean saveBook(Book book, MultipartFile content, MultipartFile image) {
+        try {
+            book.setContent(content.getBytes());
+            book.setImage(image.getBytes());
+            bookDAO.saveBook(book);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
 
-//    @RequestMapping(value = "books", method = RequestMethod.GET)
-//    public String books(@RequestParam(value = "bookId", required = false) String[] bookId, Model model) {
-//        List<Book> bookList = bookDAO.getBooks();
-//        List<Book> bookListFromParam = new ArrayList<>();
-//        if (bookId != null && bookId.length != 0) {
-//            for (String s : bookId) {
-//                bookListFromParam.add(bookDAO.getBooks(Long.parseLong(s)));
-//            }
-//            model.addAttribute("bookListFromParam", bookListFromParam);
-//        }
-//        model.addAttribute("bookList", bookList);
-//        return "test/books";
-//    }
-//
-//
-//    @RequestMapping(value = "test", method = RequestMethod.GET)
-//    public String test() {
-//        Book book = bookDAO.getBooks(20L);
-//        List<Book> list1 = bookDAO.getBooks(new Author(0L, "эрих", null));
-//        List<Book> list2 = bookDAO.getBooks("стив");
-//        List<Book> list3 = bookDAO.getBooks(new Genre(0L, "прИкл", null));
-//        List<Book> list4 = bookDAO.getBooks(new Character('б'));
-//        return "test/main";
-//    }
-//
-//
-//    @RequestMapping(value = "lgn", method = RequestMethod.GET)
-//    public String lgn() {
-//        //это не вернет поток, а будет искать flows/auth.jsp! чтобы попасть в поток нужно писать redirect:flows/auth
-//        return "flows/auth";
-//    }
+    private boolean updateBook(Book updatedBook, MultipartFile content, MultipartFile image, Long bookId) {
+        try {
+            Book existBook = bookDAO.getBooksWithContent(bookId);
+            existBook.setAllField(updatedBook);
+            if (content.getSize() > 0) {
+                existBook.setContent(content.getBytes());
+            }
+            if (image.getSize() > 0 ) {
+                existBook.setImage(image.getBytes());
+            }
+            bookDAO.updateBook(existBook);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
+
 
 
 //    SpringSecurity

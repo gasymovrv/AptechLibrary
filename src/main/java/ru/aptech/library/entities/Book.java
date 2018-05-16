@@ -235,4 +235,24 @@ public class Book implements Serializable {
         result = 31 * result + Arrays.hashCode(image);
         return result;
     }
+
+    public void setAllField(Book book) {
+        this.name = book.name;
+        if(book.content!=null && book.content.length>0){
+            this.content = book.content;
+        }
+        this.pageCount = book.pageCount;
+        this.isbn = book.isbn;
+        this.genre = book.genre;
+        this.author = book.author;
+        this.publishYear = book.publishYear;
+        this.publisher = book.publisher;
+        if(book.image!=null && book.image.length>0){
+            this.image = book.image;
+        }
+        this.descr = book.descr;
+        this.bookcol = book.bookcol;
+        this.rating = book.rating;
+        this.voteCount = book.voteCount;
+    }
 }

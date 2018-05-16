@@ -32,6 +32,14 @@
         <put-attribute name="main" value="/WEB-INF/views/add-books.jsp"/>
     </definition>
 
+    <definition name="edit-book-page" extends="base-layout">
+        <put-attribute name="title" value="Изменение книги"/>
+        <put-attribute name="top-panel" value="/WEB-INF/views/top-panel-edit-books.jsp"/>
+        <put-attribute name="letters" value=""/>
+        <put-attribute name="sidebar" value=""/>
+        <put-attribute name="main" value="/WEB-INF/views/edit-books.jsp"/>
+    </definition>
+
     <definition name="auth-page" extends="base-layout">
         <put-attribute name="title" value="Авторизация"/>
         <put-attribute name="top-panel" value="/WEB-INF/views/top-panel-login.jsp"/>
