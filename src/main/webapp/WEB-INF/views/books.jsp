@@ -4,14 +4,16 @@
 <!-- Main box -->
 <div class="col-sm-9">
     <div id="main-box">
-        <script>
-            if(${isDeleted}){
-                alert("Книга успешно удалена!");
-            }else {
-                alert("Произошла ошибка при удалении!");
-            }
-            <% pageContext.getRequest().setAttribute("isDeleted", null);%>
-        </script>
+        <c:if test="${not empty isDeleted}">
+            <script>
+                if (${isDeleted}) {
+                    alert("Книга успешно удалена!");
+                } else {
+                    alert("Произошла ошибка при удалении!");
+                }
+                <% pageContext.getRequest().setAttribute("isDeleted", null);%>
+            </script>
+        </c:if>
         <div id="box-with-rows-for-books" class="row">
             <%--template--%>
         </div>

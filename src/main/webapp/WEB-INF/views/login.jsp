@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div class="col-sm-5">
     <div class="basic-login">
-        <form name='form_login' role="form" role="form" action="j_spring_security_check" method='POST'>
+        <form name='form_login' role="form" role="form" action="<c:url value='/login' />" method='POST'>
             <div class="form-group">
                 <c:if test="${not empty error}"><p class="alert alert-danger">${error}</p></c:if>
                 <label for="login-username"><i class="icon-user"></i> <b>Имя или email</b></label>

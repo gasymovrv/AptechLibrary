@@ -44,8 +44,30 @@
         <!--</authentication-provider>-->
     <!--</authentication-manager>-->
 
-    <!--<beans:bean id="bcrypt"-->
-                <!--class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">-->
-        <!--<beans:constructor-arg name="strength" value="11" />-->
-    <!--</beans:bean>-->
+    <beans:bean id="bcrypt"
+                class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+        <beans:constructor-arg name="strength" value="5" />
+    </beans:bean>
+
+    <beans:bean id ="passwordEncoder" class = "org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
+    <http use-expressions="true">
+        <intercept-url pattern="/bookInfo" access="hasRole('ROLE_USER')" />
+        <form-login login-page='/authorization'
+                    default-target-url="/home"
+                    authentication-failure-url="/authorization?error=true"
+                    username-parameter="user_login"
+                    password-parameter="password_login"
+        />
+        <logout logout-success-url="/authorization" />
+        <csrf disabled="true"/>
+    </http>
+
+    <authentication-manager>
+        <authentication-provider>
+            <user-service>
+                <user name="q" password="$2a$05$IHUj33qfJo7veMhOY06CxOEt6Y6IPZX5cB3zbxuz.EVdUvd.XNrou" authorities="ROLE_USER" />
+            </user-service>
+        </authentication-provider>
+    </authentication-manager>
 </beans:beans>
