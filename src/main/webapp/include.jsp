@@ -12,3 +12,4 @@
 <c:set var="showImg" value="${contextPath}showBookImage" scope="request"/>
 <c:set var="showPdf" value="${contextPath}showBookContent" scope="request"/>
 <c:set var="bookId" value="bookId" scope="request"/>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>

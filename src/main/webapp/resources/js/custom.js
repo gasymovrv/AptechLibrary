@@ -137,28 +137,24 @@ function createHtmlItemsList(bookList, items) {
     let editBook = getContextPath() + '/editBookView?bookId=';
     let addBook = getContextPath() + '/addBookView';
     let foundResultText = getFoundResultText();
+    saveFoundResultText("");//обнуляем, иначе отображается старый текст при нажатии кнопки назад
     let rowId = 'row-with-books_0';
-    if (foundResultText) {//если атрибут foundResultText пустой
-        $('#main-box').html(
-            '   <div class="row">\n' +
-            '       <div class="col-sm-8" id="books-count"><h3>' + foundResultText + ' ' + items + '</h3></div>\n' +
-            '       <div class="col-sm-2 admin-element">\n' +
-            '           <a href="' + addBook + '" type="button" role="button" class="btn btn-md admin-button">Добавить книгу</a>\n' +
-            '       </div>' +
-            '   </div>\n');
-    } else {
-        $('#main-box').html(
-            '   <div class="row">\n' +
-            '       <div class="col-sm-2 admin-element">\n' +
-            '           <a href="' + addBook + '" type="button" role="button" class="btn btn-md admin-button">Добавить книгу</a>\n' +
-            '       </div>' +
-            '   </div>\n');
-    }
-    $('#main-box').append(
-        '   <div id="box-with-rows-for-books" class="row">' +
-        '       <div id="' + rowId + '" class="row"></div>' +
-        '   </div>\n');
+    let admin = isAdmin();
+    $('#main-box').html(
+        '<div id="row-info" class="row"></div>\n' +
+        '<div id="box-with-rows-for-books" class="row">' +
+        '    <div id="' + rowId + '" class="row"></div>' +
+        '</div>\n');
 
+    if (foundResultText) {//если атрибут foundResultText не пустой
+        $('#row-info').html('<div class="col-sm-8" id="books-count"><h3>' + foundResultText + ' ' + items + '</h3></div>');
+    }
+    if(admin){
+        $('#row-info').append(
+            '<div class="col-sm-2 admin-element">\n' +
+            '    <a href="' + addBook + '" type="button" role="button" class="btn btn-md admin-button">Добавить книгу</a>\n' +
+            '</div>');
+    }
 
 
     let j = 0;
@@ -205,19 +201,23 @@ function createHtmlItemsList(bookList, items) {
                 '                       data-placement="top" title="Читать"><i\n' +
                 '                            class="glyphicon glyphicon-eye-open icon-white"></i></a>\n' +
                 '                </div>\n' +
-                '            </div>\n' +
-                '            <div class="btn-toolbar admin-element" role="toolbar" aria-label="Toolbar with button groups">\n' +
-                '                <div class="btn-group-lg" role="group" aria-label="First group">\n' +
-                '                    <a href="' + editBook + bookList[i].id + '" class="btn admin-button" role="button"\n' +
-                '                       data-toggle="tooltip"\n' +
-                '                       data-placement="top" title="Изменить"><i\n' +
-                '                            class="glyphicon glyphicon-pencil icon-white"></i></a>\n' +
-                '                    <a href="#" onclick="confirmDeleteBook('+bookList[i].id+', \''+bookList[i].name+'\')" class="btn admin-button" role="button"\n' +
-                '                       data-toggle="tooltip"\n' +
-                '                       data-placement="top" title="Удалить"><i\n' +
-                '                            class="glyphicon glyphicon-trash icon-white"></i></a>\n' +
-                '                </div>\n' +
-                '            </div>\n' +
+                '            </div>\n';
+            if (admin) {
+                html +=
+                    '            <div class="btn-toolbar admin-element" role="toolbar" aria-label="Toolbar with button groups">\n' +
+                    '                <div class="btn-group-lg" role="group" aria-label="First group">\n' +
+                    '                    <a href="' + editBook + bookList[i].id + '" class="btn admin-button" role="button"\n' +
+                    '                       data-toggle="tooltip"\n' +
+                    '                       data-placement="top" title="Изменить"><i\n' +
+                    '                            class="glyphicon glyphicon-pencil icon-white"></i></a>\n' +
+                    '                    <a href="#" onclick="confirmDeleteBook(' + bookList[i].id + ', \'' + bookList[i].name + '\')" class="btn admin-button" role="button"\n' +
+                    '                       data-toggle="tooltip"\n' +
+                    '                       data-placement="top" title="Удалить"><i\n' +
+                    '                            class="glyphicon glyphicon-trash icon-white"></i></a>\n' +
+                    '                </div>\n' +
+                    '            </div>\n';
+            }
+            html +=
                 '        </div>\n' +
                 '    </div>\n' +
                 '</div>\n';

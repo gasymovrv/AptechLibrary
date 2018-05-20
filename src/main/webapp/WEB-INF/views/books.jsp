@@ -14,6 +14,9 @@
                 <% pageContext.getRequest().setAttribute("isDeleted", null);%>
             </script>
         </c:if>
+        <div id="row-info" class="row">
+            <%--template--%>
+        </div>
         <div id="box-with-rows-for-books" class="row">
             <%--template--%>
         </div>

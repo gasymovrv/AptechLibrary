@@ -3,6 +3,12 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
-    <view-state id="loginPage" view="login-page"/>
+    <!--<input name="error" type="java.lang.Boolean" required = "false"/>-->
+    <!--<input name="err" type="java.lang.String" required="false"/>-->
+    <!--<on-start>-->
+        <!--<set name="err" value="'Неверное имя пользователя или пароль!'"/>-->
+    <!--</on-start>-->
+    <!--<view-state id="loginPage" view="login-page">-->
+    <!--</view-state>-->
 
 </flow>

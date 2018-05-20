@@ -34,17 +34,19 @@
                        data-toggle="tooltip"
                        data-placement="top" title="Читать"><i
                             class="glyphicon glyphicon-eye-open icon-white"></i></a>
-                    <a href="${editBook}?${bookId}=${book.id}" class="btn admin-button"
-                       role="button"
-                       data-toggle="tooltip"
-                       data-placement="top" title="Изменить"><i
-                            class="glyphicon glyphicon-pencil icon-white"></i></a>
-                    <a href="#" id="${book.id}" class="btn admin-button"
-                       onclick="confirmDeleteBook(${book.id}, '${book.name}')"
-                       role="button"
-                       data-toggle="tooltip"
-                       data-placement="top" title="Удалить"><i
-                            class="glyphicon glyphicon-trash icon-white"></i></a>
+                    <security:authorize access="hasRole('ROLE_ADMIN')">
+                        <a href="${editBook}?${bookId}=${book.id}" class="btn admin-button"
+                           role="button"
+                           data-toggle="tooltip"
+                           data-placement="top" title="Изменить"><i
+                                class="glyphicon glyphicon-pencil icon-white"></i></a>
+                        <a href="#" id="${book.id}" class="btn admin-button"
+                           onclick="confirmDeleteBook(${book.id}, '${book.name}')"
+                           role="button"
+                           data-toggle="tooltip"
+                           data-placement="top" title="Удалить"><i
+                                class="glyphicon glyphicon-trash icon-white"></i></a>
+                    </security:authorize>
                 </div>
             </div>
         </div>

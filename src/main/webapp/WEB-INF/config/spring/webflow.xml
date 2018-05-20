@@ -10,11 +10,7 @@
     <flow-executor id="flowExecutor" flow-registry="flowRegistry"/>
 
     <flow-registry id="flowRegistry" flow-builder-services="flowBuilder">
-        <!--<flow-location path="/WEB-INF/flows/login-flow.xml" id="login" />-->
-        <!--<flow-location id="flows/main" path="/WEB-INF/flows/main-flow.xml" />-->
-        <!--<flow-location path="/WEB-INF/flows/login-flow.xml" />-->
-        <!--<flow-location path="/WEB-INF/flows/login-flow.xml" />-->
-        <!--<flow-location path="/WEB-INF/flows/login-flow.xml" />-->
+        <!--<flow-location path="/WEB-INF/flows/login-flow.xml" id="authorization" />-->
     </flow-registry>
 
     <flow-builder-services id="flowBuilder" view-factory-creator="flowViewResolver"/>

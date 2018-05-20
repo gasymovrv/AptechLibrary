@@ -108,10 +108,6 @@ public class MainController {
     public void saveFoundResultText(@RequestParam String foundResultText, HttpSession session) {
         session.setAttribute("foundResultText", foundResultText);
     }
-    @RequestMapping(value = "/getIsDelete", method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody Boolean getIsDelete(HttpSession session) {
-        return (Boolean) session.getAttribute("isDeleted");
-    }
 
     @RequestMapping(value = "/addBookView", method = RequestMethod.GET)
     public ModelAndView addBookView() {

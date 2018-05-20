@@ -52,7 +52,11 @@
     <beans:bean id ="passwordEncoder" class = "org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
     <http use-expressions="true">
-        <intercept-url pattern="/bookInfo" access="hasRole('ROLE_USER')" />
+        <intercept-url pattern="/deleteBook**" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/editBookView**" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/editBookAction**" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/addBookView**" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/addBookAction**" access="hasRole('ROLE_ADMIN')" />
         <form-login login-page='/authorization'
                     default-target-url="/home"
                     authentication-failure-url="/authorization?error=true"
@@ -66,7 +70,7 @@
     <authentication-manager>
         <authentication-provider>
             <user-service>
-                <user name="q" password="$2a$05$IHUj33qfJo7veMhOY06CxOEt6Y6IPZX5cB3zbxuz.EVdUvd.XNrou" authorities="ROLE_USER" />
+                <user name="q" password="$2a$05$IHUj33qfJo7veMhOY06CxOEt6Y6IPZX5cB3zbxuz.EVdUvd.XNrou" authorities="ROLE_ADMIN" />
             </user-service>
         </authentication-provider>
     </authentication-manager>

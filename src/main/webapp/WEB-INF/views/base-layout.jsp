@@ -28,6 +28,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="${contextPathToRes}js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     <script src="${contextPathToRes}js/custom.js"></script>
+    <script src="${contextPathToRes}js/customUsers.js"></script>
     <script type="text/javascript" src="${contextPathToRes}js/jquery.simplePagination.js"></script>
 </head>
 
