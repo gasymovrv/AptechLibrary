@@ -27,7 +27,6 @@ import java.io.InputStream;
 import java.util.List;
 
 @Controller
-//@RequestMapping("/")
 public class MainController {
     @Autowired
     private BookDAOImpl bookDAO;

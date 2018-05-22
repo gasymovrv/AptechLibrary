@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd">
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <context:component-scan base-package="ru.aptech.library.service ru.aptech.library.dao"/>
+    <tx:annotation-driven transaction-manager="txManager"/>
+
+    <!--Для тестового соединения с БД-->
+    <!--<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource">-->
+        <!--<property name="driverClassName" value="com.mysql.jdbc.Driver"/>-->
+        <!--<property name="url" value="jdbc:mysql://192.168.56.200:3306/aplib"/>-->
+        <!--<property name="username" value="root"/>-->
+        <!--<property name="password" value="4"/>-->
+    <!--</bean>-->
 
     <!-- 1. Create datasource from JNDI DataSource -->
     <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
@@ -18,15 +33,25 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="hibernateProperties">
             <props>
+                <!--<prop key="hibernate.jndi.url">java:/ApLib</prop>-->
+                <!--<prop key="hibernate.connection.username">root</prop>-->
+                <!--<prop key="hibernate.connection.password">4</prop>-->
+                <!--<prop key="connection.driver_class">com.mysql.jdbc.Driver</prop>-->
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
                 <prop key="hibernate.show_sql">true</prop>
-                <prop key="hibernate.hbm2dll.auto">validate</prop>
-                <!--<prop key="connection.driver_class">com.mysql.jdbc.Driver</prop>-->
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.hbm2dll.auto">update</prop>
             </props>
         </property>
         <property name="mappingLocations">
             <list>
-                <value>classpath*:db/hibernate/*.hbm.xml</value>
+                <value>classpath*:db/hibernate/Author.hbm.xml</value>
+                <value>classpath*:db/hibernate/Book.hbm.xml</value>
+                <value>classpath*:db/hibernate/Genre.hbm.xml</value>
+                <value>classpath*:db/hibernate/Publisher.hbm.xml</value>
+                <value>classpath*:db/hibernate/Vote.hbm.xml</value>
+                <value>classpath*:db/hibernate/UserRole.hbm.xml</value>
+                <value>classpath*:db/hibernate/User.hbm.xml</value>
             </list>
         </property>
     </bean>
