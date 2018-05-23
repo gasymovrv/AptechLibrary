@@ -1,9 +1,7 @@
 package ru.aptech.library.dao;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,9 +14,16 @@ public class UserDAOImpl {
 
     @Transactional
     public User findByUserName(String username) {
-        return sessionFactory.getCurrentSession()
+        Session session = sessionFactory.getCurrentSession();
+        return session
                 .createQuery("from User where username=:username", User.class)
                 .setParameter("username", username).getSingleResult();
+    }
+
+    @Transactional
+    public void save(User user) {
+        Session session = sessionFactory.getCurrentSession();
+        session.save(user);
     }
 
 }

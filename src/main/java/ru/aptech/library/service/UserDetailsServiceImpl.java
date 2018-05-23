@@ -17,8 +17,8 @@ import org.springframework.stereotype.Service;
 import ru.aptech.library.dao.UserDAOImpl;
 import ru.aptech.library.entities.UserRole;
 
-@Service("myUserDetailsService")
-public class MyUserDetailsService implements UserDetailsService {
+@Service("userDetailsServiceImpl")
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private UserDAOImpl userDao;

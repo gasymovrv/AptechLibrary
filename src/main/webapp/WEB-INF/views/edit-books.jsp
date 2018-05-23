@@ -3,7 +3,7 @@
 <%--@elvariable id="book" type="ru.aptech.library.entities.Book"--%>
 
 <!-- Main box -->
-<div class="col-sm-10 mx-auto">
+<div class="center-block col-sm-9" style="float: none;">
     <c:if test="${not empty isEdited}">
         <c:choose>
             <c:when test="${isEdited}">
@@ -100,6 +100,12 @@
                 <form:input id='descr' name='descr' path="descr" type="text" class="form-control"/>
             </div>
         </div>
-        <button type="submit" class="btn pull-right">Изменить</button>
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group-sm pull-right" role="group" aria-label="First group">
+                <button type="submit" class="btn btn-sm">Сохранить</button>
+                <button type="reset" class="btn btn-sm">Отмена</button>
+            </div>
+        </div>
+
     </form:form>
 </div>

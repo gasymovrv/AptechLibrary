@@ -26,26 +26,29 @@
 
     <definition name="add-book-page" extends="base-layout">
         <put-attribute name="title" value="Добавление книги"/>
-        <put-attribute name="top-panel" value="/WEB-INF/views/top-panel-add-books.jsp"/>
+        <put-attribute name="top-panel-title" value="Добавление книги" cascade="true"/>
+        <put-attribute name="top-panel" value="/WEB-INF/views/top-panel.jsp"/>
         <put-attribute name="letters" value=""/>
         <put-attribute name="sidebar" value=""/>
         <put-attribute name="main" value="/WEB-INF/views/add-books.jsp"/>
     </definition>
 
-    <definition name="edit-book-page" extends="base-layout">
+    <definition name="edit-book-page" extends="add-book-page">
         <put-attribute name="title" value="Изменение книги"/>
-        <put-attribute name="top-panel" value="/WEB-INF/views/top-panel-edit-books.jsp"/>
-        <put-attribute name="letters" value=""/>
-        <put-attribute name="sidebar" value=""/>
+        <put-attribute name="top-panel-title" value="Редактирование информации о книге" cascade="true"/>
         <put-attribute name="main" value="/WEB-INF/views/edit-books.jsp"/>
     </definition>
 
-    <definition name="login-page" extends="base-layout">
+    <definition name="login-page" extends="add-book-page">
         <put-attribute name="title" value="Авторизация"/>
-        <put-attribute name="top-panel" value="/WEB-INF/views/top-panel-login.jsp"/>
-        <put-attribute name="letters" value=""/>
-        <put-attribute name="sidebar" value=""/>
+        <put-attribute name="top-panel-title" value="Авторизация" cascade="true"/>
         <put-attribute name="main" value="/WEB-INF/views/login.jsp"/>
+    </definition>
+
+    <definition name="registration-page" extends="add-book-page">
+        <put-attribute name="title" value="Регистрация"/>
+        <put-attribute name="top-panel-title" value="Регистрация" cascade="true"/>
+        <put-attribute name="main" value="/WEB-INF/views/registration.jsp"/>
     </definition>
 
 

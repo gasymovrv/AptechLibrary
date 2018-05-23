@@ -1,5 +1,5 @@
 package ru.aptech.library.entities;
-import javax.persistence.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -7,7 +7,7 @@ import java.util.Set;
 public class User {
     private String username;
     private String password;
-    private boolean enabled;
+    private boolean enabled = true;
     private Set<UserRole> userRole = new HashSet<UserRole>(0);
 
 

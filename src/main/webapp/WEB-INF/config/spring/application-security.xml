@@ -46,10 +46,8 @@
 
     <beans:bean id="bcrypt"
                 class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
-        <beans:constructor-arg name="strength" value="5" />
+        <beans:constructor-arg name="strength" value="11" />
     </beans:bean>
-
-    <beans:bean id ="passwordEncoder" class = "org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
     <http use-expressions="true">
         <intercept-url pattern="/deleteBook**" access="hasRole('ROLE_ADMIN')" />
@@ -57,19 +55,19 @@
         <intercept-url pattern="/editBookAction**" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/addBookView**" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/addBookAction**" access="hasRole('ROLE_ADMIN')" />
-        <form-login login-page='/authorization'
+        <form-login login-page='/users/authorization'
                     default-target-url="/home"
-                    authentication-failure-url="/authorization?error=true"
+                    authentication-failure-url="/users/authorization?error=true"
                     username-parameter="user_login"
                     password-parameter="password_login"
         />
-        <logout logout-success-url="/authorization" />
+        <logout logout-success-url="/users/authorization" />
         <csrf disabled="true"/>
     </http>
 
-    <authentication-manager alias="authenticationManager">
-        <authentication-provider user-service-ref="myUserDetailsService" >
-            <password-encoder ref="passwordEncoder"/>
+    <authentication-manager>
+        <authentication-provider user-service-ref="userDetailsServiceImpl" >
+            <password-encoder ref="bcrypt"/>
         </authentication-provider>
     </authentication-manager>
 </beans:beans>
