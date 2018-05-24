@@ -15,7 +15,7 @@
             </div>
             <div class="form-group">
                 <label class="checkbox">
-                    <input type="checkbox"> Запомнить меня
+                    <input type="checkbox" name="remember-me"> Запомнить меня
                 </label>
                 <a href="#" class="forgot-password">Забыли пароль?</a>
                 <button type="submit" class="btn pull-right">Войти</button>

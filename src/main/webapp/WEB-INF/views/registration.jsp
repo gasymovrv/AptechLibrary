@@ -5,21 +5,32 @@
     <div class="basic-login">
         <form:form name='form_login' action="${contextPath}users/registrationAction" method='POST' modelAttribute="user">
             <div class="form-group">
-                <c:if test="${not empty error}"><p class="alert alert-danger">${error}</p></c:if>
+                <p hidden="hidden" id="box-danger" class="alert alert-danger"></p>
                 <label for="username"><i class="icon-user"></i> <b>Имя или email</b></label>
                 <form:input class="form-control" id="username" path='username'/>
             </div>
             <div class="form-group">
-                <label for="password"><i class="icon-lock"></i> <b>Пароль</b></label>
-                <form:password class="form-control" id="password" path='password'/>
+                <label for="password1"><i class="icon-lock"></i> <b>Пароль</b></label>
+                <input id="password1" class="form-control" type="password">
             </div>
             <div class="form-group">
-                <button type="submit" class="btn pull-right">Зарегистрироваться</button>
+                <label for="password2"><i class="icon-lock"></i> <b>Подтвердите пароль</b></label>
+                <form:password class="form-control" id="password2" path='password'/>
+            </div>
+            <div class="form-group">
+                <span id="submit-new-user" class="d-inline-block pull-right" title="Сначала заполните все поля">
+                    <button disabled="disabled" type="submit" class="btn">
+                        Зарегистрироваться
+                    </button>
+                </span>
                 <div class="clearfix"></div>
             </div>
         </form:form>
     </div>
 </div>
+<script>
+    userValidation();
+</script>
 <%--<div class="col-sm-7 social-login">--%>
     <%--<p>Или войдите через социальные сети</p>--%>
     <%--<div class="social-login-buttons">--%>

@@ -193,13 +193,9 @@ function createHtmlItemsList(bookList, items) {
                 '            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">\n' +
                 '                <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">\n' +
                 '                    <a href="' + bookInfo + bookList[i].id + '" class="btn" role="button"\n' +
-                '                       data-toggle="tooltip"\n' +
-                '                       data-placement="top" title="В корзину"><i\n' +
-                '                            class="glyphicon glyphicon-shopping-cart icon-white"></i></a>\n' +
+                '                       title="В корзину"><i class="glyphicon glyphicon-shopping-cart icon-white"></i></a>\n' +
                 '                    <a href="' + showPdf + bookList[i].id + '" class="btn" role="button"\n' +
-                '                       data-toggle="tooltip"\n' +
-                '                       data-placement="top" title="Читать"><i\n' +
-                '                            class="glyphicon glyphicon-eye-open icon-white"></i></a>\n' +
+                '                       title="Читать"><i class="glyphicon glyphicon-eye-open icon-white"></i></a>\n' +
                 '                </div>\n' +
                 '            </div>\n';
             if (admin) {
@@ -207,13 +203,9 @@ function createHtmlItemsList(bookList, items) {
                     '            <div class="btn-toolbar admin-element" role="toolbar" aria-label="Toolbar with button groups">\n' +
                     '                <div class="btn-group-lg" role="group" aria-label="First group">\n' +
                     '                    <a href="' + editBook + bookList[i].id + '" class="btn admin-button" role="button"\n' +
-                    '                       data-toggle="tooltip"\n' +
-                    '                       data-placement="top" title="Изменить"><i\n' +
-                    '                            class="glyphicon glyphicon-pencil icon-white"></i></a>\n' +
+                    '                       title="Изменить"><i class="glyphicon glyphicon-pencil icon-white"></i></a>\n' +
                     '                    <a href="#" onclick="confirmDeleteBook(' + bookList[i].id + ', \'' + bookList[i].name + '\')" class="btn admin-button" role="button"\n' +
-                    '                       data-toggle="tooltip"\n' +
-                    '                       data-placement="top" title="Удалить"><i\n' +
-                    '                            class="glyphicon glyphicon-trash icon-white"></i></a>\n' +
+                    '                       title="Удалить"><i class="glyphicon glyphicon-trash icon-white"></i></a>\n' +
                     '                </div>\n' +
                     '            </div>\n';
             }

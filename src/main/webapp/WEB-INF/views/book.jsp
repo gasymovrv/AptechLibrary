@@ -25,27 +25,19 @@
             <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                 <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">
                     <a href="${bookInfo}?${bookId}=${book.id}" class="btn"
-                       role="button"
-                       data-toggle="tooltip"
-                       data-placement="top" title="В корзину"><i
-                            class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
+                       role="button" title="В корзину">
+                        <i class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
                     <a href="${showPdf}?${bookId}=${book.id}" class="btn"
-                       role="button"
-                       data-toggle="tooltip"
-                       data-placement="top" title="Читать"><i
-                            class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                       role="button" title="Читать">
+                        <i class="glyphicon glyphicon-eye-open icon-white"></i></a>
                     <security:authorize access="hasRole('ROLE_ADMIN')">
                         <a href="${editBook}?${bookId}=${book.id}" class="btn admin-button"
-                           role="button"
-                           data-toggle="tooltip"
-                           data-placement="top" title="Изменить"><i
-                                class="glyphicon glyphicon-pencil icon-white"></i></a>
+                           role="button" title="Изменить">
+                            <i class="glyphicon glyphicon-pencil icon-white"></i></a>
                         <a href="#" id="${book.id}" class="btn admin-button"
                            onclick="confirmDeleteBook(${book.id}, '${book.name}')"
-                           role="button"
-                           data-toggle="tooltip"
-                           data-placement="top" title="Удалить"><i
-                                class="glyphicon glyphicon-trash icon-white"></i></a>
+                           role="button" title="Удалить">
+                            <i class="glyphicon glyphicon-trash icon-white"></i></a>
                     </security:authorize>
                 </div>
             </div>
