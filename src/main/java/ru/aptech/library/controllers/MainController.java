@@ -241,13 +241,4 @@ public class MainController {
         }
     }
 
-//
-//    @RequestMapping(value = "login", method = RequestMethod.GET)
-//    public ModelAndView login(@RequestParam(value = "error", required = false) String error) {
-//        ModelAndView model = new ModelAndView("login-page");
-//        if (error != null) {
-//            model.addObject("error", "Неверное имя пользователя или пароль!");
-//        }
-//        return model;
-//    }
 }

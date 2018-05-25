@@ -27,11 +27,18 @@
         />
         <logout logout-success-url="/users/authorization" delete-cookies="JSESSIONID"/>
         <csrf disabled="true"/>
-        <!--запомнить пользователя на 2 недели-->
+
+        <!--
+            Запомнить пользователя на 2 недели, хранится в БД (persistent_logins).
+            Стирание куков браузера выбрасывает из авторизации,
+            повторный вход возобновляет запоминание (даже без галочки "запомнить меня").
+        -->
         <remember-me
                 token-validity-seconds="1209600"
                 remember-me-parameter="remember-me"
-                user-service-ref="userDetailsServiceImpl"/>
+                data-source-ref="dataSource"
+                user-service-ref="userDetailsServiceImpl"
+                />
     </http>
 
     <authentication-manager>

@@ -11,7 +11,20 @@ $(document).ready(function () {
     searchByGenre();
     searchByLetter();
     searchByText();
+    bookActions();
 });
+
+function  bookActions() {
+    let bookActions = $('.book-actions');
+    bookActions.hover(
+        function () {
+            $(this).popover('show');
+        },
+        function () {
+            $(this).popover('hide');
+        }
+    );
+}
 
 function searchByText() {
     $(document).on('submit', '#top-panel-form', function (event) {
@@ -22,7 +35,6 @@ function searchByText() {
         printItemsWithPagination(criteria);
     });
 }
-
 
 function searchByLetter() {
     $(document).on('click', '#letters-form button', function () {//то же что и метод click, но работает всегда
@@ -192,20 +204,25 @@ function createHtmlItemsList(bookList, items) {
                 '        <div class="actions">\n' +
                 '            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">\n' +
                 '                <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">\n' +
-                '                    <a href="' + bookInfo + bookList[i].id + '" class="btn" role="button"\n' +
-                '                       title="В корзину"><i class="glyphicon glyphicon-shopping-cart icon-white"></i></a>\n' +
-                '                    <a href="' + showPdf + bookList[i].id + '" class="btn" role="button"\n' +
-                '                       title="Читать"><i class="glyphicon glyphicon-eye-open icon-white"></i></a>\n' +
+                '                    <a href="' + bookInfo + bookList[i].id + '" class="btn book-actions" role="button"\n' +
+                '                        data-placement="top" data-toggle="popover" data-content="В корзину">' +
+                '                       <i class="glyphicon glyphicon-shopping-cart icon-white"></i></a>\n' +
+                '                    <a href="' + showPdf + bookList[i].id + '" class="btn book-actions" role="button"\n' +
+                '                        data-placement="top" data-toggle="popover" data-content="Читать">' +
+                '                       <i class="glyphicon glyphicon-eye-open icon-white"></i></a>\n' +
                 '                </div>\n' +
                 '            </div>\n';
             if (admin) {
                 html +=
                     '            <div class="btn-toolbar admin-element" role="toolbar" aria-label="Toolbar with button groups">\n' +
                     '                <div class="btn-group-lg" role="group" aria-label="First group">\n' +
-                    '                    <a href="' + editBook + bookList[i].id + '" class="btn admin-button" role="button"\n' +
-                    '                       title="Изменить"><i class="glyphicon glyphicon-pencil icon-white"></i></a>\n' +
-                    '                    <a href="#" onclick="confirmDeleteBook(' + bookList[i].id + ', \'' + bookList[i].name + '\')" class="btn admin-button" role="button"\n' +
-                    '                       title="Удалить"><i class="glyphicon glyphicon-trash icon-white"></i></a>\n' +
+                    '                    <a href="' + editBook + bookList[i].id + '" class="btn admin-button book-actions" role="button"\n' +
+                    '                        data-placement="top" data-toggle="popover" data-content="Изменить">' +
+                    '                       <i class="glyphicon glyphicon-pencil icon-white"></i></a>\n' +
+                    '                    <a href="#" onclick="confirmDeleteBook(' + bookList[i].id + ', \'' + bookList[i].name + '\')"' +
+                    '                        class="btn admin-button book-actions" role="button"\n' +
+                    '                        data-placement="top" data-toggle="popover" data-content="Удалить">' +
+                    '                       <i class="glyphicon glyphicon-trash icon-white"></i></a>\n' +
                     '                </div>\n' +
                     '            </div>\n';
             }

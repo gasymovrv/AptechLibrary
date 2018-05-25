@@ -35,3 +35,5 @@ INSERT INTO `user`(`username`, `password`, `enabled`) VALUES ('admin', '$2a$05$I
 INSERT INTO `user`(`username`, `password`, `enabled`) VALUES ('user', '$2a$05$IHUj33qfJo7veMhOY06CxOEt6Y6IPZX5cB3zbxuz.EVdUvd.XNrou', true);
 INSERT INTO `user_role`(`username`, `role`) VALUES ('admin', 'ROLE_ADMIN');
 INSERT INTO `user_role`(`username`, `role`) VALUES ('user', 'ROLE_USER');
+
+

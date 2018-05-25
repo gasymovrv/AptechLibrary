@@ -15,26 +15,43 @@ function isAdmin() {
 }
 
 function userValidation() {
-    $("#username, #password1, #password2").keyup(function () {
-        let boxDanger = $('#box-danger');
-        let username = $('#username').val();
-        let pass1 = $('#password1').val();
-        let pass2 = $('#password2').val();
+    let spanButton = $('#submit-new-user');
+    spanButton.attr('data-content', "Сначала заполните все поля");
 
-        if (!pass1 || !pass2 || !username) {
-            $('#submit-new-user button').prop('disabled', true);
-            boxDanger.text('Необходимо заполнить все поля');
-            boxDanger.show();
-        } else if (pass1 !== pass2) {
-            $('#submit-new-user button').prop('disabled', true);
-            $('#submit-new-user').prop('title', 'Пароли должны совпадать');
-            boxDanger.text('Пароли не совпадают');
-            boxDanger.show();
-        } else {
-            $('#submit-new-user button').prop('disabled', false);
-            $('#submit-new-user').prop('title', "");
-            boxDanger.empty();
-            boxDanger.hide();
+    spanButton.hover(
+        function () {
+            $(this).popover('show');
+        },
+        function () {
+            $(this).popover('hide');
         }
+    );
+
+    $("#username, #password1, #password2").each(function () {
+        $(this).keyup(function () {
+            let boxDanger = $('#box-danger');
+            let username = $('#username').val();
+            let pass1 = $('#password1').val();
+            let pass2 = $('#password2').val();
+
+            if (!pass1 || !pass2 || !username) {
+                $('#submit-new-user button').prop('disabled', true);
+                $(spanButton).popover('enable');
+                spanButton.attr('data-content', 'Необходимо заполнить все поля');
+                boxDanger.empty();
+                boxDanger.hide();
+            } else if ((pass1 && pass2) && (pass1 !== pass2)) {
+                $('#submit-new-user button').prop('disabled', true);
+                $(spanButton).popover('enable');
+                spanButton.attr('data-content', 'Пароли должны совпадать');
+                boxDanger.text('Пароли не совпадают');
+                boxDanger.show();
+            } else {
+                $('#submit-new-user button').prop('disabled', false);
+                $(spanButton).popover('disable');
+                boxDanger.empty();
+                boxDanger.hide();
+            }
+        });
     });
 }

@@ -61,7 +61,7 @@ CREATE TABLE `book` (
   CONSTRAINT `fk_author` FOREIGN KEY (`author_id`) REFERENCES `author` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_genre` FOREIGN KEY (`genre_id`) REFERENCES `genre` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_publisher` FOREIGN KEY (`publisher_id`) REFERENCES `publisher` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -79,6 +79,22 @@ CREATE TABLE `genre` (
   KEY `fk_parent_idx` (`parent`),
   CONSTRAINT `fk_parent` FOREIGN KEY (`parent`) REFERENCES `genre` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `persistent_logins`
+--
+
+DROP TABLE IF EXISTS `persistent_logins`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `persistent_logins` (
+  `username` varchar(64) NOT NULL,
+  `series` varchar(64) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `last_used` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`series`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,8 +120,8 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
   `username` varchar(45) NOT NULL,
-  `password` varchar(60) NOT NULL,
-  `enabled` boolean NOT NULL,
+  `password` varchar(64) NOT NULL,
+  `enabled` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -122,8 +138,9 @@ CREATE TABLE `user_role` (
   `username` varchar(45) NOT NULL,
   `role` varchar(45) NOT NULL,
   PRIMARY KEY (`user_role_id`),
-  KEY `fk_user` (`username`),
-  CONSTRAINT `fk_user` FOREIGN KEY (`username`) REFERENCES `user` (`username`) ON UPDATE CASCADE
+  UNIQUE KEY `uni_username_role` (`role`,`username`),
+  KEY `fk_username_idx` (`username`),
+  CONSTRAINT `fk_username` FOREIGN KEY (`username`) REFERENCES `user` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -156,4 +173,4 @@ CREATE TABLE `vote` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-05-22 20:37:29
+-- Dump completed on 2018-05-25 12:20:06

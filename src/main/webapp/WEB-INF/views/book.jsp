@@ -24,19 +24,19 @@
             <!-- Operations -->
             <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                 <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">
-                    <a href="${bookInfo}?${bookId}=${book.id}" class="btn"
-                       role="button" title="В корзину">
+                    <a href="${bookInfo}?${bookId}=${book.id}" class="btn book-actions"
+                       role="button" data-placement="top" data-toggle="popover" data-content="В корзину">
                         <i class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
-                    <a href="${showPdf}?${bookId}=${book.id}" class="btn"
-                       role="button" title="Читать">
+                    <a href="${showPdf}?${bookId}=${book.id}" class="btn book-actions"
+                       role="button" data-placement="top" data-toggle="popover" data-content="Читать">
                         <i class="glyphicon glyphicon-eye-open icon-white"></i></a>
                     <security:authorize access="hasRole('ROLE_ADMIN')">
-                        <a href="${editBook}?${bookId}=${book.id}" class="btn admin-button"
-                           role="button" title="Изменить">
+                        <a href="${editBook}?${bookId}=${book.id}" class="btn admin-button book-actions"
+                           role="button" data-placement="top" data-toggle="popover" data-content="Изменить">
                             <i class="glyphicon glyphicon-pencil icon-white"></i></a>
-                        <a href="#" id="${book.id}" class="btn admin-button"
+                        <a href="#" id="${book.id}" class="btn admin-button book-actions"
                            onclick="confirmDeleteBook(${book.id}, '${book.name}')"
-                           role="button" title="Удалить">
+                           role="button" data-placement="top" data-toggle="popover" data-content="Удалить">
                             <i class="glyphicon glyphicon-trash icon-white"></i></a>
                     </security:authorize>
                 </div>
