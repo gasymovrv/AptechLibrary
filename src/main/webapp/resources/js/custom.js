@@ -11,7 +11,6 @@ $(document).ready(function () {
     searchByGenre();
     searchByLetter();
     searchByText();
-    bookActions();
 });
 
 function  bookActions() {
@@ -239,6 +238,7 @@ function createHtmlItemsList(bookList, items) {
             }
         });
     }
+    bookActions();
 }
 
 //сохраняем значение атрибута foundResultText в сессии
