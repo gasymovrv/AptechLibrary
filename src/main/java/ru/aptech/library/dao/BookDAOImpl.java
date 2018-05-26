@@ -5,10 +5,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.aptech.library.entities.Author;
 import ru.aptech.library.entities.Book;
-import ru.aptech.library.entities.Genre;
-import ru.aptech.library.entities.Publisher;
 import ru.aptech.library.enums.SearchType;
 import ru.aptech.library.util.SearchCriteria;
 
@@ -42,7 +39,7 @@ public class BookDAOImpl {
 
 
     @Transactional
-    public List<Book> getBooks(Integer booksOnPage, Integer selectedPage) {
+    public List<Book> find(Integer booksOnPage, Integer selectedPage) {
         int init = (selectedPage - 1) * booksOnPage;
         Session session = sessionFactory.getCurrentSession();
         List<Book> bookList = session.createQuery(BOOKS_WITHOUT_CONTENT + ORDER_BY_NAME,
@@ -52,7 +49,7 @@ public class BookDAOImpl {
 
 
     @Transactional
-    public Book getBooks(long id) {
+    public Book find(long id) {
         Session session = sessionFactory.getCurrentSession();
         Book book = session.createQuery(BOOKS_WITHOUT_CONTENT
                         + " where b.id=:id",
@@ -61,14 +58,14 @@ public class BookDAOImpl {
     }
 
     @Transactional
-    public Book getBooksWithContent(long id) {
+    public Book findWithContent(long id) {
         Session session = sessionFactory.getCurrentSession();
         return session.get(Book.class, id);
     }
 
 
     @Transactional
-    public List<Book> getBooks(SearchCriteria criteria, Integer booksOnPage, Integer selectedPage) {
+    public List<Book> find(SearchCriteria criteria, Integer booksOnPage, Integer selectedPage) {
         int init = (selectedPage - 1) * booksOnPage;
         Session session = sessionFactory.getCurrentSession();
         List<Book> books = session.createQuery(BOOKS_WITHOUT_CONTENT +
@@ -89,6 +86,24 @@ public class BookDAOImpl {
         return books;
     }
 
+
+    @Transactional
+    public void save(Book book) {
+        Session session = sessionFactory.getCurrentSession();
+        session.save(book);
+    }
+
+    @Transactional
+    public void update(Book book) {
+        Session session = sessionFactory.getCurrentSession();
+        session.update(book);
+    }
+
+    @Transactional
+    public void delete(Long bookId) {
+        Session session = sessionFactory.getCurrentSession();
+        session.delete(find(bookId));
+    }
 
     @Transactional
     public byte[] getBookContent(long id) {
@@ -145,28 +160,8 @@ public class BookDAOImpl {
         return stringSearchType;
     }
 
-
-    @Transactional
-    public void saveBook(Book book) {
-        Session session = sessionFactory.getCurrentSession();
-        session.save(book);
-    }
-
-    @Transactional
-    public void updateBook(Book book) {
-        Session session = sessionFactory.getCurrentSession();
-        session.update(book);
-    }
-
-    @Transactional
-    public void deleteBook(Long bookId) {
-        Session session = sessionFactory.getCurrentSession();
-        session.delete(getBooks(bookId));
-    }
-
-
 //    @Transactional
-//    public List<Book> getBooks() {
+//    public List<Book> find() {
 //        //Сессия
 //        Session session = sessionFactory.getCurrentSession();
 //        //Бюйлдер
@@ -181,50 +176,5 @@ public class BookDAOImpl {
 //        Query<Book> query = session.createQuery(criteria);
 //        //Выполяем запрос
 //        return query.getSingleResult();
-//    }
-
-//
-//
-//    @Transactional
-//    public List<Book> getBooks(Author author) {
-//        Session session = sessionFactory.getCurrentSession();
-//        List<Book> books = session.createQuery(BOOKS_WITHOUT_CONTENT
-//                        + " where b.author.fio like CONCAT('%', :author, '%')"
-//                        + ORDER_BY_NAME,
-//                Book.class).setParameter("author", author.getFio()).getResultList();
-//        return books;
-//    }
-//
-//
-//    @Transactional
-//    public List<Book> getBooks(String bookName) {
-//        Session session = sessionFactory.getCurrentSession();
-//        List<Book> books = session.createQuery(BOOKS_WITHOUT_CONTENT
-//                        + " where b.name like CONCAT('%', :name, '%')"
-//                        + ORDER_BY_NAME,
-//                Book.class).setParameter("name", bookName.toLowerCase()).getResultList();
-//        return books;
-//    }
-//
-//
-//    @Transactional
-//    public List<Book> getBooks(Genre genre) {
-//        Session session = sessionFactory.getCurrentSession();
-//        List<Book> books = session.createQuery(BOOKS_WITHOUT_CONTENT
-//                        + " where b.genre.name like CONCAT('%', :genre, '%')"
-//                        + ORDER_BY_NAME,
-//                Book.class).setParameter("genre", genre.getName()).getResultList();
-//        return books;
-//    }
-//
-//
-//    @Transactional
-//    public List<Book> getBooks(Character letter) {
-//        Session session = sessionFactory.getCurrentSession();
-//        List<Book> books = session.createQuery(BOOKS_WITHOUT_CONTENT
-//                        + " where b.name like CONCAT(:letter, '%')"
-//                        + ORDER_BY_NAME,
-//                Book.class).setParameter("letter", letter).getResultList();
-//        return books;
 //    }
 }

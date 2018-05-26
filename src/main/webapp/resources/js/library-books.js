@@ -1,29 +1,3 @@
-$(document).ready(function () {
-    //изменение количества книг на странице
-    $(document).on('click', '#books-on-page-button', function () {
-        let booksOnPage = $('#books-on-page-input').val();
-        printItemsWithPagination(getCriteria(), booksOnPage);
-    });
-
-    //обновление списка книг при поиске
-    searchByAuthor();
-    searchByPublisher();
-    searchByGenre();
-    searchByLetter();
-    searchByText();
-});
-
-function  bookActions() {
-    let bookActions = $('.book-actions');
-    bookActions.hover(
-        function () {
-            $(this).popover('show');
-        },
-        function () {
-            $(this).popover('hide');
-        }
-    );
-}
 
 function searchByText() {
     $(document).on('submit', '#top-panel-form', function (event) {
@@ -203,10 +177,10 @@ function createHtmlItemsList(bookList, items) {
                 '        <div class="actions">\n' +
                 '            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">\n' +
                 '                <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">\n' +
-                '                    <a href="' + bookInfo + bookList[i].id + '" class="btn book-actions" role="button"\n' +
+                '                    <a href="' + bookInfo + bookList[i].id + '" class="btn element-actions" role="button"\n' +
                 '                        data-placement="top" data-toggle="popover" data-content="В корзину">' +
                 '                       <i class="glyphicon glyphicon-shopping-cart icon-white"></i></a>\n' +
-                '                    <a href="' + showPdf + bookList[i].id + '" class="btn book-actions" role="button"\n' +
+                '                    <a href="' + showPdf + bookList[i].id + '" class="btn element-actions" role="button"\n' +
                 '                        data-placement="top" data-toggle="popover" data-content="Читать">' +
                 '                       <i class="glyphicon glyphicon-eye-open icon-white"></i></a>\n' +
                 '                </div>\n' +
@@ -215,11 +189,11 @@ function createHtmlItemsList(bookList, items) {
                 html +=
                     '            <div class="btn-toolbar admin-element" role="toolbar" aria-label="Toolbar with button groups">\n' +
                     '                <div class="btn-group-lg" role="group" aria-label="First group">\n' +
-                    '                    <a href="' + editBook + bookList[i].id + '" class="btn admin-button book-actions" role="button"\n' +
+                    '                    <a href="' + editBook + bookList[i].id + '" class="btn admin-button element-actions" role="button"\n' +
                     '                        data-placement="top" data-toggle="popover" data-content="Изменить">' +
                     '                       <i class="glyphicon glyphicon-pencil icon-white"></i></a>\n' +
                     '                    <a href="#" onclick="confirmDeleteBook(' + bookList[i].id + ', \'' + bookList[i].name + '\')"' +
-                    '                        class="btn admin-button book-actions" role="button"\n' +
+                    '                        class="btn admin-button element-actions" role="button"\n' +
                     '                        data-placement="top" data-toggle="popover" data-content="Удалить">' +
                     '                       <i class="glyphicon glyphicon-trash icon-white"></i></a>\n' +
                     '                </div>\n' +
@@ -238,7 +212,7 @@ function createHtmlItemsList(bookList, items) {
             }
         });
     }
-    bookActions();
+    popovers();
 }
 
 //сохраняем значение атрибута foundResultText в сессии
@@ -309,10 +283,4 @@ function confirmDeleteBook(bookId, bookName) {
     if (confirm("Уверены что хотите удалить книгу '" + bookName + "'?")) {
         window.location = (getContextPath() + '/deleteBook?bookId=' + bookId);
     }
-}
-
-//метод для получения контекстного пути '/aptech-library'
-//!!! работает только с корневым именем, не содержащим '/'
-function getContextPath() {
-    return window.location.pathname.substring(0, window.location.pathname.indexOf("/", 2));
 }

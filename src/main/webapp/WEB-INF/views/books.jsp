@@ -25,10 +25,10 @@
         <ul id="books-pag" class="pagination pagination-md"></ul>
         <div class="form-inline">
             <div class="form-group mb-2">
-                Книг на странице:
+                Отображать на странице:
                 <input id="books-on-page-input" type="number" name="booksOnPage" value="${sessionScope.booksOnPage}" class="input-micro">
             </div>
-            <button id="books-on-page-button" type="button" class="btn">Подтвердить</button>
+            <button id="books-on-page-button" class="btn">Подтвердить</button>
         </div>
     </div>
 </div>

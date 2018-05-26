@@ -27,7 +27,7 @@ import java.io.InputStream;
 import java.util.List;
 
 @Controller
-public class MainController {
+public class BookController {
     @Autowired
     private BookDAOImpl bookDAO;
     @Autowired
@@ -62,17 +62,17 @@ public class MainController {
         session.setAttribute("booksOnPage", booksOnPage);
         if(criteria.isEmpty()){
             session.setAttribute("criteria", new SearchCriteria());
-            return bookDAO.getBooks(booksOnPage, selectedPage);
+            return bookDAO.find(booksOnPage, selectedPage);
         }
         session.setAttribute("criteria", criteria);
-        return bookDAO.getBooks(criteria, booksOnPage, selectedPage);
+        return bookDAO.find(criteria, booksOnPage, selectedPage);
     }
 
     @RequestMapping(value = "/bookInfo", method = RequestMethod.GET)
     public ModelAndView bookInfo(@RequestParam(value = "bookId") Long bookId) {
         ModelAndView modelAndView = new ModelAndView("home-page-one-book");
         addAttributesForCriteria(modelAndView);
-        modelAndView.addObject("book", bookDAO.getBooks(bookId));
+        modelAndView.addObject("book", bookDAO.find(bookId));
         return modelAndView;
     }
 
@@ -130,7 +130,7 @@ public class MainController {
     @RequestMapping(value = "/editBookView", method = RequestMethod.GET)
     public ModelAndView editBookView(@RequestParam Long bookId) {
         ModelAndView modelAndView = new ModelAndView("edit-book-page");
-        Book book = bookDAO.getBooks(bookId);
+        Book book = bookDAO.find(bookId);
         modelAndView.addObject("book", book);
         addAttributesForAddOrEditBook(modelAndView);
         return modelAndView;
@@ -144,7 +144,7 @@ public class MainController {
         ModelAndView modelAndView = new ModelAndView("edit-book-page");
         boolean isEdited = updateBook(book, content, image, bookId);
         modelAndView.addObject("isEdited", isEdited);
-        modelAndView.addObject("book", bookDAO.getBooks(bookId));
+        modelAndView.addObject("book", bookDAO.find(bookId));
         addAttributesForAddOrEditBook(modelAndView);
         return modelAndView;
     }
@@ -153,7 +153,7 @@ public class MainController {
     public ModelAndView deleteBook(@RequestParam(value = "bookId") Long bookId) {
         boolean isDeleted;
         try {
-            bookDAO.deleteBook(bookId);
+            bookDAO.delete(bookId);
             isDeleted = true;
         } catch (Exception e){
             isDeleted = false;
@@ -166,7 +166,7 @@ public class MainController {
 
     @RequestMapping(value = "/showBookImage", method = RequestMethod.GET)
     public void showImage(@RequestParam("bookId") Long bookId, HttpServletResponse response, HttpServletRequest request) throws IOException {
-        Book book = bookDAO.getBooks(bookId);
+        Book book = bookDAO.find(bookId);
         //получаем дефолтное изображение из статических ресурсов
         String path = request.getSession().getServletContext().getRealPath("/resources/img/nophoto.jpg");
         InputStream inputStream = new FileSystemResource(new File(path)).getInputStream();
@@ -205,7 +205,7 @@ public class MainController {
     private void addAttributesForAddOrEditBook(ModelAndView modelAndView) {
         List<Publisher> publishers = publisherDAO.getPublishers();
         List<Genre> genres = genreDAO.getGenres();
-        List<Author> authors = authorDAO.getAuthors();
+        List<Author> authors = authorDAO.find();
         modelAndView.addObject("genreList", genres);
         modelAndView.addObject("authorList", authors);
         modelAndView.addObject("publisherList", publishers);
@@ -216,7 +216,7 @@ public class MainController {
         try {
             book.setContent(content.getBytes());
             book.setImage(image.getBytes());
-            bookDAO.saveBook(book);
+            bookDAO.save(book);
             return true;
         } catch (Exception e) {
             return false;
@@ -226,7 +226,7 @@ public class MainController {
 
     private boolean updateBook(Book updatedBook, MultipartFile content, MultipartFile image, Long bookId) {
         try {
-            Book existBook = bookDAO.getBooksWithContent(bookId);
+            Book existBook = bookDAO.findWithContent(bookId);
             existBook.setAllField(updatedBook);
             if (content.getSize() > 0) {
                 existBook.setContent(content.getBytes());
@@ -234,7 +234,7 @@ public class MainController {
             if (image.getSize() > 0 ) {
                 existBook.setImage(image.getBytes());
             }
-            bookDAO.updateBook(existBook);
+            bookDAO.update(existBook);
             return true;
         } catch (Exception e) {
             return false;

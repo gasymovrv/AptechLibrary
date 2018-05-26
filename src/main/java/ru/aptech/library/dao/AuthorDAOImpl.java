@@ -20,20 +20,39 @@ public class AuthorDAOImpl {
 
 
     @Transactional
-    public List<Author> getAuthors() {
+    public List<Author> find() {
         Session session = sessionFactory.getCurrentSession();
-        List<Author> genreList = session.createQuery(AUTHORS + ORDER_BY_NAME,
+        List<Author> authorList = session.createQuery(AUTHORS + ORDER_BY_NAME,
                 Author.class).getResultList();
-        return genreList;
+        return authorList;
     }
 
     @Transactional
-    public Author getAuthors(Long id) {
+    public List<Author> find(Integer authorsOnPage, Integer selectedPage) {
+        int init = (selectedPage - 1) * authorsOnPage;
+        Session session = sessionFactory.getCurrentSession();
+        List<Author> authorList = session.createQuery(AUTHORS + ORDER_BY_NAME,
+                Author.class).setFirstResult(init).setMaxResults(authorsOnPage).getResultList();
+        return authorList;
+    }
+
+    @Transactional
+    public Author find(Long id) {
         Session session = sessionFactory.getCurrentSession();
         Author author = session.createQuery(AUTHORS + " where a.id=:id",
                 Author.class).setParameter("id", id).getSingleResult();
         return author;
     }
 
+    @Transactional
+    public void delete(Long id) {
+        Session session = sessionFactory.getCurrentSession();
+        session.delete(find(id));
+    }
 
+    @Transactional
+    public Long getQuantityAuthors() {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("select count(*) from Author ", Long.class).getSingleResult();
+    }
 }

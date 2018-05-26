@@ -25,7 +25,7 @@
                     <a href="${home}">Все книги</a>
                 </li>
                 <li>
-                    <a href="${home}">Авторы</a>
+                    <a href="${authorsPage}">Авторы</a>
                 </li>
                 <li class="has-submenu active">
                     <a href="#">Подробнее</a>

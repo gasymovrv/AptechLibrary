@@ -30,13 +30,19 @@
         <put-attribute name="top-panel" value="/WEB-INF/views/top-panel.jsp"/>
         <put-attribute name="letters" value=""/>
         <put-attribute name="sidebar" value=""/>
-        <put-attribute name="main" value="/WEB-INF/views/add-books.jsp"/>
+        <put-attribute name="main" value="/WEB-INF/views/add-book.jsp"/>
     </definition>
 
     <definition name="edit-book-page" extends="add-book-page">
         <put-attribute name="title" value="Изменение книги"/>
         <put-attribute name="top-panel-title" value="Редактирование информации о книге" cascade="true"/>
-        <put-attribute name="main" value="/WEB-INF/views/edit-books.jsp"/>
+        <put-attribute name="main" value="/WEB-INF/views/edit-book.jsp"/>
+    </definition>
+
+    <definition name="author-page-list-author" extends="add-book-page">
+        <put-attribute name="title" value="Список авторов"/>
+        <put-attribute name="top-panel-title" value="Список авторов" cascade="true"/>
+        <put-attribute name="main" value="/WEB-INF/views/authors.jsp"/>
     </definition>
 
     <definition name="login-page" extends="add-book-page">
