@@ -57,9 +57,17 @@ public class BookController {
                                                  @RequestParam(required = false) Integer booksOnPage,
                                                  @RequestBody SearchCriteria criteria,
                                                      HttpSession session) {
-        if (selectedPage == null) {selectedPage = 1;}
-        if (booksOnPage == null) {booksOnPage = PAGE_SIZE_VALUE;}
-        session.setAttribute("booksOnPage", booksOnPage);
+        if (selectedPage == null) {
+            selectedPage = 1;
+        }
+        if (booksOnPage == null && session.getAttribute("booksOnPage") == null) {
+            booksOnPage = PAGE_SIZE_VALUE;
+            session.setAttribute("booksOnPage", booksOnPage);
+        } else if (booksOnPage == null && session.getAttribute("booksOnPage") != null) {
+            booksOnPage = (Integer)session.getAttribute("booksOnPage");
+        } else {
+            session.setAttribute("booksOnPage", booksOnPage);
+        }
         if(criteria.isEmpty()){
             session.setAttribute("criteria", new SearchCriteria());
             return bookDAO.find(booksOnPage, selectedPage);

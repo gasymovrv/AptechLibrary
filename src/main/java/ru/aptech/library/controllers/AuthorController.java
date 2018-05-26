@@ -2,7 +2,9 @@ package ru.aptech.library.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ru.aptech.library.dao.AuthorDAOImpl;
 import ru.aptech.library.entities.Author;
@@ -24,10 +26,18 @@ public class AuthorController {
                                    @RequestParam(required = false) Integer selectedPage,
                                    HttpSession session) {
         ModelAndView modelAndView = new ModelAndView("author-page-list-author");
-        if (selectedPage == null) {selectedPage = 1;}
-        if(authorsOnPage == null) {authorsOnPage = PAGE_SIZE_VALUE;}
+        if (selectedPage == null) {
+            selectedPage = 1;
+        }
+        if (authorsOnPage == null && session.getAttribute("authorsOnPage") == null) {
+            authorsOnPage = PAGE_SIZE_VALUE;
+            session.setAttribute("authorsOnPage", authorsOnPage);
+        } else if (authorsOnPage == null && session.getAttribute("authorsOnPage") != null) {
+            authorsOnPage = (Integer)session.getAttribute("authorsOnPage");
+        } else {
+            session.setAttribute("authorsOnPage", authorsOnPage);
+        }
         List<Author> authors = authorDAO.find(authorsOnPage, selectedPage);
-        session.setAttribute("authorsOnPage", authorsOnPage);
         modelAndView.addObject("authorList", authors);
         modelAndView.addObject("selectedPage", selectedPage);
         modelAndView.addObject("quantityAuthors", authorDAO.getQuantityAuthors());
