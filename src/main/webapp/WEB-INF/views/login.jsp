@@ -1,5 +1,7 @@
 <%@include file="../../include.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<!-- Main box (non search) - Login-->
 <div class="center-block col-sm-5" style="float: none;">
     <div class="basic-login">
         <form name='form_login' role="form" role="form" action="<c:url value='/login' />" method='POST'>

@@ -1,20 +1,9 @@
 $(document).ready(function () {
-    //изменение количества книг на странице
-    $(document).on('click', '#books-on-page-button', function () {
-        let booksOnPage = $('#books-on-page-input').val();
-        printItemsWithPagination(getCriteria(), booksOnPage);
-    });
 
-    //обновление списка книг при поиске
-    searchByAuthor();
-    searchByPublisher();
-    searchByGenre();
-    searchByLetter();
-    searchByText();
 });
 
 function  popovers() {
-    let actions = $('.element-actions');
+    let actions = $('.item-actions');
     actions.hover(
         function () {
             $(this).popover('show');

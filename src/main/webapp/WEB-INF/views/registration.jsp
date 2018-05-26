@@ -1,6 +1,8 @@
 <%@include file="../../include.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%--@elvariable id="user" type="ru.aptech.library.entities.User"--%>
+
+<!-- Main box (non search) - Registration-->
 <div class="center-block col-sm-5" style="float: none;">
     <div class="basic-login">
         <form:form name='form_login' action="${contextPath}users/registrationAction" method='POST' modelAttribute="user">

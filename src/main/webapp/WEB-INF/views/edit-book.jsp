@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%--@elvariable id="book" type="ru.aptech.library.entities.Book"--%>
 
-<!-- Main box -->
+<!-- Main box (non search) - edit book-->
 <div class="center-block col-sm-9" style="float: none;">
     <c:if test="${not empty isEdited}">
         <c:choose>

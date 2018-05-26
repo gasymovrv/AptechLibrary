@@ -4,57 +4,73 @@
         "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
 
-    <definition name="base-layout" template="/WEB-INF/views/base-layout.jsp">
-        <put-attribute name="title" value=""/>
-        <put-attribute name="header" value="/WEB-INF/views/header.jsp"/>
-        <put-attribute name="top-panel" value="/WEB-INF/views/top-panel-search.jsp"/>
-        <put-attribute name="letters" value="/WEB-INF/views/letters.jsp"/>
-        <put-attribute name="sidebar" value="/WEB-INF/views/sidebar.jsp"/>
-        <put-attribute name="main" value=""/>
-        <put-attribute name="footer" value="/WEB-INF/views/footer.jsp"/>
+    <definition name="base-layout-s" template="/WEB-INF/views/common/base.jsp">
+        <put-attribute name="body">
+            <definition template="/WEB-INF/views/common/base-layout-search.jsp">
+                <put-attribute name="title" value=""/>
+                <put-attribute name="header" value="/WEB-INF/views/header.jsp"/>
+                <put-attribute name="top-panel" value="/WEB-INF/views/top-panel-search.jsp"/>
+                <put-attribute name="letters" value="/WEB-INF/views/letters.jsp"/>
+                <put-attribute name="sidebar" value="/WEB-INF/views/sidebar.jsp"/>
+                <put-attribute name="main" value="" cascade="true"/>
+                <put-attribute name="pagination" value="/WEB-INF/views/paginationBooks.jsp" cascade="true"/>
+                <put-attribute name="footer" value="/WEB-INF/views/footer.jsp"/>
+            </definition>
+        </put-attribute>
     </definition>
 
-    <definition name="home-page-list-books" extends="base-layout">
+    <definition name="base-layout-ns" template="/WEB-INF/views/common/base.jsp">
+        <put-attribute name="body">
+            <definition template="/WEB-INF/views/common/base-layout-non-search.jsp">
+                <put-attribute name="title" value=""/>
+                <put-attribute name="header" value="/WEB-INF/views/header.jsp"/>
+                <put-attribute name="top-panel" value="/WEB-INF/views/top-panel.jsp"/>
+                <put-attribute name="top-panel-title" value="" cascade="true"/>
+                <put-attribute name="main" value="" cascade="true"/>
+                <put-attribute name="footer" value="/WEB-INF/views/footer.jsp"/>
+            </definition>
+        </put-attribute>
+    </definition>
+
+    <definition name="home-page-list-books" extends="base-layout-s">
         <put-attribute name="title" value="Домашняя страница"/>
-        <put-attribute name="main" value="/WEB-INF/views/books.jsp"/>
+        <put-attribute name="main" value="/WEB-INF/views/books.jsp" cascade="true"/>
     </definition>
 
-    <definition name="home-page-one-book" extends="base-layout">
+    <definition name="home-page-one-book" extends="base-layout-s">
         <put-attribute name="title" value="Информация о книге"/>
-        <put-attribute name="main" value="/WEB-INF/views/book.jsp"/>
+        <put-attribute name="main" value="/WEB-INF/views/book.jsp" cascade="true"/>
     </definition>
 
-    <definition name="add-book-page" extends="base-layout">
+    <definition name="add-book-page" extends="base-layout-ns">
         <put-attribute name="title" value="Добавление книги"/>
         <put-attribute name="top-panel-title" value="Добавление книги" cascade="true"/>
-        <put-attribute name="top-panel" value="/WEB-INF/views/top-panel.jsp"/>
-        <put-attribute name="letters" value=""/>
-        <put-attribute name="sidebar" value=""/>
-        <put-attribute name="main" value="/WEB-INF/views/add-book.jsp"/>
+        <put-attribute name="main" value="/WEB-INF/views/add-book.jsp" cascade="true"/>
     </definition>
 
-    <definition name="edit-book-page" extends="add-book-page">
+    <definition name="edit-book-page" extends="base-layout-ns">
         <put-attribute name="title" value="Изменение книги"/>
         <put-attribute name="top-panel-title" value="Редактирование информации о книге" cascade="true"/>
-        <put-attribute name="main" value="/WEB-INF/views/edit-book.jsp"/>
+        <put-attribute name="main" value="/WEB-INF/views/edit-book.jsp" cascade="true"/>
     </definition>
 
-    <definition name="author-page-list-author" extends="add-book-page">
+    <definition name="author-page-list-author" extends="base-layout-ns">
         <put-attribute name="title" value="Список авторов"/>
         <put-attribute name="top-panel-title" value="Список авторов" cascade="true"/>
-        <put-attribute name="main" value="/WEB-INF/views/authors.jsp"/>
+        <put-attribute name="main" value="/WEB-INF/views/authors.jsp" cascade="true"/>
+        <put-attribute name="pagination" value="/WEB-INF/views/paginationAuthors.jsp" cascade="true"/>
     </definition>
 
-    <definition name="login-page" extends="add-book-page">
+    <definition name="login-page" extends="base-layout-ns">
         <put-attribute name="title" value="Авторизация"/>
         <put-attribute name="top-panel-title" value="Авторизация" cascade="true"/>
-        <put-attribute name="main" value="/WEB-INF/views/login.jsp"/>
+        <put-attribute name="main" value="/WEB-INF/views/login.jsp" cascade="true"/>
     </definition>
 
-    <definition name="registration-page" extends="add-book-page">
+    <definition name="registration-page" extends="base-layout-ns">
         <put-attribute name="title" value="Регистрация"/>
         <put-attribute name="top-panel-title" value="Регистрация" cascade="true"/>
-        <put-attribute name="main" value="/WEB-INF/views/registration.jsp"/>
+        <put-attribute name="main" value="/WEB-INF/views/registration.jsp" cascade="true"/>
     </definition>
 
 

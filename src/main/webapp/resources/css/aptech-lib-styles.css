@@ -1,9 +1,8 @@
 .bottom-indent{
     margin-bottom: 5px;
 }
+
 .admin-button{
     background: none repeat scroll 0 0 #b34f4f; !important;
     border: 1px solid #b34f4f;
 }
-
-.admin-element{}
