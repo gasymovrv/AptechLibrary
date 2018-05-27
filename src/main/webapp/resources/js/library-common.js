@@ -1,5 +1,5 @@
 $(document).ready(function () {
-
+    itemsOnPageValidation();
 });
 
 function  popovers() {
@@ -12,6 +12,24 @@ function  popovers() {
             $(this).popover('hide');
         }
     );
+}
+
+//сохраняем значение атрибута foundResultText в сессии
+function saveFoundResultText(foundResultText) {
+    $.ajax({
+        type: 'POST',//тип запроса
+        contentType: 'application/json', //отправляемый тип
+        url: getContextPath() + '/saveFoundResultText?foundResultText=' + foundResultText,//url адрес обработчика
+        async: false
+    });
+}
+
+function itemsOnPageValidation() {
+    $(".pagination-wrapper input").bind('keyup mouseup', function () {
+        if ($(this).val() < 1) {
+            $(this).val(1);
+        }
+    });
 }
 
 //метод для получения контекстного пути '/aptech-library'

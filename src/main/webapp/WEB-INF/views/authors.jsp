@@ -14,7 +14,11 @@
         </script>
     </c:if>
     <div id="row-info" class="row">
-        <%--template--%>
+        <security:authorize access="hasRole('ROLE_ADMIN')">
+            <div class="col-sm-2">
+                <a href="addBook" type="button" role="button" class="btn btn-md admin-button">Добавить автора</a>
+            </div>
+        </security:authorize>
     </div>
     <div id="box-with-rows-for-authors" class="row">
         <c:set var="i" value="0" scope="page"/>
@@ -32,6 +36,9 @@
                                 </div>
                                 <div class="title">
                                     <h3>Год рождения: ${author.birthday}</h3>
+                                </div>
+                                <div class="title">
+                                    <h3><a id="${author.id}" class="author-link" href="#">Книги автора</a></h3>
                                 </div>
                                 <!-- Operations -->
                                 <div class="actions">
@@ -60,15 +67,7 @@
 
 </div>
 <script>
-    $('#authors-pag').pagination({
-        items: ${quantityAuthors},
-        itemsOnPage: ${sessionScope.authorsOnPage},
-        currentPage: ${selectedPage},
-        cssStyle: '',
-        prevText: 'Назад',
-        nextText: 'Вперед',
-        onPageClick: function (page, evt) {
-            window.location = (getContextPath() + '/authors/list?authorsOnPage=${sessionScope.authorsOnPage}&selectedPage='+page);
-        }
-    });
+    popovers();
+    searchBooksByAuthor();
+    authorsPagination(${quantityAuthors}, ${sessionScope.authorsOnPage}, ${selectedPage});
 </script>

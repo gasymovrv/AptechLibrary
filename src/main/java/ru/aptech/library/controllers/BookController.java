@@ -41,14 +41,13 @@ public class BookController {
     private static final int PAGE_SIZE_VALUE = 6;
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
-    public ModelAndView home(HttpSession session) {
+    public ModelAndView home(@RequestParam(required = false) Long authorId, HttpSession session) {
         ModelAndView modelAndView = new ModelAndView("home-page-list-books");
         addAttributesForCriteria(modelAndView);
         if(session.getAttribute("booksOnPage") == null) {
             session.setAttribute("booksOnPage", PAGE_SIZE_VALUE);
         }
-        session.setAttribute("criteria", new SearchCriteria());
-        session.setAttribute("foundResultText", "");
+        modelAndView.addObject("authorId", authorId);
         return modelAndView;
     }
 

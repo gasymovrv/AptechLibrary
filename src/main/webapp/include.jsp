@@ -10,9 +10,7 @@
 <c:set var="editBook" value="${contextPath}editBookView" scope="request"/>
 <c:set var="showImg" value="${contextPath}showBookImage" scope="request"/>
 <c:set var="showPdf" value="${contextPath}showBookContent" scope="request"/>
-<c:set var="bookId" value="bookId" scope="request"/>
 <c:set var="authorsPage" value="${contextPath}authors/list" scope="request"/>
-<c:set var="authorId" value="authorId" scope="request"/>
 <c:set var="editAuthor" value="${contextPath}editAuthorView" scope="request"/>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix = "fn" uri = "http://java.sun.com/jsp/jstl/functions" %>

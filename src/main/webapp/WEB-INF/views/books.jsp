@@ -14,8 +14,13 @@
 <tiles:insertAttribute name="pagination"/>
 
 <script>
+    let criteria = null;
+    //используем критерию для поиска по автору со страницы "Авторы"
+    <c:if test="${not empty authorId}">
+    criteria = {authorId: ${authorId}};
+    </c:if>
     //отобразить книги и пагинатор
-    printItemsWithPagination();
+    printItemsWithPagination(criteria);
 </script>
 
 <c:if test="${not empty isDeleted}">

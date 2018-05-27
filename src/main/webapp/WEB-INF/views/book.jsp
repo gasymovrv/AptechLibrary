@@ -5,7 +5,7 @@
 <div id="main-box">
     <div class="col-sm-4">
         <div class="product-image-large">
-            <img class="img-rounded" src="${showImg}?${bookId}=${book.id}" alt="Item Name">
+            <img class="img-rounded" src="${showImg}?bookId=${book.id}" alt="Item Name">
         </div>
     </div>
     <!-- End Product Image & Available Colors -->
@@ -26,11 +26,11 @@
                 <a href="#" class="btn item-actions"
                    role="button" data-placement="top" data-toggle="popover" data-content="В корзину">
                     <i class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
-                <a href="${showPdf}?${bookId}=${book.id}" class="btn item-actions"
+                <a href="${showPdf}?bookId=${book.id}" class="btn item-actions"
                    role="button" data-placement="top" data-toggle="popover" data-content="Читать">
                     <i class="glyphicon glyphicon-eye-open icon-white"></i></a>
                 <security:authorize access="hasRole('ROLE_ADMIN')">
-                    <a href="${editBook}?${bookId}=${book.id}" class="btn admin-button item-actions"
+                    <a href="${editBook}?bookId=${book.id}" class="btn admin-button item-actions"
                        role="button" data-placement="top" data-toggle="popover" data-content="Изменить">
                         <i class="glyphicon glyphicon-pencil icon-white"></i></a>
                     <a href="#" class="btn admin-button item-actions"

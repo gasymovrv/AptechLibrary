@@ -223,16 +223,6 @@ function createHtmlItemsList(bookList, items) {
     popovers();
 }
 
-//сохраняем значение атрибута foundResultText в сессии
-function saveFoundResultText(foundResultText) {
-    $.ajax({
-        type: 'POST',//тип запроса
-        contentType: 'application/json', //отправляемый тип
-        url: getContextPath() + '/saveFoundResultText?foundResultText=' + foundResultText,//url адрес обработчика
-        async: false
-    });
-}
-
 //получаем значение атрибута foundResultText из сессии
 function getFoundResultText() {
     let result;

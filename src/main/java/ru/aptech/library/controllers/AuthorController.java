@@ -5,9 +5,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import ru.aptech.library.dao.AuthorDAOImpl;
 import ru.aptech.library.entities.Author;
+import ru.aptech.library.enums.SortType;
+import ru.aptech.library.util.SearchCriteria;
 import ru.aptech.library.util.Utils;
 
 import javax.servlet.http.HttpSession;
@@ -39,6 +42,7 @@ public class AuthorController {
         }
         List<Author> authors = authorDAO.find(authorsOnPage, selectedPage);
         modelAndView.addObject("authorList", authors);
+        modelAndView.addObject("sortType", SortType.values());
         modelAndView.addObject("selectedPage", selectedPage);
         modelAndView.addObject("quantityAuthors", authorDAO.getQuantityAuthors());
         return modelAndView;
@@ -49,6 +53,12 @@ public class AuthorController {
         ModelAndView modelAndView = new ModelAndView("author-page-one-author");
         modelAndView.addObject("author", authorDAO.find(authorId));
         return modelAndView;
+    }
+
+
+    @RequestMapping(value = "/authors/getAuthorName", method = RequestMethod.GET, produces = "text/html; charset=utf-8")
+    public @ResponseBody String getAuthorName(@RequestParam Long authorId) {
+        return authorDAO.find(authorId).getFio();
     }
 
 //    @RequestMapping(value = "/addBookView", method = RequestMethod.GET)
