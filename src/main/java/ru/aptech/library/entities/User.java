@@ -1,5 +1,7 @@
 package ru.aptech.library.entities;
 
+import ru.aptech.library.enums.RoleType;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -50,5 +52,16 @@ public class User {
         this.userRole = userRole;
     }
 
-    //getter and setter methods
+    public void fillUserRoles(){
+        if (!userRole.isEmpty()) {
+            for (UserRole ur : userRole) {
+                ur.setUser(this);
+            }
+        } else {
+            UserRole ur = new UserRole();
+            ur.setUser(this);
+            ur.setRole(RoleType.ROLE_USER.toString());
+            userRole.add(ur);
+        }
+    }
 }

@@ -16,7 +16,7 @@ function isAdmin() {
 
 function userValidation() {
     let spanButton = $('#submit-new-user');
-    spanButton.attr('data-content', "Сначала заполните все поля");
+    spanButton.attr('data-content', "Сначала заполните обязательные поля");
 
     spanButton.hover(
         function () {
@@ -37,7 +37,7 @@ function userValidation() {
             if (!pass1 || !pass2 || !username) {
                 $('#submit-new-user button').prop('disabled', true);
                 $(spanButton).popover('enable');
-                spanButton.attr('data-content', 'Необходимо заполнить все поля');
+                spanButton.attr('data-content', 'Необходимо заполнить обязательные поля');
                 boxDanger.empty();
                 boxDanger.hide();
             } else if ((pass1 && pass2) && (pass1 !== pass2)) {

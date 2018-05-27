@@ -3,6 +3,7 @@ package ru.aptech.library.entities;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 //@Entity
@@ -11,6 +12,7 @@ public class Author implements Serializable {
     private long id;
     private String fio;
     private Date birthday;
+    private Timestamp created;
 
 
     public Author() {
@@ -58,6 +60,16 @@ public class Author implements Serializable {
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+
+    public Timestamp getCreated() {
+        return created;
+    }
+
+
+    public void setCreated(Timestamp created) {
+        this.created = created;
     }
 
 

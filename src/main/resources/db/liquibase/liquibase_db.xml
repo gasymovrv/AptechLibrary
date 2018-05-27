@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--Запускать через мавен-плагин, выполнить liquibase:update-->
+
+    <changeSet author="rgasymov" id="20180526-01">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="aplib" tableName="user"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE  TABLE user (
+            username VARCHAR(45) NOT NULL ,
+            password VARCHAR(64) NOT NULL ,
+            enabled TINYINT NOT NULL DEFAULT 1 ,
+            PRIMARY KEY (username));
+        </sql>
+    </changeSet>
+
+    <changeSet author="rgasymov" id="20180526-02">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="aplib" tableName="user_role"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE TABLE user_role (
+            user_role_id int(11) NOT NULL AUTO_INCREMENT,
+            username varchar(45) NOT NULL,
+            role varchar(45) NOT NULL,
+            PRIMARY KEY (user_role_id),
+            UNIQUE KEY uni_username_role (role,username),
+            KEY fk_username_idx (username),
+            CONSTRAINT fk_username FOREIGN KEY (username) REFERENCES user (username));
+        </sql>
+    </changeSet>
+
+    <changeSet author="rgasymov" id="20180526-03">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="aplib" tableName="persistent_logins"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE TABLE persistent_logins (
+            username varchar(64) not null,
+            series varchar(64) not null,
+            token varchar(64) not null,
+            last_used timestamp not null,
+            PRIMARY KEY (series)
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet author="rgasymov" id="20180526-04">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT count(*) FROM user WHERE username='admin';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            <!--username:admin password:q-->
+            INSERT INTO `user`(`username`, `password`, `enabled`) VALUES ('admin', '$2a$05$IHUj33qfJo7veMhOY06CxOEt6Y6IPZX5cB3zbxuz.EVdUvd.XNrou', true);
+        </sql>
+    </changeSet>
+
+    <changeSet author="rgasymov" id="20180526-05">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT count(*) FROM user WHERE username='user';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            <!--username:user password:q-->
+            INSERT INTO `user`(`username`, `password`, `enabled`) VALUES ('user', '$2a$05$IHUj33qfJo7veMhOY06CxOEt6Y6IPZX5cB3zbxuz.EVdUvd.XNrou', true);
+        </sql>
+    </changeSet>
+
+    <changeSet author="rgasymov" id="20180526-06">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT count(*) FROM user_role WHERE role='ROLE_ADMIN';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO `user_role`(`username`, `role`) VALUES ('admin', 'ROLE_ADMIN');
+        </sql>
+    </changeSet>
+
+    <changeSet author="rgasymov" id="20180526-07">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT count(*) FROM user_role WHERE role='ROLE_USER';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO `user_role`(`username`, `role`) VALUES ('user', 'ROLE_USER');
+        </sql>
+    </changeSet>
+
+    <changeSet author="rgasymov" id="20180527-01">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="aplib" tableName="author" columnName="created"/>
+            </not>
+        </preConditions>
+        <sql>ALTER TABLE author ADD COLUMN created TIMESTAMP(6)</sql>
+    </changeSet>
+
+    <changeSet author="rgasymov" id="20180527-02">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="aplib" tableName="book" columnName="created"/>
+            </not>
+        </preConditions>
+        <sql>ALTER TABLE book ADD COLUMN created TIMESTAMP(6)</sql>
+    </changeSet>
+
+</databaseChangeLog>

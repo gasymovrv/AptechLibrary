@@ -14,5 +14,8 @@
         <property name="birthday">
             <column name="birthday" sql-type="date"/>
         </property>
+        <property name="created">
+            <column name="created" sql-type="timestamp"/>
+        </property>
     </class>
 </hibernate-mapping>

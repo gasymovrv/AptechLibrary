@@ -1,26 +1,16 @@
 package ru.aptech.library.enums;
 
 public enum SearchType {
-    TITLE("TITLE", "По названию"),
-    AUTHOR("AUTHOR", "По автору"),
-    GENRE("GENRE", "По жанру"),
-    PUBLISHER("PUBLISHER", "По издательству");
-
-    private String id;
-
+    TITLE("По названию"),
+    AUTHOR("По автору"),
+    GENRE("По жанру"),
+    PUBLISHER("По издательству");
 
     private String text;
 
-
-    SearchType(String id, String text) {
+    SearchType(String text) {
         this.text = text;
     }
-
-
-    public String getId() {
-        return id;
-    }
-
 
     public String getText() {
         return text;

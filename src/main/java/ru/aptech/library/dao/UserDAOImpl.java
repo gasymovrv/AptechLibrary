@@ -23,6 +23,7 @@ public class UserDAOImpl {
     @Transactional
     public void save(User user) {
         Session session = sessionFactory.getCurrentSession();
+        user.fillUserRoles();
         session.save(user);
     }
 

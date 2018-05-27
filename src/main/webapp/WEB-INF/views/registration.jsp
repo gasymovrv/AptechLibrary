@@ -8,17 +8,27 @@
         <form:form name='form_login' action="${contextPath}users/registrationAction" method='POST' modelAttribute="user">
             <div class="form-group">
                 <p hidden="hidden" id="box-danger" class="alert alert-danger"></p>
-                <label for="username"><i class="icon-user"></i> <b title="Обязательно для заполнения">Имя или email<sup style="color: red">*</sup></b></label>
+                <label for="username"><b title="Обязательно для заполнения">Имя или email<sup style="color: red">*</sup></b></label>
                 <form:input class="form-control" id="username" path='username'/>
             </div>
             <div class="form-group">
-                <label for="password1"><i class="icon-lock"></i> <b title="Обязательно для заполнения">Пароль<sup style="color: red">*</sup></b></label>
+                <label for="password1"><b title="Обязательно для заполнения">Пароль<sup style="color: red">*</sup></b></label>
                 <input id="password1" class="form-control" type="password">
             </div>
             <div class="form-group">
-                <label for="password2"><i class="icon-lock"></i> <b title="Обязательно для заполнения">Подтвердите пароль<sup style="color: red">*</sup></b></label>
+                <label for="password2"><b title="Обязательно для заполнения">Подтвердите пароль<sup style="color: red">*</sup></b></label>
                 <form:password class="form-control" id="password2" path='password'/>
             </div>
+            <security:authorize access="hasRole('ROLE_ADMIN')">
+                <div class="form-group">
+                    <label for="role">Привелегии</label>
+                    <select id="role" class="form-control" name="userRole" multiple>
+                        <c:forEach var="ur" items="${userRoles}">
+                            <option value="${ur}">${ur.text}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+            </security:authorize>
             <div class="form-group">
                 <span id="submit-new-user" class="d-inline-block pull-right" data-placement="top" data-toggle="popover">
                     <button disabled="disabled" type="submit" class="btn">

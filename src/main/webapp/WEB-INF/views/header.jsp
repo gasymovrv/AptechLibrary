@@ -15,6 +15,9 @@
                         <li><security:authentication property="principal.username" /></li>
                         <li><i class="glyphicon glyphicon-log-out icon-white"></i> <a href="<c:url value='/logout' />">Выход</a></li>
                     </security:authorize>
+                    <security:authorize access="hasRole('ROLE_ADMIN')">
+                        <li><i class="glyphicon glyphicon-user icon-white"></i> <a href="${contextPath}users/registrationView">Добавить пользователя</a></li>
+                    </security:authorize>
                 </ul>
             </div>
         </div>
