@@ -1,24 +1,30 @@
 package ru.aptech.library.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.aptech.library.dao.AuthorDAOImpl;
+import ru.aptech.library.dao.BookDAOImpl;
 import ru.aptech.library.entities.Author;
 import ru.aptech.library.enums.SortType;
-import ru.aptech.library.util.Utils;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class AuthorController {
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     @Autowired
     private AuthorDAOImpl authorDAO;
+    @Autowired
+    private BookDAOImpl bookDAO;
     private static final int PAGE_SIZE_VALUE = 6;
 
     @RequestMapping(value = "/authors/list", method = RequestMethod.GET)
@@ -45,20 +51,16 @@ public class AuthorController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/authors/getAuthorName", method = RequestMethod.GET, produces = "text/html; charset=utf-8")
-    public @ResponseBody String getAuthorName(@RequestParam Long authorId) {
-        return authorDAO.find(authorId).getFio();
-    }
-
     @RequestMapping(value = "/authors/addAuthorView", method = RequestMethod.GET)
     public ModelAndView addAuthorView() {
         ModelAndView modelAndView = new ModelAndView("add-author-page");
         modelAndView.addObject("author", new Author());
+//        modelAndView.addObject("bookList", bookDAO.find());
         return modelAndView;
     }
 
     @RequestMapping(value = "/authors/addAuthorAction", method = RequestMethod.POST)
-    public ModelAndView addAuthorAction(@ModelAttribute Author author, @RequestParam String date) {
+    public ModelAndView addAuthorAction(@ModelAttribute Author author, @RequestParam String date/*, BindingResult result*/) {
         ModelAndView modelAndView = new ModelAndView("add-author-page");
         boolean isAdded = saveAuthor(author, date);
         modelAndView.addObject("isAdded", isAdded);
@@ -123,4 +125,21 @@ public class AuthorController {
             return false;
         }
     }
+
+//    @InitBinder
+//    protected void initBinder(WebDataBinder binder) {
+//        binder.registerCustomEditor(Set.class, "books", new CustomCollectionEditor(Set.class)
+//        {
+//            @Override
+//            protected Object convertElement(Object element) {
+//                Long bookId = null;
+//                if (element instanceof String) {
+//                    bookId = Long.parseLong(element.toString());
+//                } else if (element instanceof Long) {
+//                    bookId = (Long) element;
+//                }
+//                return bookId != null ? bookDAO.find(bookId) : null;
+//            }
+//        });
+//    }
 }

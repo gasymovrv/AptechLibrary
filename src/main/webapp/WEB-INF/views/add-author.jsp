@@ -35,6 +35,14 @@
                 />
             </div>
         </div>
+        <%--<div class="form-group">--%>
+            <%--<label for="books">Выберите книги данного автора</label>--%>
+            <%--<select id="books" class="form-control" name="books" multiple>--%>
+                <%--<c:forEach var="b" items="${bookList}">--%>
+                    <%--<option value="${b.id}">${b.name}</option>--%>
+                <%--</c:forEach>--%>
+            <%--</select>--%>
+        <%--</div>--%>
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group-sm pull-right" role="group" aria-label="First group">
                 <button type="submit" class="btn btn-sm">Сохранить</button>

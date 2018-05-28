@@ -10,7 +10,7 @@ public class User {
     private String username;
     private String password;
     private boolean enabled = true;
-    private Set<UserRole> userRole = new HashSet<UserRole>(0);
+    private Set<UserRole> userRole = new HashSet<>(0);
 
 
     public String getUsername() {

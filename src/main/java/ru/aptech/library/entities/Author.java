@@ -1,10 +1,14 @@
 package ru.aptech.library.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 //@Entity
 //@Table(name = "author")
@@ -13,6 +17,8 @@ public class Author implements Serializable {
     private String fio;
     private LocalDate birthday;
     private Timestamp created;
+//    @JsonIgnore
+//    private Set<Book> books = new HashSet<>(0);
 
 
     public Author() {
@@ -71,6 +77,16 @@ public class Author implements Serializable {
     public void setCreated(Timestamp created) {
         this.created = created;
     }
+
+
+//    public Set<Book> getBooks() {
+//        return books;
+//    }
+//
+//
+//    public void setBooks(Set<Book> books) {
+//        this.books = books;
+//    }
 
 
     @Override

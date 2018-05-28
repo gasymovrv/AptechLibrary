@@ -39,6 +39,14 @@ public class BookDAOImpl {
 
 
     @Transactional
+    public List<Book> find() {
+        Session session = sessionFactory.getCurrentSession();
+        List<Book> bookList = session.createQuery(BOOKS_WITHOUT_CONTENT + ORDER_BY_NAME,
+                Book.class).getResultList();
+        return bookList;
+    }
+
+    @Transactional
     public List<Book> find(Integer booksOnPage, Integer selectedPage) {
         int init = (selectedPage - 1) * booksOnPage;
         Session session = sessionFactory.getCurrentSession();

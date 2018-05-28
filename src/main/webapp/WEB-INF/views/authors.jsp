@@ -28,7 +28,9 @@
                                     <h3>Год рождения: ${author.birthday}</h3>
                                 </div>
                                 <div class="title">
-                                    <h3><a id="${author.id}" class="author-link" href="#">Книги автора</a></h3>
+                                    <h3>
+                                        <a href="#" onclick="searchBooksByAuthor(${author.id}, '${author.fio}')"> Книги автора </a>
+                                    </h3>
                                 </div>
                                 <!-- Operations -->
                                 <div class="actions">
@@ -67,6 +69,5 @@
     </c:if>
 
     popovers();
-    searchBooksByAuthor();
     authorsPagination(${quantityAuthors}, ${sessionScope.authorsOnPage}, ${selectedPage});
 </script>

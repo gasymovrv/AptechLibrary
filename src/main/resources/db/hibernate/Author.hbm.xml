@@ -17,5 +17,11 @@
         <property name="created">
             <column name="created" sql-type="timestamp"/>
         </property>
+        <!--<set name="books" table="book" inverse="false" cascade="all" lazy="true" fetch="join">-->
+            <!--<key>-->
+                <!--<column name="author_id" not-null="true" />-->
+            <!--</key>-->
+            <!--<one-to-many class="ru.aptech.library.entities.Book" />-->
+        <!--</set>-->
     </class>
 </hibernate-mapping>

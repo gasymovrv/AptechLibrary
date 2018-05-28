@@ -34,7 +34,6 @@
     </definition>
 
     <!--base-layout-search-->
-
     <definition name="home-page-list-books" extends="base-layout-s">
         <put-attribute name="title" value="Домашняя страница"/>
         <put-attribute name="main" value="/WEB-INF/views/books.jsp" cascade="true"/>
