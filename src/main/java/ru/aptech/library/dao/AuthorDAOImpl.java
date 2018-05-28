@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.aptech.library.entities.Author;
-import ru.aptech.library.entities.Genre;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -42,6 +42,19 @@ public class AuthorDAOImpl {
         Author author = session.createQuery(AUTHORS + " where a.id=:id",
                 Author.class).setParameter("id", id).getSingleResult();
         return author;
+    }
+
+
+    @Transactional
+    public void save(Author author) {
+        Session session = sessionFactory.getCurrentSession();
+        session.save(author);
+    }
+
+    @Transactional
+    public void update(Author author) {
+        Session session = sessionFactory.getCurrentSession();
+        session.update(author);
     }
 
     @Transactional

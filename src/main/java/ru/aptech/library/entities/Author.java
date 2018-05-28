@@ -2,7 +2,7 @@ package ru.aptech.library.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.sql.Timestamp;
 import java.util.Objects;
 
@@ -11,7 +11,7 @@ import java.util.Objects;
 public class Author implements Serializable {
     private long id;
     private String fio;
-    private Date birthday;
+    private LocalDate birthday;
     private Timestamp created;
 
 
@@ -19,7 +19,7 @@ public class Author implements Serializable {
     }
 
 
-    public Author(long id, String fio, Date birthday) {
+    public Author(long id, String fio, LocalDate birthday) {
         this.id = id;
         this.fio = fio;
         this.birthday = birthday;
@@ -53,12 +53,12 @@ public class Author implements Serializable {
 
 //    @Basic
 //    @Column(name = "birthday", nullable = false)
-    public Date getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 
@@ -88,5 +88,10 @@ public class Author implements Serializable {
     public int hashCode() {
 
         return Objects.hash(id, fio, birthday);
+    }
+
+    public void setAllField(Author author) {
+        this.fio = author.fio;
+        this.birthday = author.birthday;
     }
 }

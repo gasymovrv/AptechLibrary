@@ -3,20 +3,10 @@
 
 <!-- Main box (non search) - authors-->
 <div class="center-block col-sm-9" style="float: none;">
-    <c:if test="${not empty isDeleted}">
-        <script>
-            if (${isDeleted}) {
-                alert("Автор успешно удален!");
-            } else {
-                alert("Произошла ошибка при удалении!");
-            }
-            <% pageContext.getRequest().setAttribute("isDeleted", null);%>
-        </script>
-    </c:if>
     <div id="row-info" class="row">
         <security:authorize access="hasRole('ROLE_ADMIN')">
             <div class="col-sm-2">
-                <a href="addBook" type="button" role="button" class="btn btn-md admin-button">Добавить автора</a>
+                <a href="${contextPath}authors/addAuthorView" type="button" role="button" class="btn btn-md admin-button">Добавить автора</a>
             </div>
         </security:authorize>
     </div>
@@ -43,8 +33,7 @@
                                 <!-- Operations -->
                                 <div class="actions">
                                     <security:authorize access="hasRole('ROLE_ADMIN')">
-                                        <%--${authorInfo}?${authorId}=${author.id}--%>
-                                        <a href="#" class="btn admin-button item-actions"
+                                        <a href="${contextPath}authors/editAuthorView?authorId=${author.id}" class="btn admin-button item-actions"
                                            role="button" data-placement="top" data-toggle="popover" data-content="Изменить">
                                             <i class="glyphicon glyphicon-pencil icon-white"></i></a>
                                         <a href="#" class="btn admin-button item-actions"
@@ -67,6 +56,16 @@
 
 </div>
 <script>
+
+    <c:if test="${not empty sessionScope.isDeleted}">
+    if (${sessionScope.isDeleted}) {
+        alert("Автор успешно удален!");
+    } else {
+        alert("Произошла ошибка при удалении!");
+    }
+    <%session.setAttribute("isDeleted", null);%>
+    </c:if>
+
     popovers();
     searchBooksByAuthor();
     authorsPagination(${quantityAuthors}, ${sessionScope.authorsOnPage}, ${selectedPage});

@@ -18,7 +18,7 @@
             </c:otherwise>
         </c:choose>
     </c:if>
-    <form:form id="addBookForm" method="post" modelAttribute="book" action="${contextPath}addBookAction"  enctype="multipart/form-data">
+    <form:form method="post" modelAttribute="book" action="${contextPath}addBookAction"  enctype="multipart/form-data">
         <div class="form-group row">
             <label for="name" class="col-sm-2 col-form-label">Название</label>
             <div class="col-sm-10">

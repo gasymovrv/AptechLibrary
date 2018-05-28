@@ -14,6 +14,16 @@
 <tiles:insertAttribute name="pagination"/>
 
 <script>
+
+    <c:if test="${not empty sessionScope.isDeleted}">
+    if (${sessionScope.isDeleted}) {
+        alert("Книга успешно удалена!");
+    } else {
+        alert("Произошла ошибка при удалении!");
+    }
+    <%session.setAttribute("isDeleted", null);%>
+    </c:if>
+
     let criteria = null;
     //используем критерию для поиска по автору со страницы "Авторы"
     <c:if test="${not empty authorId}">
@@ -22,14 +32,3 @@
     //отобразить книги и пагинатор
     printItemsWithPagination(criteria);
 </script>
-
-<c:if test="${not empty isDeleted}">
-    <script>
-        if (${isDeleted}) {
-            alert("Книга успешно удалена!");
-        } else {
-            alert("Произошла ошибка при удалении!");
-        }
-        <% pageContext.getRequest().setAttribute("isDeleted", null);%>
-    </script>
-</c:if>

@@ -137,8 +137,7 @@ public class BookController {
     @RequestMapping(value = "/editBookView", method = RequestMethod.GET)
     public ModelAndView editBookView(@RequestParam Long bookId) {
         ModelAndView modelAndView = new ModelAndView("edit-book-page");
-        Book book = bookDAO.find(bookId);
-        modelAndView.addObject("book", book);
+        modelAndView.addObject("book", bookDAO.find(bookId));
         addAttributesForAddOrEditBook(modelAndView);
         return modelAndView;
     }
@@ -157,18 +156,10 @@ public class BookController {
     }
 
     @RequestMapping(value = "/deleteBook", method = RequestMethod.GET)
-    public ModelAndView deleteBook(@RequestParam(value = "bookId") Long bookId) {
-        boolean isDeleted;
-        try {
-            bookDAO.delete(bookId);
-            isDeleted = true;
-        } catch (Exception e){
-            isDeleted = false;
-        }
-        ModelAndView modelAndView = new ModelAndView("home-page-list-books");
-        addAttributesForCriteria(modelAndView);
-        modelAndView.addObject("isDeleted", isDeleted);
-        return modelAndView;
+    public String deleteBook(@RequestParam(value = "bookId") Long bookId, HttpSession session) {
+        boolean isDeleted = deleteBook(bookId);
+        session.setAttribute("isDeleted", isDeleted);
+        return "redirect:/home";
     }
 
     @RequestMapping(value = "/showBookImage", method = RequestMethod.GET)
@@ -230,7 +221,6 @@ public class BookController {
         }
     }
 
-
     private boolean updateBook(Book updatedBook, MultipartFile content, MultipartFile image, Long bookId) {
         try {
             Book existBook = bookDAO.findWithContent(bookId);
@@ -244,6 +234,15 @@ public class BookController {
             bookDAO.update(existBook);
             return true;
         } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean deleteBook(Long bookId) {
+        try {
+            bookDAO.delete(bookId);
+            return true;
+        } catch (Exception e){
             return false;
         }
     }

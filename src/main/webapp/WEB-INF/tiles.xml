@@ -27,10 +27,13 @@
                 <put-attribute name="top-panel" value="/WEB-INF/views/top-panel.jsp"/>
                 <put-attribute name="top-panel-title" value="" cascade="true"/>
                 <put-attribute name="main" value="" cascade="true"/>
+                <put-attribute name="pagination" value="" cascade="true"/>
                 <put-attribute name="footer" value="/WEB-INF/views/footer.jsp"/>
             </definition>
         </put-attribute>
     </definition>
+
+    <!--base-layout-search-->
 
     <definition name="home-page-list-books" extends="base-layout-s">
         <put-attribute name="title" value="Домашняя страница"/>
@@ -42,6 +45,8 @@
         <put-attribute name="main" value="/WEB-INF/views/book.jsp" cascade="true"/>
     </definition>
 
+    <!--base-layout-non-search-->
+    <!--book-->
     <definition name="add-book-page" extends="base-layout-ns">
         <put-attribute name="title" value="Добавление книги"/>
         <put-attribute name="top-panel-title" value="Добавление книги" cascade="true"/>
@@ -54,6 +59,7 @@
         <put-attribute name="main" value="/WEB-INF/views/edit-book.jsp" cascade="true"/>
     </definition>
 
+    <!--author-->
     <definition name="author-page-list-author" extends="base-layout-ns">
         <put-attribute name="title" value="Список авторов"/>
         <put-attribute name="top-panel-title" value="Список авторов" cascade="true"/>
@@ -61,6 +67,19 @@
         <put-attribute name="pagination" value="/WEB-INF/views/paginationAuthors.jsp" cascade="true"/>
     </definition>
 
+    <definition name="edit-author-page" extends="base-layout-ns">
+        <put-attribute name="title" value="Список авторов"/>
+        <put-attribute name="top-panel-title" value="Редактирование информации об авторе" cascade="true"/>
+        <put-attribute name="main" value="/WEB-INF/views/edit-author.jsp" cascade="true"/>
+    </definition>
+
+    <definition name="add-author-page" extends="base-layout-ns">
+        <put-attribute name="title" value="Список авторов"/>
+        <put-attribute name="top-panel-title" value="Добавление автора" cascade="true"/>
+        <put-attribute name="main" value="/WEB-INF/views/add-author.jsp" cascade="true"/>
+    </definition>
+
+    <!--login-->
     <definition name="login-page" extends="base-layout-ns">
         <put-attribute name="title" value="Авторизация"/>
         <put-attribute name="top-panel-title" value="Авторизация" cascade="true"/>
