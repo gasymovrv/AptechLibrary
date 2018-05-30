@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ru.aptech.library.dao.AuthorDAOImpl;
 import ru.aptech.library.dao.BookDAOImpl;
 import ru.aptech.library.entities.Author;
+import ru.aptech.library.entities.Book;
 import ru.aptech.library.enums.SortType;
 
 import javax.servlet.http.HttpSession;
@@ -26,6 +27,7 @@ public class AuthorController {
     @Autowired
     private BookDAOImpl bookDAO;
     private static final int PAGE_SIZE_VALUE = 6;
+    private static final String UNKNOWN_AUTHOR = "Неизвестный автор";
 
     @RequestMapping(value = "/authors/list", method = RequestMethod.GET)
     public ModelAndView authorList(@RequestParam(required = false) Integer authorsOnPage,
@@ -54,26 +56,23 @@ public class AuthorController {
     @RequestMapping(value = "/authors/addAuthorView", method = RequestMethod.GET)
     public ModelAndView addAuthorView() {
         ModelAndView modelAndView = new ModelAndView("add-author-page");
-        modelAndView.addObject("author", new Author());
-//        modelAndView.addObject("bookList", bookDAO.find());
+        addAttributesForAddOrEditAuthor(modelAndView, new Author());
         return modelAndView;
     }
 
     @RequestMapping(value = "/authors/addAuthorAction", method = RequestMethod.POST)
-    public ModelAndView addAuthorAction(@ModelAttribute Author author, @RequestParam String date/*, BindingResult result*/) {
+    public ModelAndView addAuthorAction(@ModelAttribute Author author, @RequestParam String date, BindingResult result) {
         ModelAndView modelAndView = new ModelAndView("add-author-page");
         boolean isAdded = saveAuthor(author, date);
         modelAndView.addObject("isAdded", isAdded);
-        modelAndView.addObject("date", author.getBirthday().format(DATE_FORMAT));
+        addAttributesForAddOrEditAuthor(modelAndView, author);
         return modelAndView;
     }
 
     @RequestMapping(value = "/authors/editAuthorView", method = RequestMethod.GET)
     public ModelAndView editAuthorView(@RequestParam Long authorId) {
         ModelAndView modelAndView = new ModelAndView("edit-author-page");
-        Author author = authorDAO.find(authorId);
-        modelAndView.addObject("author", author);
-        modelAndView.addObject("date", author.getBirthday().format(DATE_FORMAT));
+        addAttributesForAddOrEditAuthor(modelAndView, authorDAO.find(authorId));
         return modelAndView;
     }
 
@@ -82,9 +81,7 @@ public class AuthorController {
         ModelAndView modelAndView = new ModelAndView("edit-author-page");
         boolean isEdited  = updateAuthor(author, authorId, date);
         modelAndView.addObject("isEdited", isEdited);
-        Author updatedAuthor = authorDAO.find(authorId);
-        modelAndView.addObject("date", updatedAuthor.getBirthday().format(DATE_FORMAT));
-        modelAndView.addObject("author", updatedAuthor);
+        addAttributesForAddOrEditAuthor(modelAndView, authorDAO.find(authorId));
         return modelAndView;
     }
 
@@ -95,10 +92,18 @@ public class AuthorController {
         return "redirect:/authors/list";
     }
 
+    private void addAttributesForAddOrEditAuthor(ModelAndView modelAndView, Author author) {
+        String birthday = author.getBirthday() != null ? author.getBirthday().format(DATE_FORMAT) : "";
+        modelAndView.addObject("author", author);
+        modelAndView.addObject("bookList", bookDAO.find());
+        modelAndView.addObject("date", birthday);
+    }
+
     private boolean saveAuthor(Author author, String date){
         try {
-            author.setBirthday(LocalDate.parse(date, DATE_FORMAT));
-            authorDAO.save(author);
+            author.setBirthday(!date.equals("") ? LocalDate.parse(date, DATE_FORMAT) : null);
+            Long id = authorDAO.save(author);
+            author.setAllField(authorDAO.find(id));
             return true;
         } catch (Exception e){
             return false;
@@ -107,10 +112,22 @@ public class AuthorController {
 
     private boolean updateAuthor(Author author, Long authorId, String date){
         try {
-            author.setBirthday(LocalDate.parse(date, DATE_FORMAT));
+            author.setBirthday(!date.equals("") ? LocalDate.parse(date, DATE_FORMAT) : null);
             Author existAuthor = authorDAO.find(authorId);
+            Set<Book> newBookList = author.getBooks();
+            Set<Book> oldBookList = existAuthor.getBooks();
+            for(Book oB : oldBookList) {
+                if(!newBookList.contains(oB)){
+                    oB.setAuthor(authorDAO.find(UNKNOWN_AUTHOR));
+                    bookDAO.update(oB);
+                }
+            }
             existAuthor.setAllField(author);
             authorDAO.update(existAuthor);
+            for(Book nB : newBookList) {
+                nB.setAuthor(existAuthor);
+                bookDAO.update(nB);
+            }
             return true;
         } catch (Exception e){
             return false;
@@ -119,6 +136,10 @@ public class AuthorController {
 
     private boolean deleteAuthor(Long authorId){
         try {
+            for(Book b : authorDAO.find(authorId).getBooks()){
+                b.setAuthor(authorDAO.find(UNKNOWN_AUTHOR));
+                bookDAO.update(b);
+            }
             authorDAO.delete(authorId);
             return true;
         } catch (Exception e){
@@ -126,20 +147,20 @@ public class AuthorController {
         }
     }
 
-//    @InitBinder
-//    protected void initBinder(WebDataBinder binder) {
-//        binder.registerCustomEditor(Set.class, "books", new CustomCollectionEditor(Set.class)
-//        {
-//            @Override
-//            protected Object convertElement(Object element) {
-//                Long bookId = null;
-//                if (element instanceof String) {
-//                    bookId = Long.parseLong(element.toString());
-//                } else if (element instanceof Long) {
-//                    bookId = (Long) element;
-//                }
-//                return bookId != null ? bookDAO.find(bookId) : null;
-//            }
-//        });
-//    }
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(Set.class, "books", new CustomCollectionEditor(Set.class)
+        {
+            @Override
+            protected Object convertElement(Object element) {
+                Long bookId = null;
+                if (element instanceof String) {
+                    bookId = Long.parseLong(element.toString());
+                } else if (element instanceof Long) {
+                    bookId = (Long) element;
+                }
+                return bookId != null ? bookDAO.findWithContent(bookId) : null;
+            }
+        });
+    }
 }

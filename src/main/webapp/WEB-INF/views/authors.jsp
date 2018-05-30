@@ -25,7 +25,19 @@
                                     <h3>${author.fio}</h3>
                                 </div>
                                 <div class="title">
-                                    <h3>Год рождения: ${author.birthday}</h3>
+                                    <h3>Дата рождения:
+                                        <c:choose>
+                                            <c:when test="${not empty author.birthday}">
+                                                ${author.birthday}
+                                            </c:when>
+                                            <c:otherwise>
+                                                Неизвестна
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h3>
+                                </div>
+                                <div class="title">
+                                    <h3>Количество книг: ${author.books.size()}</h3>
                                 </div>
                                 <div class="title">
                                     <h3>

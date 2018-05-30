@@ -13,4 +13,4 @@
 <c:set var="authorsPage" value="${contextPath}authors/list" scope="request"/>
 <c:set var="editAuthor" value="${contextPath}editAuthorView" scope="request"/>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
-<%@ taglib prefix = "fn" uri = "http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="customFn" uri = "/WEB-INF/tld/customFn.tld" %>

@@ -17,8 +17,8 @@ public class Author implements Serializable {
     private String fio;
     private LocalDate birthday;
     private Timestamp created;
-//    @JsonIgnore
-//    private Set<Book> books = new HashSet<>(0);
+    @JsonIgnore
+    private Set<Book> books = new HashSet<>(0);
 
 
     public Author() {
@@ -79,14 +79,14 @@ public class Author implements Serializable {
     }
 
 
-//    public Set<Book> getBooks() {
-//        return books;
-//    }
-//
-//
-//    public void setBooks(Set<Book> books) {
-//        this.books = books;
-//    }
+    public Set<Book> getBooks() {
+        return books;
+    }
+
+
+    public void setBooks(Set<Book> books) {
+        this.books = books;
+    }
 
 
     @Override
@@ -102,12 +102,13 @@ public class Author implements Serializable {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id, fio, birthday);
     }
 
     public void setAllField(Author author) {
         this.fio = author.fio;
         this.birthday = author.birthday;
+        this.books = author.books;
+
     }
 }

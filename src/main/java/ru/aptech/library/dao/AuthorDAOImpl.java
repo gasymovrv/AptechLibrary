@@ -22,7 +22,7 @@ public class AuthorDAOImpl {
     @Transactional
     public List<Author> find() {
         Session session = sessionFactory.getCurrentSession();
-        List<Author> authorList = session.createQuery(AUTHORS + ORDER_BY_NAME,
+        List<Author> authorList = session.createQuery(AUTHORS + " where fio != 'Неизвестный автор'" + ORDER_BY_NAME,
                 Author.class).getResultList();
         return authorList;
     }
@@ -31,7 +31,7 @@ public class AuthorDAOImpl {
     public List<Author> find(Integer authorsOnPage, Integer selectedPage) {
         int init = (selectedPage - 1) * authorsOnPage;
         Session session = sessionFactory.getCurrentSession();
-        List<Author> authorList = session.createQuery(AUTHORS + ORDER_BY_NAME,
+        List<Author> authorList = session.createQuery(AUTHORS + " where fio != 'Неизвестный автор'" + ORDER_BY_NAME,
                 Author.class).setFirstResult(init).setMaxResults(authorsOnPage).getResultList();
         return authorList;
     }
@@ -44,11 +44,19 @@ public class AuthorDAOImpl {
         return author;
     }
 
+    @Transactional
+    public Author find(String fio) {
+        Session session = sessionFactory.getCurrentSession();
+        Author author = session.createQuery(AUTHORS + " where a.fio=:fio",
+                Author.class).setParameter("fio", fio).getSingleResult();
+        return author;
+    }
+
 
     @Transactional
-    public void save(Author author) {
+    public Long save(Author author) {
         Session session = sessionFactory.getCurrentSession();
-        session.save(author);
+        return (Long)session.save(author);
     }
 
     @Transactional

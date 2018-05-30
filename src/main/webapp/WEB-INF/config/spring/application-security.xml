@@ -19,6 +19,11 @@
         <intercept-url pattern="/editBookAction**" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/addBookView**" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/addBookAction**" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/authors/deleteAuthor**" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/authors/editAuthorView**" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/authors/editAuthorAction**" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/authors/addAuthorView**" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/authors/addAuthorAction**" access="hasRole('ROLE_ADMIN')" />
         <form-login login-page='/users/authorization'
                     default-target-url="/home"
                     authentication-failure-url="/users/authorization?error=true"

@@ -44,6 +44,9 @@ function searchByAuthor() {
         let criteria = {'authorId': $(this).prop('id')};
         let authorName = $(this).text();
         let text = "Найдено книг автора " + authorName + ": ";
+        if(authorName === "Неизвестный автор"){
+            text = "Найдено книг без автора: ";
+        }
         saveFoundResultText(text);
         printItemsWithPagination(criteria);
     });

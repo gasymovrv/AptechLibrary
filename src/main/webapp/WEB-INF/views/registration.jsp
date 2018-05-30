@@ -22,7 +22,7 @@
             <security:authorize access="hasRole('ROLE_ADMIN')">
                 <div class="form-group">
                     <label for="role">Привелегии</label>
-                    <select id="role" class="form-control" name="userRole" multiple>
+                    <select class="custom-multiselect" id="role" class="form-control" name="userRole" multiple="multiple">
                         <c:forEach var="ur" items="${userRoles}">
                             <option value="${ur}">${ur.text}</option>
                         </c:forEach>

@@ -1,6 +1,7 @@
 package ru.aptech.library.entities;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -20,6 +21,7 @@ public class Book implements Serializable {
     private String bookcol;
     private Integer rating;
     private Long voteCount;
+    private Timestamp created;
 
 
     public Book() {
@@ -205,6 +207,16 @@ public class Book implements Serializable {
     }
 
 
+    public Timestamp getCreated() {
+        return created;
+    }
+
+
+    public void setCreated(Timestamp created) {
+        this.created = created;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -212,14 +224,12 @@ public class Book implements Serializable {
         Book book = (Book) o;
         return id == book.id &&
                 pageCount == book.pageCount &&
-                genre == book.genre &&
-                author == book.author &&
+                genre.equals(book.genre) &&
+                author.equals(book.author) &&
                 publishYear == book.publishYear &&
-                publisher == book.publisher &&
+                publisher.equals(book.publisher) &&
                 Objects.equals(name, book.name) &&
-                Arrays.equals(content, book.content) &&
                 Objects.equals(isbn, book.isbn) &&
-                Arrays.equals(image, book.image) &&
                 Objects.equals(descr, book.descr) &&
                 Objects.equals(bookcol, book.bookcol) &&
                 Objects.equals(rating, book.rating) &&
@@ -229,10 +239,8 @@ public class Book implements Serializable {
 
     @Override
     public int hashCode() {
-
         int result = Objects.hash(id, name, pageCount, isbn, genre, author, publishYear, publisher, descr, bookcol, rating, voteCount);
-        result = 31 * result + Arrays.hashCode(content);
-        result = 31 * result + Arrays.hashCode(image);
+        result = 31 * result;
         return result;
     }
 

@@ -39,6 +39,7 @@ public class BookController {
     @Autowired
     private Utils utils;
     private static final int PAGE_SIZE_VALUE = 6;
+    private static final String UNKNOWN_AUTHOR = "Неизвестный автор";
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public ModelAndView home(@RequestParam(required = false) Long authorId, HttpSession session) {
@@ -118,8 +119,7 @@ public class BookController {
     @RequestMapping(value = "/addBookView", method = RequestMethod.GET)
     public ModelAndView addBookView() {
         ModelAndView modelAndView = new ModelAndView("add-book-page");
-        modelAndView.addObject("book", new Book());
-        addAttributesForAddOrEditBook(modelAndView);
+        addAttributesForAddOrEditBook(modelAndView, new Book());
         return modelAndView;
     }
 
@@ -130,15 +130,14 @@ public class BookController {
         ModelAndView modelAndView = new ModelAndView("add-book-page");
         boolean isAdded = saveBook(book, content, image);
         modelAndView.addObject("isAdded", isAdded);
-        addAttributesForAddOrEditBook(modelAndView);
+        addAttributesForAddOrEditBook(modelAndView, book);
         return modelAndView;
     }
 
     @RequestMapping(value = "/editBookView", method = RequestMethod.GET)
     public ModelAndView editBookView(@RequestParam Long bookId) {
         ModelAndView modelAndView = new ModelAndView("edit-book-page");
-        modelAndView.addObject("book", bookDAO.find(bookId));
-        addAttributesForAddOrEditBook(modelAndView);
+        addAttributesForAddOrEditBook(modelAndView, bookDAO.find(bookId));
         return modelAndView;
     }
 
@@ -150,8 +149,7 @@ public class BookController {
         ModelAndView modelAndView = new ModelAndView("edit-book-page");
         boolean isEdited = updateBook(book, content, image, bookId);
         modelAndView.addObject("isEdited", isEdited);
-        modelAndView.addObject("book", bookDAO.find(bookId));
-        addAttributesForAddOrEditBook(modelAndView);
+        addAttributesForAddOrEditBook(modelAndView, bookDAO.find(bookId));
         return modelAndView;
     }
 
@@ -200,13 +198,16 @@ public class BookController {
     }
 
 
-    private void addAttributesForAddOrEditBook(ModelAndView modelAndView) {
+    private void addAttributesForAddOrEditBook(ModelAndView modelAndView, Book book) {
         List<Publisher> publishers = publisherDAO.getPublishers();
         List<Genre> genres = genreDAO.getGenres();
         List<Author> authors = authorDAO.find();
+        Author unknownAuthor = authorDAO.find(UNKNOWN_AUTHOR);
         modelAndView.addObject("genreList", genres);
         modelAndView.addObject("authorList", authors);
+        modelAndView.addObject("unknownAuthor", unknownAuthor);
         modelAndView.addObject("publisherList", publishers);
+        modelAndView.addObject("book", book);
     }
 
 
@@ -214,7 +215,8 @@ public class BookController {
         try {
             book.setContent(content.getBytes());
             book.setImage(image.getBytes());
-            bookDAO.save(book);
+            Long id = bookDAO.save(book);
+            book.setAllField(bookDAO.find(id));
             return true;
         } catch (Exception e) {
             return false;

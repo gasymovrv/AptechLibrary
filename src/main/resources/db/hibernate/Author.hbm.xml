@@ -7,6 +7,7 @@
     <class name="ru.aptech.library.entities.Author" table="author" schema="aplib">
         <id name="id">
             <column name="id" sql-type="bigint(20)"/>
+            <generator class="identity"/>
         </id>
         <property name="fio">
             <column name="fio" sql-type="varchar(300)" length="300"/>
@@ -17,11 +18,11 @@
         <property name="created">
             <column name="created" sql-type="timestamp"/>
         </property>
-        <!--<set name="books" table="book" inverse="false" cascade="all" lazy="true" fetch="join">-->
-            <!--<key>-->
-                <!--<column name="author_id" not-null="true" />-->
-            <!--</key>-->
-            <!--<one-to-many class="ru.aptech.library.entities.Book" />-->
-        <!--</set>-->
+        <set name="books" table="book" inverse="true" cascade="save-update" lazy="false" fetch="join">
+            <key>
+                <column name="author_id" not-null="true"/>
+            </key>
+            <one-to-many class="ru.aptech.library.entities.Book" />
+        </set>
     </class>
 </hibernate-mapping>

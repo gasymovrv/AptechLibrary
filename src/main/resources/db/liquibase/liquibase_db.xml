@@ -110,7 +110,7 @@
                 <columnExists schemaName="aplib" tableName="author" columnName="created"/>
             </not>
         </preConditions>
-        <sql>ALTER TABLE author ADD COLUMN created TIMESTAMP(6)</sql>
+        <sql>ALTER TABLE author ADD COLUMN created TIMESTAMP(6);</sql>
     </changeSet>
 
     <changeSet author="rgasymov" id="20180527-02">
@@ -119,7 +119,20 @@
                 <columnExists schemaName="aplib" tableName="book" columnName="created"/>
             </not>
         </preConditions>
-        <sql>ALTER TABLE book ADD COLUMN created TIMESTAMP(6)</sql>
+        <sql>ALTER TABLE book ADD COLUMN created TIMESTAMP(6);</sql>
+    </changeSet>
+
+    <changeSet author="rgasymov" id="20180529-01">
+        <sql>ALTER TABLE author MODIFY COLUMN birthday date null;</sql>
+    </changeSet>
+
+    <changeSet author="rgasymov" id="20180529-02">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT count(*) FROM author WHERE fio='Неизвестный автор';
+            </sqlCheck>
+        </preConditions>
+        <sql>INSERT INTO author (fio) VALUES ('Неизвестный автор');</sql>
     </changeSet>
 
 </databaseChangeLog>

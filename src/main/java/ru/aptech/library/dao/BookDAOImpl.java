@@ -96,9 +96,9 @@ public class BookDAOImpl {
 
 
     @Transactional
-    public void save(Book book) {
+    public Long save(Book book) {
         Session session = sessionFactory.getCurrentSession();
-        session.save(book);
+        return (Long)session.save(book);
     }
 
     @Transactional
@@ -110,7 +110,7 @@ public class BookDAOImpl {
     @Transactional
     public void delete(Long bookId) {
         Session session = sessionFactory.getCurrentSession();
-        session.delete(find(bookId));
+        session.delete(findWithContent(bookId));
     }
 
     @Transactional

@@ -4,6 +4,7 @@
 Бэк-технологии:
     commons-fileupload
     com.fasterxml.jackson.core
+    java SE 8
     javax.servlet
     javax.servlet.jsp
     jstl
@@ -33,6 +34,10 @@
         Размещен на ubuntu-16.04.3-server-amd64,
         установлено на VirtualBox,
         подключение по TCP/IP с локальной машины
+    БД можно восстановить так:
+        1) импортировать скрипт db/dump(struct-and-data).sql
+        2) накатить db/liquibase/liquibase_db.xml
+           (Запускать через мавен-плагин, выполнить liquibase:update)
 
 Сервер приложений
     wildfly-11.0.0.Final

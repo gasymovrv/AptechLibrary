@@ -20,6 +20,9 @@ function authorsPagination(quantityAuthors, authorsOnPage, selectedPage) {
 
 function searchBooksByAuthor(authorId, authorName) {
     let text = "Найдено книг автора " + authorName + ": ";
+    if(authorName === "Неизвестный автор"){
+        text = "Найдено книг без автора: ";
+    }
     saveFoundResultText(text);
     window.location = (getContextPath() + '/home?authorId=' + authorId);
 }
