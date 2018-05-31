@@ -13,3 +13,4 @@
         <button id="books-on-page-button" class="btn">Подтвердить</button>
     </div>
 </div>
+<%--скрипт для пагинации встроен в скрипт отображения книг printItemsWithPagination() и вызывается на books.jsp--%>

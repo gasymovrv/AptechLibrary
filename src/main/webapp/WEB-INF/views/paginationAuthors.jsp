@@ -13,3 +13,6 @@
         <button type="submit" class="btn">Подтвердить</button>
     </form>
 </div>
+<script>
+    authorsPagination(${quantityAuthors}, ${sessionScope.authorsOnPage}, ${selectedPage});
+</script>

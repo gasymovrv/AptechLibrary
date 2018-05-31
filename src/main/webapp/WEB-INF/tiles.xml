@@ -4,6 +4,11 @@
         "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
 
+    <!--
+    cascade="true" для того чтобы работала вставка атрибутов во вложенных атрибутах
+        например для <put-attribute name="body">,
+        внутри которого вставлен новый шаблон со своими атрибутами
+    -->
     <definition name="base-layout-s" template="/WEB-INF/views/common/base.jsp">
         <put-attribute name="body">
             <definition template="/WEB-INF/views/common/base-layout-search.jsp">
@@ -24,7 +29,7 @@
             <definition template="/WEB-INF/views/common/base-layout-non-search.jsp">
                 <put-attribute name="title" value=""/>
                 <put-attribute name="header" value="/WEB-INF/views/header.jsp"/>
-                <put-attribute name="top-panel" value="/WEB-INF/views/top-panel.jsp"/>
+                <put-attribute name="top-panel" value="/WEB-INF/views/top-panel.jsp" cascade="true"/>
                 <put-attribute name="top-panel-title" value="" cascade="true"/>
                 <put-attribute name="main" value="" cascade="true"/>
                 <put-attribute name="pagination" value="" cascade="true"/>
@@ -61,7 +66,8 @@
     <!--author-->
     <definition name="author-page-list-author" extends="base-layout-ns">
         <put-attribute name="title" value="Список авторов"/>
-        <put-attribute name="top-panel-title" value="Список авторов" cascade="true"/>
+        <put-attribute name="top-panel" value="/WEB-INF/views/top-panel-authors.jsp" cascade="true"/>
+        <put-attribute name="top-panel-title" value="Поиск авторов" cascade="true"/>
         <put-attribute name="main" value="/WEB-INF/views/authors.jsp" cascade="true"/>
         <put-attribute name="pagination" value="/WEB-INF/views/paginationAuthors.jsp" cascade="true"/>
     </definition>

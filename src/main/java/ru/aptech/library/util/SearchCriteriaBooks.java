@@ -1,15 +1,19 @@
 package ru.aptech.library.util;
 
 
+import org.springframework.util.StringUtils;
 import ru.aptech.library.enums.SearchType;
+import ru.aptech.library.enums.SortType;
 
 import java.io.Serializable;
 
-public class SearchCriteria implements Serializable{
+public class SearchCriteriaBooks implements Serializable{
 
     private String text;
 
     private SearchType searchType = SearchType.TITLE;
+
+    private SortType sortType = SortType.NAME;
 
     private Character letter;
 
@@ -25,7 +29,11 @@ public class SearchCriteria implements Serializable{
     }
 
     public void setText(String text) {
-        this.text = text;
+        if(StringUtils.isEmpty(text)){
+            this.text = null;
+        } else {
+            this.text = text;
+        }
     }
 
     public SearchType getSearchType() {
@@ -71,6 +79,17 @@ public class SearchCriteria implements Serializable{
     public void setAuthorId(Long authorId) {
         this.authorId = authorId;
     }
+
+
+    public SortType getSortType() {
+        return sortType;
+    }
+
+
+    public void setSortType(SortType sortType) {
+        this.sortType = sortType;
+    }
+
 
     public boolean isEmpty(){
         return getText() == null

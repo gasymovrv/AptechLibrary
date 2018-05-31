@@ -15,7 +15,8 @@ import ru.aptech.library.entities.Book;
 import ru.aptech.library.entities.Genre;
 import ru.aptech.library.entities.Publisher;
 import ru.aptech.library.enums.SearchType;
-import ru.aptech.library.util.SearchCriteria;
+import ru.aptech.library.enums.SortType;
+import ru.aptech.library.util.SearchCriteriaBooks;
 import ru.aptech.library.util.Utils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,14 +49,16 @@ public class BookController {
         if(session.getAttribute("booksOnPage") == null) {
             session.setAttribute("booksOnPage", PAGE_SIZE_VALUE);
         }
-        modelAndView.addObject("authorId", authorId);
+        SearchCriteriaBooks criteria = new SearchCriteriaBooks();
+        criteria.setAuthorId(authorId);
+        modelAndView.addObject("criteriaBooks", criteria);
         return modelAndView;
     }
 
     @RequestMapping(value = "/searchByCriteria", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public @ResponseBody List<Book> searchByCriteria(@RequestParam(required = false) Integer selectedPage,
                                                  @RequestParam(required = false) Integer booksOnPage,
-                                                 @RequestBody SearchCriteria criteria,
+                                                 @RequestBody SearchCriteriaBooks criteria,
                                                      HttpSession session) {
         if (selectedPage == null) {
             selectedPage = 1;
@@ -68,12 +71,18 @@ public class BookController {
         } else {
             session.setAttribute("booksOnPage", booksOnPage);
         }
-        if(criteria.isEmpty()){
-            session.setAttribute("criteria", new SearchCriteria());
-            return bookDAO.find(booksOnPage, selectedPage);
+
+        List<Book> books;
+        if(criteria.isEmpty() && session.getAttribute("criteriaBooks")==null){
+            SearchCriteriaBooks scb = new SearchCriteriaBooks();
+            session.setAttribute("criteriaBooks", scb);
+            books = bookDAO.find(scb, booksOnPage, selectedPage);
+        } else {
+            session.setAttribute("criteriaBooks", criteria);
+            books = bookDAO.find(criteria, booksOnPage, selectedPage);
         }
-        session.setAttribute("criteria", criteria);
-        return bookDAO.find(criteria, booksOnPage, selectedPage);
+
+        return books;
     }
 
     @RequestMapping(value = "/bookInfo", method = RequestMethod.GET)
@@ -89,15 +98,15 @@ public class BookController {
      * Методы для работы с ajax
      * */
     @RequestMapping(value = "/getQuantityBooks", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-    public @ResponseBody Long getQuantityBooks(@RequestBody SearchCriteria criteria) {
+    public @ResponseBody Long getQuantityBooks(@RequestBody SearchCriteriaBooks criteria) {
         if(criteria.isEmpty()){
             return bookDAO.getQuantityBooks();
         }
         return bookDAO.getQuantityBooks(criteria);
     }
     @RequestMapping(value = "/getCriteria", method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody SearchCriteria getCriteria(HttpSession session) {
-        return (SearchCriteria)session.getAttribute("criteria");
+    public @ResponseBody SearchCriteriaBooks getCriteria(HttpSession session) {
+        return (SearchCriteriaBooks)session.getAttribute("criteriaBooks");
     }
     @RequestMapping(value = "/getBooksOnPage", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody Object getBooksOnPage(HttpSession session) {
@@ -195,6 +204,7 @@ public class BookController {
         modelAndView.addObject("genreList", genres);
         modelAndView.addObject("letters", letters);
         modelAndView.addObject("searchTypeList", searchTypeList);
+        modelAndView.addObject("sortTypeList", SortType.values());
     }
 
 

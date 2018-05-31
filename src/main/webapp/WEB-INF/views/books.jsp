@@ -1,6 +1,6 @@
 <%@include file="../../include.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%--@elvariable id="criteria" type="ru.aptech.library.util.SearchCriteriaBooks"--%>
 <!-- Main box (search) - books-->
 <div id="main-box">
     <div id="row-info" class="row">
@@ -25,9 +25,16 @@
     </c:if>
 
     let criteria = null;
-    //используем критерию для поиска по автору со страницы "Авторы"
-    <c:if test="${not empty authorId}">
-    criteria = {authorId: ${authorId}};
+    <c:if test="${not empty criteriaBooks}">
+    criteria = {
+        authorId: '${criteriaBooks.authorId}',
+        genreId: '${criteriaBooks.genreId}',
+        publisherId: '${criteriaBooks.publisherId}',
+        letter: '${criteriaBooks.letter}',
+        text: '${criteriaBooks.text}',
+        sortType:'${criteriaBooks.sortType}',
+        searchType: '${criteriaBooks.searchType}'
+    };
     </c:if>
     //отобразить книги и пагинатор
     printItemsWithPagination(criteria);

@@ -81,5 +81,4 @@
     </c:if>
 
     popovers();
-    authorsPagination(${quantityAuthors}, ${sessionScope.authorsOnPage}, ${selectedPage});
 </script>

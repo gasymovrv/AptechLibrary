@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.aptech.library.entities.Book;
 import ru.aptech.library.enums.SearchType;
-import ru.aptech.library.util.SearchCriteria;
+import ru.aptech.library.util.SearchCriteriaBooks;
 
 import java.util.List;
 
@@ -31,10 +31,9 @@ public class BookDAOImpl {
                     "b.voteCount) from Book b";
 
     private final String ORDER_BY_NAME = " order by b.name";
+    private final String ORDER_BY_CREATION = " order by b.created desc";
     @Autowired
     private SessionFactory sessionFactory;
-    @Autowired
-    private GenreDAOImpl genreDAO;
 
 
 
@@ -43,15 +42,6 @@ public class BookDAOImpl {
         Session session = sessionFactory.getCurrentSession();
         List<Book> bookList = session.createQuery(BOOKS_WITHOUT_CONTENT + ORDER_BY_NAME,
                 Book.class).getResultList();
-        return bookList;
-    }
-
-    @Transactional
-    public List<Book> find(Integer booksOnPage, Integer selectedPage) {
-        int init = (selectedPage - 1) * booksOnPage;
-        Session session = sessionFactory.getCurrentSession();
-        List<Book> bookList = session.createQuery(BOOKS_WITHOUT_CONTENT + ORDER_BY_NAME,
-                Book.class).setFirstResult(init).setMaxResults(booksOnPage).getResultList();
         return bookList;
     }
 
@@ -73,24 +63,42 @@ public class BookDAOImpl {
 
 
     @Transactional
-    public List<Book> find(SearchCriteria criteria, Integer booksOnPage, Integer selectedPage) {
+    public List<Book> find(SearchCriteriaBooks criteria, Integer booksOnPage, Integer selectedPage) {
         int init = (selectedPage - 1) * booksOnPage;
+        String sortSql = ORDER_BY_NAME;
+        if(criteria!=null){
+            switch (criteria.getSortType()){
+                case NAME:
+                    sortSql = ORDER_BY_NAME;
+                    break;
+                case CREATION_DATE:
+                    sortSql = ORDER_BY_CREATION;
+                    break;
+            }
+        }
         Session session = sessionFactory.getCurrentSession();
-        List<Book> books = session.createQuery(BOOKS_WITHOUT_CONTENT +
-                        " where b.genre.id=:genre" +
-                        " or b.publisher.id=:publisher" +
-                        " or b.author.id=:author" +
-                        " or b.name like CONCAT(:letter, '%')" +
-                        " or " + getSqlBySearchType(criteria.getSearchType()) +
-                        " like CONCAT('%', :text, '%')" +
-                        ORDER_BY_NAME,
-                Book.class)
-                .setParameter("genre", criteria.getGenreId())
-                .setParameter("publisher", criteria.getPublisherId())
-                .setParameter("author", criteria.getAuthorId())
-                .setParameter("letter", criteria.getLetter())
-                .setParameter("text", criteria.getText())
-                .setFirstResult(init).setMaxResults(booksOnPage).getResultList();
+        List<Book> books;
+        if (criteria != null && !criteria.isEmpty()) {
+            books = session.createQuery(BOOKS_WITHOUT_CONTENT +
+                            " where b.genre.id=:genre" +
+                            " or b.publisher.id=:publisher" +
+                            " or b.author.id=:author" +
+                            " or b.name like CONCAT(:letter, '%')" +
+                            " or " + getSqlBySearchType(criteria.getSearchType()) +
+                            " like CONCAT('%', :text, '%')" +
+                            sortSql,
+                    Book.class)
+                    .setParameter("genre", criteria.getGenreId())
+                    .setParameter("publisher", criteria.getPublisherId())
+                    .setParameter("author", criteria.getAuthorId())
+                    .setParameter("letter", criteria.getLetter())
+                    .setParameter("text", criteria.getText())
+                    .setFirstResult(init).setMaxResults(booksOnPage).getResultList();
+        } else {
+            books = session.createQuery(BOOKS_WITHOUT_CONTENT + sortSql,
+                    Book.class)
+                    .setFirstResult(init).setMaxResults(booksOnPage).getResultList();
+        }
         return books;
     }
 
@@ -129,7 +137,7 @@ public class BookDAOImpl {
     }
 
     @Transactional
-    public Long getQuantityBooks(SearchCriteria criteria) {
+    public Long getQuantityBooks(SearchCriteriaBooks criteria) {
         Session session = sessionFactory.getCurrentSession();
 
         Long result = session.createQuery("select count(*) from Book b" +
@@ -150,20 +158,22 @@ public class BookDAOImpl {
     }
 
     private String getSqlBySearchType(SearchType searchType){
-        String stringSearchType = null;
-        switch (searchType) {
-            case TITLE:
-                stringSearchType = " b.name ";
-                break;
-            case AUTHOR:
-                stringSearchType = " b.author.fio ";
-                break;
-            case GENRE:
-                stringSearchType = " b.genre.name ";
-                break;
-            case PUBLISHER:
-                stringSearchType = " b.publisher.name ";
-                break;
+        String stringSearchType =  " b.name ";
+        if (searchType!=null) {
+            switch (searchType) {
+                case TITLE:
+                    stringSearchType = " b.name ";
+                    break;
+                case AUTHOR:
+                    stringSearchType = " b.author.fio ";
+                    break;
+                case GENRE:
+                    stringSearchType = " b.genre.name ";
+                    break;
+                case PUBLISHER:
+                    stringSearchType = " b.publisher.name ";
+                    break;
+            }
         }
         return stringSearchType;
     }

@@ -2,7 +2,11 @@
 function searchByText() {
     $(document).on('submit', '#top-panel-form', function (event) {
         event.preventDefault();
-        let criteria = {'text': $('#top-panel-form-text').val(), 'searchType': $('#top-panel-form-select').val()};
+        let criteria = {
+            'text': $('#top-panel-form-text').val(),
+            'searchType': $('#top-panel-form-select').val(),
+            'sortType': $('#top-panel-form-select-sort').val()
+        };
         let text = "Найдено книг по Вашему запросу: ";
         saveFoundResultText(text);
         printItemsWithPagination(criteria);
@@ -11,7 +15,9 @@ function searchByText() {
 
 function searchByLetter() {
     $(document).on('click', '#letters-form button', function () {//то же что и метод click, но работает всегда
-        let criteria = {'letter': $(this).prop('id')};
+        let criteria = {
+            'letter': $(this).prop('id'),
+            'sortType': $('#top-panel-form-select-sort').val()};
         let text = "Найдено книг, начинающихся на '" + criteria['letter'] + "': ";
         saveFoundResultText(text);
         printItemsWithPagination(criteria);
@@ -20,7 +26,10 @@ function searchByLetter() {
 
 function searchByGenre() {
     $(document).on('click', 'a.genre-link', function () {//то же что и метод click, но работает всегда
-        let criteria = {'genreId': $(this).prop('id')};
+        let criteria = {
+            'genreId': $(this).prop('id'),
+            'sortType': $('#top-panel-form-select-sort').val()
+        };
         let genreName = $(this).text();
         let text = "Найдено книг жанра '" + genreName + "': ";
         saveFoundResultText(text);
@@ -30,7 +39,10 @@ function searchByGenre() {
 
 function searchByPublisher() {
     $(document).on('click', 'a.publisher-link', function () {//то же что и метод click, но работает всегда
-        let criteria = {'publisherId': $(this).prop('id')};
+        let criteria = {
+            'publisherId': $(this).prop('id'),
+            'sortType': $('#top-panel-form-select-sort').val()
+        };
         let publisherName = $(this).text();
         let text = "Найдено книг издательства '" + publisherName + "': ";
         saveFoundResultText(text);
@@ -41,7 +53,10 @@ function searchByPublisher() {
 
 function searchByAuthor() {
     $(document).on('click', 'a.author-link', function () {//то же что и метод click, но работает всегда
-        let criteria = {'authorId': $(this).prop('id')};
+        let criteria = {
+            'authorId': $(this).prop('id'),
+            'sortType': $('#top-panel-form-select-sort').val()
+        };
         let authorName = $(this).text();
         let text = "Найдено книг автора " + authorName + ": ";
         if(authorName === "Неизвестный автор"){

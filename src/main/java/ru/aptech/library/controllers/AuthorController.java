@@ -12,6 +12,8 @@ import ru.aptech.library.dao.BookDAOImpl;
 import ru.aptech.library.entities.Author;
 import ru.aptech.library.entities.Book;
 import ru.aptech.library.enums.SortType;
+import ru.aptech.library.util.SearchCriteriaAuthors;
+import ru.aptech.library.util.SearchCriteriaBooks;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
@@ -32,6 +34,7 @@ public class AuthorController {
     @RequestMapping(value = "/authors/list", method = RequestMethod.GET)
     public ModelAndView authorList(@RequestParam(required = false) Integer authorsOnPage,
                                    @RequestParam(required = false) Integer selectedPage,
+                                   @ModelAttribute("criteriaAuthors") SearchCriteriaAuthors criteria,
                                    HttpSession session) {
         ModelAndView modelAndView = new ModelAndView("author-page-list-author");
         if (selectedPage == null) {
@@ -45,11 +48,22 @@ public class AuthorController {
         } else {
             session.setAttribute("authorsOnPage", authorsOnPage);
         }
-        List<Author> authors = authorDAO.find(authorsOnPage, selectedPage);
+
+        List<Author> authors;
+        if(criteria.isEmpty() && session.getAttribute("criteriaAuthors")==null){
+            SearchCriteriaAuthors sca = new SearchCriteriaAuthors();
+            session.setAttribute("criteriaAuthors", sca);
+            authors = authorDAO.find(sca, authorsOnPage, selectedPage);
+        } else {
+            session.setAttribute("criteriaAuthors", criteria);
+            authors = authorDAO.find(criteria, authorsOnPage, selectedPage);
+        }
+
+        modelAndView.addObject("criteriaAuthors", session.getAttribute("criteriaAuthors"));
         modelAndView.addObject("authorList", authors);
-        modelAndView.addObject("sortType", SortType.values());
+        modelAndView.addObject("sortTypeList", SortType.values());
         modelAndView.addObject("selectedPage", selectedPage);
-        modelAndView.addObject("quantityAuthors", authorDAO.getQuantityAuthors());
+        modelAndView.addObject("quantityAuthors", authorDAO.getQuantityAuthors((SearchCriteriaAuthors)session.getAttribute("criteriaAuthors")));
         return modelAndView;
     }
 
