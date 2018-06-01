@@ -3,47 +3,6 @@
 
 <!-- Main box (search) - book info-->
 <div id="main-box">
-    <div class="col-sm-4">
-        <div class="product-image-large">
-            <img class="img-rounded" src="${showImg}?bookId=${book.id}" alt="Item Name">
-        </div>
-    </div>
-    <!-- End Product Image & Available Colors -->
-    <!-- Product Summary & Options -->
-    <div class="col-sm-7 product-details">
-        <h4>${book.name}</h4>
-        <div class="price">
-            <span class="price-was">$959.99</span> $999.99
-        </div>
-        <h5>Краткое описание</h5>
-        <p>
-            ${book.descr}
-        </p>
-        <h5>Действия</h5>
-        <!-- Operations -->
-        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-            <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">
-                <a href="#" onclick="confirmAddToCart(${book.id}, '${book.name}')"
-                   class="btn item-actions"
-                   role="button" data-placement="top" data-toggle="popover" data-content="В корзину">
-                    <i class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
-                <a href="#" onclick="confirmShowBookContent(${book.id}, '${book.name}')"
-                   class="btn item-actions"
-                   role="button" data-placement="top" data-toggle="popover" data-content="Читать">
-                    <i class="glyphicon glyphicon-eye-open icon-white"></i></a>
-                <security:authorize access="hasRole('ROLE_ADMIN')">
-                    <a href="${editBook}?bookId=${book.id}" class="btn admin-button item-actions"
-                       role="button" data-placement="top" data-toggle="popover" data-content="Изменить">
-                        <i class="glyphicon glyphicon-pencil icon-white"></i></a>
-                    <a href="#" class="btn admin-button item-actions"
-                       onclick="confirmDeleteBook(${book.id}, '${book.name}')"
-                       role="button" data-placement="top" data-toggle="popover" data-content="Удалить">
-                        <i class="glyphicon glyphicon-trash icon-white"></i></a>
-                </security:authorize>
-            </div>
-        </div>
-    </div>
-    <!-- End Product Summary & Options -->
 
     <!-- Full Description & Specification -->
     <div class="col-sm-12">
@@ -102,9 +61,3 @@
         </div>
     </div>
 </div>
-
-<tiles:insertAttribute name="pagination"/>
-
-<script>
-    popovers();
-</script>

@@ -13,7 +13,7 @@ function authorsPagination(quantityAuthors, authorsOnPage, selectedPage) {
         prevText: 'Назад',
         nextText: 'Вперед',
         onPageClick: function (page, evt) {
-            window.location = (getContextPath() + '/authors/list?authorsOnPage=' + authorsOnPage + '&selectedPage=' + page);
+            window.location = (getContextPath() + '/authors/list?authorsOnPage=' + authorsOnPage + '&selectedPage=' + page + '&isPagination=true');
         }
     });
 }

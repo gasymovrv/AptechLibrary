@@ -1,39 +1,29 @@
 package ru.aptech.library.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import ru.aptech.library.dao.AuthorDAOImpl;
-import ru.aptech.library.dao.BookDAOImpl;
 import ru.aptech.library.entities.Author;
 import ru.aptech.library.entities.Book;
 import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaAuthors;
-import ru.aptech.library.util.SearchCriteriaBooks;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 
 @Controller
-public class AuthorController {
-    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    @Autowired
-    private AuthorDAOImpl authorDAO;
-    @Autowired
-    private BookDAOImpl bookDAO;
-    private static final int PAGE_SIZE_VALUE = 6;
-    private static final String UNKNOWN_AUTHOR = "Неизвестный автор";
+@RequestMapping("authors/")
+public class AuthorController extends BaseController{
 
-    @RequestMapping(value = "/authors/list", method = RequestMethod.GET)
+    @RequestMapping(value = "list", method = RequestMethod.GET)
     public ModelAndView authorList(@RequestParam(required = false) Integer authorsOnPage,
                                    @RequestParam(required = false) Integer selectedPage,
+                                   @RequestParam(required = false) Boolean isPagination,
                                    @ModelAttribute("criteriaAuthors") SearchCriteriaAuthors criteria,
                                    HttpSession session) {
         ModelAndView modelAndView = new ModelAndView("author-page-list-author");
@@ -50,13 +40,22 @@ public class AuthorController {
         }
 
         List<Author> authors;
-        if(criteria.isEmpty() && session.getAttribute("criteriaAuthors")==null){
-            SearchCriteriaAuthors sca = new SearchCriteriaAuthors();
-            session.setAttribute("criteriaAuthors", sca);
-            authors = authorDAO.find(sca, authorsOnPage, selectedPage);
+        if(isPagination!=null && isPagination){
+            authors = authorDAO.find(
+                    (SearchCriteriaAuthors) session.getAttribute("criteriaAuthors"),
+                    authorsOnPage,
+                    selectedPage,
+                    (SortType) session.getAttribute("sortType")
+            );
         } else {
-            session.setAttribute("criteriaAuthors", criteria);
-            authors = authorDAO.find(criteria, authorsOnPage, selectedPage);
+            if(criteria.isEmpty() && session.getAttribute("criteriaAuthors")==null){
+                SearchCriteriaAuthors sca = new SearchCriteriaAuthors();
+                session.setAttribute("criteriaAuthors", sca);
+                authors = authorDAO.find(sca, authorsOnPage, selectedPage, (SortType)session.getAttribute("sortType"));
+            } else {
+                session.setAttribute("criteriaAuthors", criteria);
+                authors = authorDAO.find(criteria, authorsOnPage, selectedPage, (SortType)session.getAttribute("sortType"));
+            }
         }
 
         modelAndView.addObject("criteriaAuthors", session.getAttribute("criteriaAuthors"));
@@ -67,14 +66,14 @@ public class AuthorController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/authors/addAuthorView", method = RequestMethod.GET)
+    @RequestMapping(value = "addAuthorView", method = RequestMethod.GET)
     public ModelAndView addAuthorView() {
         ModelAndView modelAndView = new ModelAndView("add-author-page");
         addAttributesForAddOrEditAuthor(modelAndView, new Author());
         return modelAndView;
     }
 
-    @RequestMapping(value = "/authors/addAuthorAction", method = RequestMethod.POST)
+    @RequestMapping(value = "addAuthorAction", method = RequestMethod.POST)
     public ModelAndView addAuthorAction(@ModelAttribute Author author, @RequestParam String date, BindingResult result) {
         ModelAndView modelAndView = new ModelAndView("add-author-page");
         boolean isAdded = saveAuthor(author, date);
@@ -83,14 +82,14 @@ public class AuthorController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/authors/editAuthorView", method = RequestMethod.GET)
+    @RequestMapping(value = "editAuthorView", method = RequestMethod.GET)
     public ModelAndView editAuthorView(@RequestParam Long authorId) {
         ModelAndView modelAndView = new ModelAndView("edit-author-page");
         addAttributesForAddOrEditAuthor(modelAndView, authorDAO.find(authorId));
         return modelAndView;
     }
 
-    @RequestMapping(value = "/authors/editAuthorAction", method = RequestMethod.POST)
+    @RequestMapping(value = "editAuthorAction", method = RequestMethod.POST)
     public ModelAndView editAuthorAction(@ModelAttribute Author author, @RequestParam Long authorId, @RequestParam String date) {
         ModelAndView modelAndView = new ModelAndView("edit-author-page");
         boolean isEdited  = updateAuthor(author, authorId, date);
@@ -99,7 +98,7 @@ public class AuthorController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/authors/deleteAuthor", method = RequestMethod.GET)
+    @RequestMapping(value = "deleteAuthor", method = RequestMethod.GET)
     public String deleteAuthor(@RequestParam(value = "authorId") Long authorId, HttpSession session) {
         boolean isDeleted = deleteAuthor(authorId);
         session.setAttribute("isDeleted", isDeleted);
@@ -116,8 +115,14 @@ public class AuthorController {
     private boolean saveAuthor(Author author, String date){
         try {
             author.setBirthday(!date.equals("") ? LocalDate.parse(date, DATE_FORMAT) : null);
-            Long id = authorDAO.save(author);
-            author.setAllField(authorDAO.find(id));
+            Set<Book> bookList = author.getBooks();
+            Author savedAuthor = authorDAO.find(authorDAO.save(author));
+            for(Book b : bookList) {
+                b.setAuthor(savedAuthor);
+                bookDAO.update(b);
+            }
+            //какая херня, но без нее почему-то селектор с книгами на странице add-or-edit-author.jsp очищается
+            author.setAllField(authorDAO.find(savedAuthor.getId()));
             return true;
         } catch (Exception e){
             return false;

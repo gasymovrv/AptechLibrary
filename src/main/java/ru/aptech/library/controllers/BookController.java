@@ -28,38 +28,19 @@ import java.io.InputStream;
 import java.util.List;
 
 @Controller
-public class BookController {
-    @Autowired
-    private BookDAOImpl bookDAO;
-    @Autowired
-    private GenreDAOImpl genreDAO;
-    @Autowired
-    private AuthorDAOImpl authorDAO;
-    @Autowired
-    private PublisherDAOImpl publisherDAO;
-    @Autowired
-    private Utils utils;
-    private static final int PAGE_SIZE_VALUE = 6;
-    private static final String UNKNOWN_AUTHOR = "Неизвестный автор";
+@RequestMapping("books/")
+public class BookController extends BaseController{
 
-    @RequestMapping(value = "/home", method = RequestMethod.GET)
-    public ModelAndView home(@RequestParam(required = false) Long authorId, HttpSession session) {
-        ModelAndView modelAndView = new ModelAndView("home-page-list-books");
-        addAttributesForCriteria(modelAndView);
-        if(session.getAttribute("booksOnPage") == null) {
-            session.setAttribute("booksOnPage", PAGE_SIZE_VALUE);
-        }
-        SearchCriteriaBooks criteria = new SearchCriteriaBooks();
-        criteria.setAuthorId(authorId);
-        modelAndView.addObject("criteriaBooks", criteria);
-        return modelAndView;
-    }
 
-    @RequestMapping(value = "/searchByCriteria", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-    public @ResponseBody List<Book> searchByCriteria(@RequestParam(required = false) Integer selectedPage,
-                                                 @RequestParam(required = false) Integer booksOnPage,
-                                                 @RequestBody SearchCriteriaBooks criteria,
-                                                     HttpSession session) {
+    /**
+     * Методы для работы с ajax
+     * */
+    @RequestMapping(value = "searchByCriteria", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public List<Book> searchByCriteria(@RequestParam(required = false) Integer selectedPage,
+                                       @RequestParam(required = false) Integer booksOnPage,
+                                       @RequestBody SearchCriteriaBooks criteria,
+                                       HttpSession session) {
         if (selectedPage == null) {
             selectedPage = 1;
         }
@@ -76,16 +57,39 @@ public class BookController {
         if(criteria.isEmpty() && session.getAttribute("criteriaBooks")==null){
             SearchCriteriaBooks scb = new SearchCriteriaBooks();
             session.setAttribute("criteriaBooks", scb);
-            books = bookDAO.find(scb, booksOnPage, selectedPage);
+            books = bookDAO.find(scb, booksOnPage, selectedPage, (SortType)session.getAttribute("sortType"));
         } else {
             session.setAttribute("criteriaBooks", criteria);
-            books = bookDAO.find(criteria, booksOnPage, selectedPage);
+            books = bookDAO.find(criteria, booksOnPage, selectedPage, (SortType)session.getAttribute("sortType"));
         }
 
         return books;
     }
+    @RequestMapping(value = "getQuantityBooks", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public Long getQuantityBooks(@RequestBody SearchCriteriaBooks criteria) {
+        if(criteria.isEmpty()){
+            return bookDAO.getQuantityBooks();
+        }
+        return bookDAO.getQuantityBooks(criteria);
+    }
+    @RequestMapping(value = "getCriteria", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public SearchCriteriaBooks getCriteria(HttpSession session) {
+        return (SearchCriteriaBooks)session.getAttribute("criteriaBooks");
+    }
+    @RequestMapping(value = "getBooksOnPage", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public Object getBooksOnPage(HttpSession session) {
+        Object o = session.getAttribute("booksOnPage");
+        if (o == null) {
+            return PAGE_SIZE_VALUE;
+        }
+        return o;
+    }
 
-    @RequestMapping(value = "/bookInfo", method = RequestMethod.GET)
+
+    @RequestMapping(value = "bookInfo", method = RequestMethod.GET)
     public ModelAndView bookInfo(@RequestParam(value = "bookId") Long bookId) {
         ModelAndView modelAndView = new ModelAndView("home-page-one-book");
         addAttributesForCriteria(modelAndView);
@@ -93,46 +97,14 @@ public class BookController {
         return modelAndView;
     }
 
-
-    /**
-     * Методы для работы с ajax
-     * */
-    @RequestMapping(value = "/getQuantityBooks", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-    public @ResponseBody Long getQuantityBooks(@RequestBody SearchCriteriaBooks criteria) {
-        if(criteria.isEmpty()){
-            return bookDAO.getQuantityBooks();
-        }
-        return bookDAO.getQuantityBooks(criteria);
-    }
-    @RequestMapping(value = "/getCriteria", method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody SearchCriteriaBooks getCriteria(HttpSession session) {
-        return (SearchCriteriaBooks)session.getAttribute("criteriaBooks");
-    }
-    @RequestMapping(value = "/getBooksOnPage", method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody Object getBooksOnPage(HttpSession session) {
-        Object o = session.getAttribute("booksOnPage");
-        if (o == null) {
-            return PAGE_SIZE_VALUE;
-        }
-        return o;
-    }
-    @RequestMapping(value = "/getFoundResultText", method = RequestMethod.GET, produces = "text/html; charset=utf-8")
-    public @ResponseBody String getFoundResultText(HttpSession session) {
-        return (String)session.getAttribute("foundResultText");
-    }
-    @RequestMapping(value = "/saveFoundResultText", method = RequestMethod.POST, consumes = "application/json")
-    public void saveFoundResultText(@RequestParam String foundResultText, HttpSession session) {
-        session.setAttribute("foundResultText", foundResultText);
-    }
-
-    @RequestMapping(value = "/addBookView", method = RequestMethod.GET)
+    @RequestMapping(value = "addBookView", method = RequestMethod.GET)
     public ModelAndView addBookView() {
         ModelAndView modelAndView = new ModelAndView("add-book-page");
         addAttributesForAddOrEditBook(modelAndView, new Book());
         return modelAndView;
     }
 
-    @RequestMapping(value = "/addBookAction", method = RequestMethod.POST)
+    @RequestMapping(value = "addBookAction", method = RequestMethod.POST)
     public ModelAndView addBookAction(@ModelAttribute Book book,
                                       @RequestParam("file1") MultipartFile content,
                                       @RequestParam("file2") MultipartFile image) {
@@ -143,14 +115,14 @@ public class BookController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/editBookView", method = RequestMethod.GET)
+    @RequestMapping(value = "editBookView", method = RequestMethod.GET)
     public ModelAndView editBookView(@RequestParam Long bookId) {
         ModelAndView modelAndView = new ModelAndView("edit-book-page");
         addAttributesForAddOrEditBook(modelAndView, bookDAO.find(bookId));
         return modelAndView;
     }
 
-    @RequestMapping(value = "/editBookAction", method = RequestMethod.POST)
+    @RequestMapping(value = "editBookAction", method = RequestMethod.POST)
     public ModelAndView editBookAction(@ModelAttribute Book book,
                                       @RequestParam("file1") MultipartFile content,
                                       @RequestParam("file2") MultipartFile image,
@@ -162,14 +134,14 @@ public class BookController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/deleteBook", method = RequestMethod.GET)
+    @RequestMapping(value = "deleteBook", method = RequestMethod.GET)
     public String deleteBook(@RequestParam(value = "bookId") Long bookId, HttpSession session) {
         boolean isDeleted = deleteBook(bookId);
         session.setAttribute("isDeleted", isDeleted);
         return "redirect:/home";
     }
 
-    @RequestMapping(value = "/showBookImage", method = RequestMethod.GET)
+    @RequestMapping(value = "showBookImage", method = RequestMethod.GET)
     public void showImage(@RequestParam("bookId") Long bookId, HttpServletResponse response, HttpServletRequest request) throws IOException {
         Book book = bookDAO.find(bookId);
         //получаем дефолтное изображение из статических ресурсов
@@ -188,8 +160,8 @@ public class BookController {
     }
 
 
-    @RequestMapping(value = "/showBookContent", method = RequestMethod.GET)
-    public void showPdf(@RequestParam("bookId") Long bookId, HttpServletResponse response) throws IOException {
+    @RequestMapping(value = "showBookContent", method = RequestMethod.GET)
+    public void showBookContent(@RequestParam("bookId") Long bookId, HttpServletResponse response) throws IOException {
         byte[] content = bookDAO.getBookContent(bookId);
         response.setContentType("application/pdf");
         response.getOutputStream().write(content);
@@ -197,14 +169,11 @@ public class BookController {
     }
 
 
-    private void addAttributesForCriteria(ModelAndView modelAndView) {
-        List<Genre> genres = genreDAO.getGenres();
-        Character[] letters = utils.getLetters();
-        SearchType[] searchTypeList = SearchType.values();
-        modelAndView.addObject("genreList", genres);
-        modelAndView.addObject("letters", letters);
-        modelAndView.addObject("searchTypeList", searchTypeList);
-        modelAndView.addObject("sortTypeList", SortType.values());
+    @RequestMapping(value = "addToCart", method = RequestMethod.GET)
+    public ModelAndView addToCart(@RequestParam("bookId") Long bookId) throws IOException {
+        ModelAndView modelAndView = new ModelAndView("cart-page");
+        modelAndView.addObject("book", bookDAO.find(bookId));
+        return modelAndView;
     }
 
 
@@ -237,10 +206,10 @@ public class BookController {
         try {
             Book existBook = bookDAO.findWithContent(bookId);
             existBook.setAllField(updatedBook);
-            if (content.getSize() > 0) {
+            if (content!=null && content.getSize() > 0) {
                 existBook.setContent(content.getBytes());
             }
-            if (image.getSize() > 0 ) {
+            if (image!=null && image.getSize() > 0 ) {
                 existBook.setImage(image.getBytes());
             }
             bookDAO.update(existBook);

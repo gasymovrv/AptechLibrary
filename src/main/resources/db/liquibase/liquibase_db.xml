@@ -85,11 +85,12 @@
     <changeSet author="rgasymov" id="20180526-06">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
-                SELECT count(*) FROM user_role WHERE role='ROLE_ADMIN';
+                SELECT count(*) FROM user_role WHERE username='admin';
             </sqlCheck>
         </preConditions>
         <sql>
             INSERT INTO `user_role`(`username`, `role`) VALUES ('admin', 'ROLE_ADMIN');
+            INSERT INTO `user_role`(`username`, `role`) VALUES ('admin', 'ROLE_USER');
         </sql>
     </changeSet>
 

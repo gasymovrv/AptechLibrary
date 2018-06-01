@@ -13,8 +13,6 @@ public class SearchCriteriaBooks implements Serializable{
 
     private SearchType searchType = SearchType.TITLE;
 
-    private SortType sortType = SortType.NAME;
-
     private Character letter;
 
     private Long genreId;
@@ -79,18 +77,6 @@ public class SearchCriteriaBooks implements Serializable{
     public void setAuthorId(Long authorId) {
         this.authorId = authorId;
     }
-
-
-    public SortType getSortType() {
-        return sortType;
-    }
-
-
-    public void setSortType(SortType sortType) {
-        this.sortType = sortType;
-    }
-
-
     public boolean isEmpty(){
         return getText() == null
                 && getAuthorId() == null

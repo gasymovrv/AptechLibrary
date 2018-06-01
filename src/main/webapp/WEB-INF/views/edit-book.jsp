@@ -18,7 +18,7 @@
             </c:otherwise>
         </c:choose>
     </c:if>
-    <form:form method="post" modelAttribute="book" action="${contextPath}editBookAction?bookId=${book.id}"  enctype="multipart/form-data">
+    <form:form method="post" modelAttribute="book" action="${contextPath}books/editBookAction?bookId=${book.id}"  enctype="multipart/form-data">
         <jsp:include page="add-or-edit-book.jsp"/>
     </form:form>
 </div>

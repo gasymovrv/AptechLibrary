@@ -11,9 +11,6 @@ public class SearchCriteriaAuthors implements Serializable{
 
     private String text;
 
-    private SortType sortType = SortType.NAME;
-
-
     public String getText() {
         return text;
     }
@@ -24,16 +21,6 @@ public class SearchCriteriaAuthors implements Serializable{
         } else {
             this.text = text;
         }
-    }
-
-
-    public SortType getSortType() {
-        return sortType;
-    }
-
-
-    public void setSortType(SortType sortType) {
-        this.sortType = sortType;
     }
 
 

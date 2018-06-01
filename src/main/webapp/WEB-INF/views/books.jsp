@@ -32,7 +32,6 @@
         publisherId: '${criteriaBooks.publisherId}',
         letter: '${criteriaBooks.letter}',
         text: '${criteriaBooks.text}',
-        sortType:'${criteriaBooks.sortType}',
         searchType: '${criteriaBooks.searchType}'
     };
     </c:if>

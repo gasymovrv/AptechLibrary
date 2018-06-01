@@ -91,7 +91,7 @@ function printItemsWithPagination(criteria, itemsOnPage) {
         type: 'POST',//тип запроса
         contentType: 'application/json', //отправляемый тип
         dataType: 'json',//принимаемый тип (из контроллера)
-        url: getContextPath() + '/getQuantityBooks',//url адрес обработчика
+        url: getContextPath() + '/books/getQuantityBooks',//url адрес обработчика
         data: JSON.stringify(criteria),//отправляемое отсюда (Request)
         async: false,
         success: function (items) {//принимаемое от сервера (Response)
@@ -126,7 +126,7 @@ function getItemsByAjax(page, itemsOnPage, criteria, async, items) {
         type: 'POST',//тип запроса
         contentType: 'application/json', //отправляемый тип
         dataType: 'json',//принимаемый тип (из контроллера)
-        url: getContextPath() + '/searchByCriteria?selectedPage=' + page + '&booksOnPage=' + itemsOnPage,//url адрес обработчика
+        url: getContextPath() + '/books/searchByCriteria?selectedPage=' + page + '&booksOnPage=' + itemsOnPage,//url адрес обработчика
         data: JSON.stringify(criteria),//отправляемое отсюда (Request)
         async: async,
         success: function (data) {//принимаемое от сервера (Response)
@@ -142,11 +142,10 @@ function createHtmlItemsList(bookList, items) {
     //костыль для того чтобы при обновлении после аджакс-поиска всегда
     window.history.pushState(null, null, getContextPath() + '/home');
 
-    let showPdf = getContextPath() + '/showBookContent?bookId=';
-    let showImg = getContextPath() + '/showBookImage?bookId=';
-    let bookInfo = getContextPath() + '/bookInfo?bookId=';
-    let editBook = getContextPath() + '/editBookView?bookId=';
-    let addBook = getContextPath() + '/addBookView';
+    let showImgLink = getContextPath() + '/books/showBookImage?bookId=';
+    let bookInfoLink = getContextPath() + '/books/bookInfo?bookId=';
+    let editBookLink = getContextPath() + '/books/editBookView?bookId=';
+    let addBookLink = getContextPath() + '/books/addBookView';
     let foundResultText = getFoundResultText();
     saveFoundResultText("");//обнуляем, иначе отображается старый текст при нажатии кнопки назад
     let rowId = 'row-with-books_0';
@@ -163,7 +162,7 @@ function createHtmlItemsList(bookList, items) {
     if(admin){
         $('#row-info').append(
             '<div class="col-sm-2">\n' +
-            '    <a href="' + addBook + '" type="button" role="button" class="btn btn-md admin-button">Добавить книгу</a>\n' +
+            '    <a href="' + addBookLink + '" type="button" role="button" class="btn btn-md admin-button">Добавить книгу</a>\n' +
             '</div>');
     }
 
@@ -172,7 +171,7 @@ function createHtmlItemsList(bookList, items) {
     for (let i = 0; i < bookList.length; i++) {
         //вложенный аджакс для того чтобы заранее подготовить все обложки книг
         $.ajax({
-            url: getContextPath() + "/showBookImage",
+            url: getContextPath() + "/books/showBookImage",
             type: "GET",
             data: {bookId: bookList[i].id},
             async: false
@@ -181,13 +180,13 @@ function createHtmlItemsList(bookList, items) {
                 '<div class="col-sm-4">\n' +
                 '    <div class="shop-item">\n' +
                 '        <div class="image">\n' +
-                '            <a href="' + bookInfo + bookList[i].id + '"><img class="img-rounded"\n' +
+                '            <a href="' + bookInfoLink + bookList[i].id + '"><img class="img-rounded"\n' +
                 // '                    src="data:image/jpeg;base64,' + bookList[i].image + '"\n' + //вариант без вложенного аджакса и без контроллера
-                '                    src="' + showImg + bookList[i].id + '"\n' +
+                '                    src="' + showImgLink + bookList[i].id + '"\n' +
                 '                     alt="Изображение отсутствует"></a>\n' +
                 '        </div>\n' +
                 '        <div class="title">\n' +
-                '            <h3><a href="' + bookInfo + bookList[i].id + '">' + bookList[i].name + '</a></h3>\n' +
+                '            <h3><a href="' + bookInfoLink + bookList[i].id + '">' + bookList[i].name + '</a></h3>\n' +
                 '        </div>\n' +
                 '        <div class="title">\n' +
                 '            <h3><a class="author-link" id="' + bookList[i].author.id + '" href="#">' + bookList[i].author.fio + '</a></h3>\n' +
@@ -203,10 +202,12 @@ function createHtmlItemsList(bookList, items) {
                 '        <div class="actions">\n' +
                 '            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">\n' +
                 '                <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">\n' +
-                '                    <a href="' + bookInfo + bookList[i].id + '" class="btn item-actions" role="button"\n' +
+                '                    <a href="#" onclick="confirmAddToCart(' + bookList[i].id + ', \'' + bookList[i].name + '\')" ' +
+                '                        class="btn item-actions" role="button"\n' +
                 '                        data-placement="top" data-toggle="popover" data-content="В корзину">' +
                 '                       <i class="glyphicon glyphicon-shopping-cart icon-white"></i></a>\n' +
-                '                    <a href="' + showPdf + bookList[i].id + '" class="btn item-actions" role="button"\n' +
+                '                    <a href="#" onclick="confirmShowBookContent(' + bookList[i].id + ', \'' + bookList[i].name + '\')" ' +
+                '                        class="btn item-actions" role="button"\n' +
                 '                        data-placement="top" data-toggle="popover" data-content="Читать">' +
                 '                       <i class="glyphicon glyphicon-eye-open icon-white"></i></a>\n' +
                 '                </div>\n' +
@@ -215,7 +216,7 @@ function createHtmlItemsList(bookList, items) {
                 html +=
                     '            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">\n' +
                     '                <div class="btn-group-lg" role="group" aria-label="First group">\n' +
-                    '                    <a href="' + editBook + bookList[i].id + '" class="btn admin-button item-actions" role="button"\n' +
+                    '                    <a href="' + editBookLink + bookList[i].id + '" class="btn admin-button item-actions" role="button"\n' +
                     '                        data-placement="top" data-toggle="popover" data-content="Изменить">' +
                     '                       <i class="glyphicon glyphicon-pencil icon-white"></i></a>\n' +
                     '                    <a href="#" onclick="confirmDeleteBook(' + bookList[i].id + ', \'' + bookList[i].name + '\')"' +
@@ -241,23 +242,6 @@ function createHtmlItemsList(bookList, items) {
     popovers();
 }
 
-//получаем значение атрибута foundResultText из сессии
-function getFoundResultText() {
-    let result;
-    $.ajax({
-        type: 'GET',//тип запроса
-        // dataType: 'json',//принимаемый тип (из контроллера)
-        url: getContextPath() + '/getFoundResultText',//url адрес обработчика
-        async: false,
-        success: function (text) {//принимаемое от сервера (Response)
-            result = text;
-        },
-        error: function () {
-            alert('Ошибка в script getFoundResultText');
-        }
-    });
-    return result;
-}
 
 //получаем значение атрибута booksOnPage из сессии
 function getBooksOnPage() {
@@ -265,7 +249,7 @@ function getBooksOnPage() {
     $.ajax({
         type: 'GET',//тип запроса
         dataType: 'json',//принимаемый тип (из контроллера)
-        url: getContextPath() + '/getBooksOnPage',//url адрес обработчика
+        url: getContextPath() + '/books/getBooksOnPage',//url адрес обработчика
         async: false,
         success: function (itemsOnPage) {//принимаемое от сервера (Response)
             result = itemsOnPage;
@@ -283,7 +267,7 @@ function getCriteria() {
     $.ajax({
         type: 'GET',//тип запроса
         dataType: 'json',//принимаемый тип (из контроллера)
-        url: getContextPath() + '/getCriteria',//url адрес обработчика
+        url: getContextPath() + '/books/getCriteria',//url адрес обработчика
         async: false,
         success: function (criteria) {//принимаемое от сервера (Response)
             result = criteria;
@@ -297,6 +281,28 @@ function getCriteria() {
 
 function confirmDeleteBook(bookId, bookName) {
     if (confirm("Уверены что хотите удалить книгу '" + bookName + "'?")) {
-        window.location = (getContextPath() + '/deleteBook?bookId=' + bookId);
+        window.location = (getContextPath() + '/books/deleteBook?bookId=' + bookId);
+    }
+}
+
+function confirmShowBookContent(bookId, bookName) {
+    let showBookContentLink = getContextPath() + '/books/showBookContent?bookId=';
+    if (!isUser()) {
+        if (confirm("Чтобы читать книгу '" + bookName + "' вам необходимо авторизоваться")) {
+            window.location = (showBookContentLink + bookId);
+        }
+    } else {
+        window.location = (showBookContentLink + bookId);
+    }
+}
+
+function confirmAddToCart(bookId, bookName) {
+    let addToCartLink = getContextPath() + '/books/addToCart?bookId=';
+    if (!isUser()) {
+        if (confirm("Чтобы купить книгу '" + bookName + "' вам необходимо авторизоваться")) {
+            window.location = (addToCartLink + bookId);
+        }
+    } else {
+        window.location = (addToCartLink + bookId);
     }
 }

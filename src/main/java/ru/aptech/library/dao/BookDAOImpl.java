@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.aptech.library.entities.Book;
 import ru.aptech.library.enums.SearchType;
+import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaBooks;
 
 import java.util.List;
@@ -63,11 +64,11 @@ public class BookDAOImpl {
 
 
     @Transactional
-    public List<Book> find(SearchCriteriaBooks criteria, Integer booksOnPage, Integer selectedPage) {
+    public List<Book> find(SearchCriteriaBooks criteria, Integer booksOnPage, Integer selectedPage, SortType sortType) {
         int init = (selectedPage - 1) * booksOnPage;
         String sortSql = ORDER_BY_NAME;
-        if(criteria!=null){
-            switch (criteria.getSortType()){
+        if(sortType!=null){
+            switch (sortType){
                 case NAME:
                     sortSql = ORDER_BY_NAME;
                     break;

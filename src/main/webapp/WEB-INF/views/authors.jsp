@@ -47,7 +47,7 @@
                                 <!-- Operations -->
                                 <div class="actions">
                                     <security:authorize access="hasRole('ROLE_ADMIN')">
-                                        <a href="${contextPath}authors/editAuthorView?authorId=${author.id}" class="btn admin-button item-actions"
+                                        <a href="${editAuthor}?authorId=${author.id}" class="btn admin-button item-actions"
                                            role="button" data-placement="top" data-toggle="popover" data-content="Изменить">
                                             <i class="glyphicon glyphicon-pencil icon-white"></i></a>
                                         <a href="#" class="btn admin-button item-actions"

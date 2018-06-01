@@ -8,7 +8,23 @@ function isAdmin() {
             result = data;
         },
         error: function () {
-            alert('Ошибка в getCurrentUserName');
+            alert('Ошибка в isAdmin');
+        }
+    });
+    return result;
+}
+
+function isUser() {
+    let result;
+    $.ajax({
+        type: 'GET',//тип запроса
+        url: getContextPath() + '/users/isUser',//url адрес обработчика
+        async: false,
+        success: function (data) {//принимаемое от сервера (Response)
+            result = data;
+        },
+        error: function () {
+            alert('Ошибка в isUser');
         }
     });
     return result;

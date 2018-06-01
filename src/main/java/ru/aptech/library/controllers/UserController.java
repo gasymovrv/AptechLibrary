@@ -23,14 +23,11 @@ import java.util.Set;
  * Handles requests for the application home page.
  */
 @Controller
-public class UserController {
-    @Autowired
-    private UserDAOImpl userDAO;
-    @Autowired
-    private BCryptPasswordEncoder bCrypt;
+@RequestMapping("users/")
+public class UserController extends BaseController{
 
-    @RequestMapping(value = "/users/authorization", method = RequestMethod.GET)
-    public ModelAndView authorization(@RequestParam(value = "error", required = false) String error, Authentication authentication, HttpSession session) {
+    @RequestMapping(value = "authorization", method = RequestMethod.GET)
+    public ModelAndView authorization(@RequestParam(value = "error", required = false) String error) {
         ModelAndView modelAndView = new ModelAndView("login-page");
         if (error != null) {
             modelAndView.addObject("error", "Неверное имя пользователя или пароль!");
@@ -38,7 +35,7 @@ public class UserController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/users/registrationView", method = RequestMethod.GET)
+    @RequestMapping(value = "registrationView", method = RequestMethod.GET)
     public ModelAndView registrationView() {
         ModelAndView modelAndView = new ModelAndView("registration-page");
         modelAndView.addObject("user", new User());
@@ -46,7 +43,7 @@ public class UserController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/users/registrationAction", method = RequestMethod.POST)
+    @RequestMapping(value = "registrationAction", method = RequestMethod.POST)
     public ModelAndView registrationAction(@ModelAttribute("user") User user, BindingResult result) {
         ModelAndView modelAndView = new ModelAndView("login-page");
         encodeUserPass(user);
@@ -62,13 +59,27 @@ public class UserController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/users/isAdmin", method = RequestMethod.GET)
+    @RequestMapping(value = "isAdmin", method = RequestMethod.GET)
     @ResponseBody
     public Boolean isAdmin(Authentication authentication) {
         boolean result = false;
         if(authentication != null){
             for (GrantedAuthority g : authentication.getAuthorities()) {
                 if(g.getAuthority().equals("ROLE_ADMIN")){
+                    result = true;
+                }
+            }
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "isUser", method = RequestMethod.GET)
+    @ResponseBody
+    public Boolean isUser(Authentication authentication) {
+        boolean result = false;
+        if(authentication != null){
+            for (GrantedAuthority g : authentication.getAuthorities()) {
+                if(g.getAuthority().equals("ROLE_USER")){
                     result = true;
                 }
             }

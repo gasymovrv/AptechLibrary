@@ -10,6 +10,7 @@
             <input type="number" name="authorsOnPage" value="${sessionScope.authorsOnPage}"
                    class="input-micro">
         </div>
+        <input type="hidden" name="isPagination" value="true">
         <button type="submit" class="btn">Подтвердить</button>
     </form>
 </div>

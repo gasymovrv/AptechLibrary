@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.aptech.library.entities.Author;
+import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaAuthors;
 
 import java.util.List;
@@ -45,11 +46,11 @@ public class AuthorDAOImpl {
     }
 
     @Transactional
-    public List<Author> find(SearchCriteriaAuthors criteria, Integer authorsOnPage, Integer selectedPage) {
+    public List<Author> find(SearchCriteriaAuthors criteria, Integer authorsOnPage, Integer selectedPage, SortType sortType) {
         int init = (selectedPage - 1) * authorsOnPage;
         String sortSql = ORDER_BY_NAME;
-        if (criteria != null) {
-            switch (criteria.getSortType()) {
+        if (sortType != null) {
+            switch (sortType) {
                 case NAME:
                     sortSql = ORDER_BY_NAME;
                     break;
@@ -98,21 +99,19 @@ public class AuthorDAOImpl {
     }
 
     @Transactional
-    public Long getQuantityAuthors() {
-        Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("select count(*) from Author where fio != 'Неизвестный автор'", Long.class).getSingleResult();
-    }
-
-    @Transactional
     public Long getQuantityAuthors(SearchCriteriaAuthors criteria) {
         Session session = sessionFactory.getCurrentSession();
-
-        Long result = session.createQuery("select count(*) from Author a" +
+        Long result;
+        if (criteria != null && !criteria.isEmpty()) {
+        result = session.createQuery("select count(*) from Author a" +
                         " where a.fio like CONCAT('%', :text, '%')" +
                         " and fio != 'Неизвестный автор'",
                 Long.class)
                 .setParameter("text", criteria.getText())
                 .getSingleResult();
+        } else {
+            result = session.createQuery("select count(*) from Author where fio != 'Неизвестный автор'", Long.class).getSingleResult();
+        }
         return result;
     }
 }

@@ -14,16 +14,22 @@
     </beans:bean>
 
     <http use-expressions="true">
-        <intercept-url pattern="/deleteBook**" access="hasRole('ROLE_ADMIN')" />
-        <intercept-url pattern="/editBookView**" access="hasRole('ROLE_ADMIN')" />
-        <intercept-url pattern="/editBookAction**" access="hasRole('ROLE_ADMIN')" />
-        <intercept-url pattern="/addBookView**" access="hasRole('ROLE_ADMIN')" />
-        <intercept-url pattern="/addBookAction**" access="hasRole('ROLE_ADMIN')" />
-        <intercept-url pattern="/authors/deleteAuthor**" access="hasRole('ROLE_ADMIN')" />
-        <intercept-url pattern="/authors/editAuthorView**" access="hasRole('ROLE_ADMIN')" />
-        <intercept-url pattern="/authors/editAuthorAction**" access="hasRole('ROLE_ADMIN')" />
-        <intercept-url pattern="/authors/addAuthorView**" access="hasRole('ROLE_ADMIN')" />
-        <intercept-url pattern="/authors/addAuthorAction**" access="hasRole('ROLE_ADMIN')" />
+        <!--Страницы админа-->
+        <intercept-url pattern="/books/deleteBook**" method="GET" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/books/editBookView**" method="GET" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/books/editBookAction**" method="POST" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/books/addBookView**" method="GET" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/books/addBookAction**" method="POST" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/authors/deleteAuthor**" method="GET" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/authors/editAuthorView**" method="GET" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/authors/editAuthorAction**" method="POST" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/authors/addAuthorView**" method="GET" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/authors/addAuthorAction**" method="POST" access="hasRole('ROLE_ADMIN')" />
+        <!--Страницы авторизованного юзера-->
+        <intercept-url pattern="/books/showBookContent**" method="GET" access="hasRole('ROLE_USER')" />
+        <intercept-url pattern="/books/addToCart**" method="GET" access="hasRole('ROLE_USER')" />
+        <!--Остальные страницы доступны анонимам-->
+
         <form-login login-page='/users/authorization'
                     default-target-url="/home"
                     authentication-failure-url="/users/authorization?error=true"

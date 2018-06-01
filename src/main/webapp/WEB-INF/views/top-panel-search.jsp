@@ -41,10 +41,11 @@
                             <h1>Сортировка</h1>
                         </div>
                         <div class="form-group col-md-3">
-                            <select id="top-panel-form-select-sort" class="form-control" name="sortType">
+                            <select id="top-panel-form-select-sort" class="form-control">
+                                <c:set var="sortType" value="${sessionScope.sortType}"/>
                                 <c:forEach var="st" items="${sortTypeList}">
                                     <c:choose>
-                                        <c:when test="${not empty criteriaBooks.sortType and criteriaBooks.sortType eq st}">
+                                        <c:when test="${sortType eq st}">
                                             <option selected value="${st}">${st.text}</option>
                                         </c:when>
                                         <c:otherwise>

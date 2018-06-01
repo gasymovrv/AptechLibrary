@@ -1,5 +1,6 @@
 $(document).ready(function () {
     itemsOnPageValidation();
+    changeSortType();
 });
 
 function  popovers() {
@@ -18,9 +19,44 @@ function  popovers() {
 function saveFoundResultText(foundResultText) {
     $.ajax({
         type: 'POST',//тип запроса
-        contentType: 'application/json', //отправляемый тип
         url: getContextPath() + '/saveFoundResultText?foundResultText=' + foundResultText,//url адрес обработчика
         async: false
+    });
+}
+
+//получаем значение атрибута foundResultText из сессии
+function getFoundResultText() {
+    let result;
+    $.ajax({
+        type: 'GET',//тип запроса)
+        url: getContextPath() + '/getFoundResultText',//url адрес обработчика
+        async: false,
+        success: function (text) {//принимаемое от сервера (Response)
+            result = text;
+        },
+        error: function () {
+            alert('Ошибка в script getFoundResultText');
+        }
+    });
+    return result;
+}
+
+
+//сохраняем значение атрибута sortType в сессии
+function saveSortType(sortType) {
+    $.ajax({
+        type: 'POST',//тип запроса
+        contentType: 'application/json', //отправляемый тип
+        url: getContextPath() + '/saveSortType?sortType=' + sortType,//url адрес обработчика
+        async: false
+    });
+}
+
+
+function changeSortType() {
+    $(document).on('change', '#top-panel-form-select-sort', function () {//то же что и метод click, но работает всегда
+        let sortType = $(this).val();
+        saveSortType(sortType);
     });
 }
 
