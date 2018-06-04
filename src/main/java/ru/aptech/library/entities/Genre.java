@@ -7,9 +7,8 @@ import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Objects;
 
-//@Entity
 public class Genre implements Serializable {
-    private long id;
+    private Long id;
     private String name;
     private Long parent;
 
@@ -18,27 +17,23 @@ public class Genre implements Serializable {
     }
 
 
-    public Genre(long id, String name, Long parent) {
+    public Genre(Long id, String name, Long parent) {
         this.id = id;
         this.name = name;
         this.parent = parent;
     }
 
 
-    //    @Id
-//    @Column(name = "id", nullable = false)
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
 
-//    @Basic
-//    @Column(name = "name", nullable = false, length = 100)
     public String getName() {
         return name;
     }
@@ -49,8 +44,6 @@ public class Genre implements Serializable {
     }
 
 
-//    @Basic
-//    @Column(name = "parent", nullable = true)
     public Long getParent() {
         return parent;
     }
@@ -66,7 +59,7 @@ public class Genre implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Genre genre = (Genre) o;
-        return id == genre.id &&
+        return id.equals(genre.id) &&
                 Objects.equals(name, genre.name) &&
                 Objects.equals(parent, genre.parent);
     }

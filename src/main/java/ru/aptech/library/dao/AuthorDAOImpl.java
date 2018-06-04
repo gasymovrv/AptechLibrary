@@ -1,5 +1,6 @@
 package ru.aptech.library.dao;
 
+import org.hibernate.Cache;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.aptech.library.entities.Author;
+import ru.aptech.library.entities.Book;
 import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaAuthors;
 
@@ -21,8 +23,6 @@ public class AuthorDAOImpl {
     @Autowired
     private SessionFactory sessionFactory;
 
-
-    @Transactional
     public List<Author> find() {
         Session session = sessionFactory.getCurrentSession();
         List<Author> authorList = session.createQuery(AUTHORS + " where fio != 'Неизвестный автор'" + ORDER_BY_NAME,
@@ -30,7 +30,6 @@ public class AuthorDAOImpl {
         return authorList;
     }
 
-    @Transactional
     public Author find(Long id) {
         Session session = sessionFactory.getCurrentSession();
         Author author = session.createQuery(AUTHORS + " where a.id=:id",
@@ -38,7 +37,6 @@ public class AuthorDAOImpl {
         return author;
     }
 
-    @Transactional
     public Author find(String fio) {
         Session session = sessionFactory.getCurrentSession();
         Author author = session.createQuery(AUTHORS + " where a.fio=:fio",
@@ -46,18 +44,17 @@ public class AuthorDAOImpl {
         return author;
     }
 
-    @Transactional
     public List<Author> find(Integer authorsOnPage, Integer init, SortType sortType) {
         String sortSql = getSqlBySortType(sortType);
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery(AUTHORS +
+        List<Author> authors = session.createQuery(AUTHORS +
                         " where fio != 'Неизвестный автор'" +
                         sortSql,
                 Author.class)
                 .setFirstResult(init).setMaxResults(authorsOnPage).getResultList();
+        return authors;
     }
 
-    @Transactional
     public List<Author> find(SearchCriteriaAuthors criteria, Integer authorsOnPage, Integer init, SortType sortType) {
         String sortSql = getSqlBySortType(sortType);
         Session session = sessionFactory.getCurrentSession();
@@ -71,32 +68,31 @@ public class AuthorDAOImpl {
 
     }
 
-
-    @Transactional
     public Long save(Author author) {
         Session session = sessionFactory.getCurrentSession();
         return (Long)session.save(author);
     }
 
-    @Transactional
     public void update(Author author) {
         Session session = sessionFactory.getCurrentSession();
         session.update(author);
     }
 
-    @Transactional
+    public void merge(Author author) {
+        Session session = sessionFactory.getCurrentSession();
+        session.merge(author);
+    }
+
     public void delete(Author author) {
         Session session = sessionFactory.getCurrentSession();
         session.delete(author);
     }
 
-    @Transactional
     public Long getQuantityAuthors() {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select count(*) from Author where fio != 'Неизвестный автор'", Long.class).getSingleResult();
     }
 
-    @Transactional
     public Long getQuantityAuthors(SearchCriteriaAuthors criteria) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select count(*) from Author a" +

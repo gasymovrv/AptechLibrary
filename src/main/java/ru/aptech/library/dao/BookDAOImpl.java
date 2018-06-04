@@ -12,6 +12,7 @@ import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaBooks;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class BookDAOImpl {
@@ -38,8 +39,6 @@ public class BookDAOImpl {
     private SessionFactory sessionFactory;
 
 
-
-    @Transactional
     public List<Book> find() {
         Session session = sessionFactory.getCurrentSession();
         List<Book> bookList = session.createQuery(BOOKS_WITHOUT_CONTENT + ORDER_BY_NAME,
@@ -47,8 +46,6 @@ public class BookDAOImpl {
         return bookList;
     }
 
-
-    @Transactional
     public Book find(long id) {
         Session session = sessionFactory.getCurrentSession();
         Book book = session.createQuery(BOOKS_WITHOUT_CONTENT
@@ -57,27 +54,24 @@ public class BookDAOImpl {
         return book;
     }
 
-    @Transactional
     public Book findWithContent(long id) {
         Session session = sessionFactory.getCurrentSession();
         return session.get(Book.class, id);
     }
 
-
-    @Transactional
     public List<Book> find(Integer booksOnPage, Integer init, SortType sortType) {
         String sortSql = getSqlBySortType(sortType);
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery(BOOKS_WITHOUT_CONTENT + sortSql,
+        List<Book> books = session.createQuery(BOOKS_WITHOUT_CONTENT + sortSql,
                     Book.class)
                     .setFirstResult(init).setMaxResults(booksOnPage).getResultList();
+        return books;
     }
 
-    @Transactional
     public List<Book> find(SearchCriteriaBooks criteria, Integer booksOnPage, Integer init, SortType sortType) {
         String sortSql = getSqlBySortType(sortType);
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery(BOOKS_WITHOUT_CONTENT +
+        List<Book> books = session.createQuery(BOOKS_WITHOUT_CONTENT +
                             " where b.genre.id=:genre" +
                             " or b.publisher.id=:publisher" +
                             " or b.author.id=:author" +
@@ -92,28 +86,29 @@ public class BookDAOImpl {
                     .setParameter("letter", criteria.getLetter())
                     .setParameter("text", criteria.getText())
                     .setFirstResult(init).setMaxResults(booksOnPage).getResultList();
+        return books;
     }
 
-
-    @Transactional
     public Long save(Book book) {
         Session session = sessionFactory.getCurrentSession();
         return (Long)session.save(book);
     }
 
-    @Transactional
     public void update(Book book) {
         Session session = sessionFactory.getCurrentSession();
         session.update(book);
     }
+    public void merge(Book book) {
+        Session session = sessionFactory.getCurrentSession();
+        session.merge(book);
+    }
 
-    @Transactional
     public void delete(Book book) {
         Session session = sessionFactory.getCurrentSession();
+        session.clear();
         session.delete(book);
     }
 
-    @Transactional
     public byte[] getBookContent(long id) {
         Session session = sessionFactory.getCurrentSession();
         byte[] content = (byte[])session.createQuery("select b.content from Book b where b.id=:id")
@@ -121,14 +116,11 @@ public class BookDAOImpl {
         return content;
     }
 
-
-    @Transactional
     public Long getQuantityBooks() {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select count(*) from Book", Long.class).getSingleResult();
     }
 
-    @Transactional
     public Long getQuantityBooks(SearchCriteriaBooks criteria) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select count(*) from Book b" +
@@ -183,7 +175,6 @@ public class BookDAOImpl {
         return sortSql;
     }
 
-//    @Transactional
 //    public List<Book> find() {
 //        //Сессия
 //        Session session = sessionFactory.getCurrentSession();

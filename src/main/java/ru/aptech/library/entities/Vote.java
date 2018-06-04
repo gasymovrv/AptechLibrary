@@ -3,11 +3,10 @@ package ru.aptech.library.entities;
 import java.io.Serializable;
 import java.util.Objects;
 
-//@Entity
 public class Vote implements Serializable {
-    private long id;
+    private Long id;
     private Integer value;
-    private long bookId;
+    private Long bookId;
     private String username;
 
 
@@ -15,7 +14,7 @@ public class Vote implements Serializable {
     }
 
 
-    public Vote(long id, Integer value, long bookId, String username) {
+    public Vote(Long id, Integer value, Long bookId, String username) {
         this.id = id;
         this.value = value;
         this.bookId = bookId;
@@ -23,20 +22,16 @@ public class Vote implements Serializable {
     }
 
 
-    //    @Id
-//    @Column(name = "id", nullable = false)
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
 
-    //    @Basic
-//    @Column(name = "value", nullable = true)
     public Integer getValue() {
         return value;
     }
@@ -47,20 +42,16 @@ public class Vote implements Serializable {
     }
 
 
-    //    @Basic
-//    @Column(name = "book_id", nullable = false)
-    public long getBookId() {
+    public Long getBookId() {
         return bookId;
     }
 
 
-    public void setBookId(long bookId) {
+    public void setBookId(Long bookId) {
         this.bookId = bookId;
     }
 
 
-    //    @Basic
-//    @Column(name = "username", nullable = false, length = 100)
     public String getUsername() {
         return username;
     }
@@ -76,8 +67,8 @@ public class Vote implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Vote vote = (Vote) o;
-        return id == vote.id &&
-                bookId == vote.bookId &&
+        return id.equals(vote.id) &&
+                bookId.equals(vote.bookId) &&
                 Objects.equals(value, vote.value) &&
                 Objects.equals(username, vote.username);
     }

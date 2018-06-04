@@ -1,11 +1,13 @@
 package ru.aptech.library.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import ru.aptech.library.dao.AuthorDAOImpl;
 import ru.aptech.library.entities.Author;
 import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaAuthors;
@@ -17,7 +19,6 @@ import java.util.Set;
 @Controller
 @RequestMapping("authors/")
 public class AuthorController extends BaseController{
-
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public ModelAndView authorList(@RequestParam(required = false) Integer authorsOnPage,
                                    @RequestParam(required = false) Integer selectedPage,
@@ -74,9 +75,18 @@ public class AuthorController extends BaseController{
     @RequestMapping(value = "addAuthorAction", method = RequestMethod.POST)
     public ModelAndView addAuthorAction(@ModelAttribute Author author, @RequestParam String date, BindingResult result) {
         ModelAndView modelAndView = new ModelAndView("add-author-page");
-        boolean isAdded = authorService.save(author, date);
+        boolean isAdded;
+        Long savedAuthorId;
+        try {
+            savedAuthorId = authorService.save(author, date);
+            isAdded = true;
+        } catch (Exception e){
+            savedAuthorId = null;
+            isAdded = false;
+            e.printStackTrace();
+        }
         modelAndView.addObject("isAdded", isAdded);
-        addAttributesForAddOrEditAuthor(modelAndView, author);
+        addAttributesForAddOrEditAuthor(modelAndView, savedAuthorId == null ? author : authorService.find(savedAuthorId));
         return modelAndView;
     }
 
@@ -90,7 +100,14 @@ public class AuthorController extends BaseController{
     @RequestMapping(value = "editAuthorAction", method = RequestMethod.POST)
     public ModelAndView editAuthorAction(@ModelAttribute Author author, @RequestParam Long authorId, @RequestParam String date) {
         ModelAndView modelAndView = new ModelAndView("edit-author-page");
-        boolean isEdited  = authorService.update(author, authorId, date);
+        boolean isEdited;
+        try {
+            authorService.update(author, authorId, date);
+            isEdited = true;
+        } catch (Exception e){
+            isEdited = false;
+            e.printStackTrace();
+        }
         modelAndView.addObject("isEdited", isEdited);
         addAttributesForAddOrEditAuthor(modelAndView, authorService.find(authorId));
         return modelAndView;
@@ -98,7 +115,14 @@ public class AuthorController extends BaseController{
 
     @RequestMapping(value = "deleteAuthor", method = RequestMethod.GET)
     public String deleteAuthor(@RequestParam(value = "authorId") Long authorId, HttpSession session) {
-        boolean isDeleted = authorService.delete(authorId);
+        boolean isDeleted;
+        try {
+            authorService.delete(authorId);
+            isDeleted = true;
+        } catch (Exception e){
+            isDeleted = false;
+            e.printStackTrace();
+        }
         session.setAttribute("isDeleted", isDeleted);
         return "redirect:/authors/list";
     }

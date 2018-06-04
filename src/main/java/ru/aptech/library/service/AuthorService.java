@@ -4,14 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import ru.aptech.library.dao.AuthorDAOImpl;
 import ru.aptech.library.dao.BookDAOImpl;
 import ru.aptech.library.entities.Author;
 import ru.aptech.library.entities.Book;
 import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaAuthors;
-import ru.aptech.library.util.SearchCriteriaBooks;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -27,30 +25,22 @@ public class AuthorService {
     @Autowired
     protected AuthorDAOImpl authorDAO;
 
+    @Transactional(propagation=Propagation.REQUIRED)
     public List<Author> find() {
-        try {
-            return authorDAO.find();
-        } catch (Exception e){
-            return null;
-        }
+        return authorDAO.find();
     }
 
+    @Transactional(propagation=Propagation.REQUIRED)
     public Author find(Long id) {
-        try {
-            return authorDAO.find(id);
-        } catch (Exception e){
-            return null;
-        }
+        return authorDAO.find(id);
     }
 
+    @Transactional(propagation=Propagation.REQUIRED)
     public Author find(String fio) {
-        try {
-            return authorDAO.find(fio);
-        } catch (Exception e){
-            return null;
-        }
+        return authorDAO.find(fio);
     }
 
+    @Transactional(propagation=Propagation.REQUIRED)
     public List<Author> find(SearchCriteriaAuthors criteria, Integer authorsOnPage, Integer selectedPage, SortType sortType) {
         int init = (selectedPage - 1) * authorsOnPage;
         if (criteria != null && !criteria.isEmpty()) {
@@ -59,62 +49,49 @@ public class AuthorService {
         return authorDAO.find(authorsOnPage, init, sortType);
     }
 
-    public boolean save(Author author, String date){
-        try {
-            author.setBirthday(!date.equals("") ? LocalDate.parse(date, DATE_FORMAT) : null);
-            Set<Book> bookList = author.getBooks();
-            Author savedAuthor = authorDAO.find(authorDAO.save(author));
-            for(Book b : bookList) {
-                b.setAuthor(savedAuthor);
-                bookDAO.update(b);
-            }
-            //какая-то херня, но без нее почему-то селектор с книгами на странице add-or-edit-author.jsp очищается
-            author.setAllField(authorDAO.find(savedAuthor.getId()));
-            return true;
-        } catch (Exception e){
-            return false;
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public Long save(Author author, String date) throws Exception {
+        author.setBirthday(!date.equals("") ? LocalDate.parse(date, DATE_FORMAT) : null);
+        Set<Book> bookList = author.getBooks();
+        Long id = authorDAO.save(author);
+        for (Book b : bookList) {
+            b.setAuthor(author);
+            bookDAO.update(b);
         }
+        return id;
     }
 
-    public boolean update(Author author, Long authorId, String date){
-        try {
-            author.setBirthday(!date.equals("") ? LocalDate.parse(date, DATE_FORMAT) : null);
-            Author existAuthor = authorDAO.find(authorId);
-            Set<Book> newBookList = author.getBooks();
-            Set<Book> oldBookList = existAuthor.getBooks();
-            for(Book oB : oldBookList) {
-                if(!newBookList.contains(oB)){
-                    oB.setAuthor(authorDAO.find(UNKNOWN_AUTHOR));
-                    bookDAO.update(oB);
-                }
+    @Transactional(propagation=Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void update(Author author, Long authorId, String date) throws Exception {
+        author.setBirthday(!date.equals("") ? LocalDate.parse(date, DATE_FORMAT) : null);
+        Author existAuthor = authorDAO.find(authorId);
+        Set<Book> newBookList = author.getBooks();
+        Set<Book> oldBookList = existAuthor.getBooks();
+        for (Book oB : oldBookList) {
+            if (!newBookList.contains(oB)) {
+                oB.setAuthor(authorDAO.find(UNKNOWN_AUTHOR));
+                bookDAO.merge(oB);
             }
-            existAuthor.setAllField(author);
-            authorDAO.update(existAuthor);
-            for(Book nB : newBookList) {
-                nB.setAuthor(existAuthor);
-                bookDAO.update(nB);
-            }
-            return true;
-        } catch (Exception e){
-            return false;
         }
+        existAuthor.setAllField(author);
+        for (Book nB : newBookList) {
+            nB.setAuthor(existAuthor);
+            bookDAO.merge(nB);
+        }
+        authorDAO.merge(existAuthor);
     }
 
-    public boolean delete(Long authorId){
-        try {
-            Author author = authorDAO.find(authorId);
-            for(Book b : author.getBooks()){
-                b.setAuthor(authorDAO.find(UNKNOWN_AUTHOR));
-                bookDAO.update(b);
-            }
-            authorDAO.delete(author);
-            return true;
-        } catch (Exception e){
-            return false;
+    @Transactional(propagation=Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void delete(Long authorId) throws Exception{
+        Author author = authorDAO.find(authorId);
+        for (Book b : author.getBooks()) {
+            b.setAuthor(authorDAO.find(UNKNOWN_AUTHOR));
+            bookDAO.update(b);
         }
+        authorDAO.delete(author);
     }
 
-
+    @Transactional(propagation=Propagation.REQUIRED)
     public Long getQuantityAuthors(SearchCriteriaAuthors criteria) {
         if (criteria != null && !criteria.isEmpty()) {
             return authorDAO.getQuantityAuthors(criteria);

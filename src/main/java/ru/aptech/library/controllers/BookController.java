@@ -99,7 +99,14 @@ public class BookController extends BaseController{
                                       @RequestParam("file1") MultipartFile content,
                                       @RequestParam("file2") MultipartFile image) {
         ModelAndView modelAndView = new ModelAndView("add-book-page");
-        boolean isAdded = bookService.save(book, content, image);
+        boolean isAdded;
+        try {
+            bookService.save(book, content, image);
+            isAdded = true;
+        } catch (Exception e){
+            isAdded = false;
+            e.printStackTrace();
+        }
         modelAndView.addObject("isAdded", isAdded);
         addAttributesForAddOrEditBook(modelAndView, book);
         return modelAndView;
@@ -118,7 +125,14 @@ public class BookController extends BaseController{
                                       @RequestParam("file2") MultipartFile image,
                                        @RequestParam Long bookId) {
         ModelAndView modelAndView = new ModelAndView("edit-book-page");
-        boolean isEdited = bookService.update(book, content, image, bookId);
+        boolean isEdited;
+        try {
+            bookService.update(book, content, image, bookId);
+            isEdited = true;
+        } catch (Exception e){
+            isEdited = false;
+            e.printStackTrace();
+        }
         modelAndView.addObject("isEdited", isEdited);
         addAttributesForAddOrEditBook(modelAndView, bookService.find(bookId));
         return modelAndView;
@@ -126,7 +140,14 @@ public class BookController extends BaseController{
 
     @RequestMapping(value = "deleteBook", method = RequestMethod.GET)
     public String deleteBook(@RequestParam(value = "bookId") Long bookId, HttpSession session) {
-        boolean isDeleted = bookService.delete(bookId);
+        boolean isDeleted;
+        try {
+            bookService.delete(bookId);
+            isDeleted = true;
+        } catch (Exception e){
+            isDeleted = false;
+            e.printStackTrace();
+        }
         session.setAttribute("isDeleted", isDeleted);
         return "redirect:/home";
     }

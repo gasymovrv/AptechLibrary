@@ -10,10 +10,8 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-//@Entity
-//@Table(name = "author")
 public class Author implements Serializable {
-    private long id;
+    private Long id;
     private String fio;
     private LocalDate birthday;
     private Timestamp created;
@@ -25,28 +23,23 @@ public class Author implements Serializable {
     }
 
 
-    public Author(long id, String fio, LocalDate birthday) {
+    public Author(Long id, String fio, LocalDate birthday) {
         this.id = id;
         this.fio = fio;
         this.birthday = birthday;
     }
 
 
-    //    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "id", nullable = false)
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
 
-//    @Basic
-//    @Column(name = "fio", nullable = false, length = 300)
     public String getFio() {
         return fio;
     }
@@ -57,8 +50,6 @@ public class Author implements Serializable {
     }
 
 
-//    @Basic
-//    @Column(name = "birthday", nullable = false)
     public LocalDate getBirthday() {
         return birthday;
     }
@@ -94,7 +85,7 @@ public class Author implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Author author = (Author) o;
-        return id == author.id &&
+        return id.equals(author.id) &&
                 Objects.equals(fio, author.fio) &&
                 Objects.equals(birthday, author.birthday);
     }

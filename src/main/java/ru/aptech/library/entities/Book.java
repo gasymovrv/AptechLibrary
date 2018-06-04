@@ -5,16 +5,15 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Objects;
 
-//@Entity
 public class Book implements Serializable {
-    private long id;
+    private Long id;
     private String name;
     private byte[] content;
-    private int pageCount;
+    private Integer pageCount;
     private String isbn;
     private Genre genre;
     private Author author;
-    private int publishYear;
+    private Integer publishYear;
     private Publisher publisher;
     private byte[] image;
     private String descr;
@@ -28,7 +27,19 @@ public class Book implements Serializable {
     }
 
 
-    public Book(long id, String name, int pageCount, String isbn, Genre genre, Author author, int publishYear, Publisher publisher, byte[] image, String descr, String bookcol, Integer rating, Long voteCount) {
+    public Book(Long id,
+                String name,
+                Integer pageCount,
+                String isbn,
+                Genre genre,
+                Author author,
+                Integer publishYear,
+                Publisher publisher,
+                byte[] image,
+                String descr,
+                String bookcol,
+                Integer rating,
+                Long voteCount) {
         this.id = id;
         this.name = name;
         this.pageCount = pageCount;
@@ -45,20 +56,16 @@ public class Book implements Serializable {
     }
 
 
-    //    @Id
-//    @Column(name = "id", nullable = false)
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
 
-    //    @Basic
-//    @Column(name = "name", nullable = false, length = 45)
     public String getName() {
         return name;
     }
@@ -69,8 +76,6 @@ public class Book implements Serializable {
     }
 
 
-    //    @Basic
-//    @Column(name = "content", nullable = false)
     public byte[] getContent() {
         return content;
     }
@@ -81,20 +86,16 @@ public class Book implements Serializable {
     }
 
 
-    //    @Basic
-//    @Column(name = "page_count", nullable = false)
-    public int getPageCount() {
+    public Integer getPageCount() {
         return pageCount;
     }
 
 
-    public void setPageCount(int pageCount) {
+    public void setPageCount(Integer pageCount) {
         this.pageCount = pageCount;
     }
 
 
-    //    @Basic
-//    @Column(name = "isbn", nullable = false, length = 100)
     public String getIsbn() {
         return isbn;
     }
@@ -135,20 +136,16 @@ public class Book implements Serializable {
     }
 
 
-    //    @Basic
-//    @Column(name = "publish_year", nullable = false)
-    public int getPublishYear() {
+    public Integer getPublishYear() {
         return publishYear;
     }
 
 
-    public void setPublishYear(int publishYear) {
+    public void setPublishYear(Integer publishYear) {
         this.publishYear = publishYear;
     }
 
 
-    //    @Basic
-//    @Column(name = "image", nullable = true)
     public byte[] getImage() {
         return image;
     }
@@ -159,8 +156,6 @@ public class Book implements Serializable {
     }
 
 
-    //    @Basic
-//    @Column(name = "descr", nullable = true, length = 5000)
     public String getDescr() {
         return descr;
     }
@@ -171,8 +166,6 @@ public class Book implements Serializable {
     }
 
 
-    //    @Basic
-//    @Column(name = "bookcol", nullable = true, length = 45)
     public String getBookcol() {
         return bookcol;
     }
@@ -183,8 +176,6 @@ public class Book implements Serializable {
     }
 
 
-    //    @Basic
-//    @Column(name = "rating", nullable = true)
     public Integer getRating() {
         return rating;
     }
@@ -195,8 +186,6 @@ public class Book implements Serializable {
     }
 
 
-    //    @Basic
-//    @Column(name = "vote_count", nullable = true)
     public Long getVoteCount() {
         return voteCount;
     }
@@ -222,11 +211,11 @@ public class Book implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Book book = (Book) o;
-        return id == book.id &&
-                pageCount == book.pageCount &&
+        return id.equals(book.id) &&
+                pageCount.equals(book.pageCount) &&
                 genre.equals(book.genre) &&
                 author.equals(book.author) &&
-                publishYear == book.publishYear &&
+                publishYear.equals(book.publishYear) &&
                 publisher.equals(book.publisher) &&
                 Objects.equals(name, book.name) &&
                 Objects.equals(isbn, book.isbn) &&
