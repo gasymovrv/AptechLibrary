@@ -1,28 +1,21 @@
 package ru.aptech.library.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import ru.aptech.library.dao.*;
-import ru.aptech.library.entities.Author;
-import ru.aptech.library.entities.Book;
 import ru.aptech.library.entities.Genre;
-import ru.aptech.library.entities.Publisher;
 import ru.aptech.library.enums.SearchType;
 import ru.aptech.library.enums.SortType;
+import ru.aptech.library.service.*;
 import ru.aptech.library.util.SearchCriteriaBooks;
 import ru.aptech.library.util.Utils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -31,15 +24,15 @@ import java.util.List;
 public class BaseController {
     protected static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     @Autowired
-    protected BookDAOImpl bookDAO;
+    protected BookService bookService;
     @Autowired
-    protected GenreDAOImpl genreDAO;
+    protected GenreService genreService;
     @Autowired
-    protected AuthorDAOImpl authorDAO;
+    protected AuthorService authorService;
     @Autowired
-    protected PublisherDAOImpl publisherDAO;
+    protected PublisherService publisherService;
     @Autowired
-    protected UserDAOImpl userDAO;
+    protected UserService userService;
     @Autowired
     protected BCryptPasswordEncoder bCrypt;
     @Autowired
@@ -84,7 +77,7 @@ public class BaseController {
 
 
     protected void addAttributesForCriteria(ModelAndView modelAndView) {
-        List<Genre> genres = genreDAO.getGenres();
+        List<Genre> genres = genreService.find();
         Character[] letters = utils.getLetters();
         SearchType[] searchTypeList = SearchType.values();
         modelAndView.addObject("genreList", genres);

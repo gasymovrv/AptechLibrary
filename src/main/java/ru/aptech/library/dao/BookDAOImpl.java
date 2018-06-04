@@ -4,6 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.aptech.library.entities.Book;
 import ru.aptech.library.enums.SearchType;
@@ -64,23 +65,19 @@ public class BookDAOImpl {
 
 
     @Transactional
-    public List<Book> find(SearchCriteriaBooks criteria, Integer booksOnPage, Integer selectedPage, SortType sortType) {
-        int init = (selectedPage - 1) * booksOnPage;
-        String sortSql = ORDER_BY_NAME;
-        if(sortType!=null){
-            switch (sortType){
-                case NAME:
-                    sortSql = ORDER_BY_NAME;
-                    break;
-                case CREATION_DATE:
-                    sortSql = ORDER_BY_CREATION;
-                    break;
-            }
-        }
+    public List<Book> find(Integer booksOnPage, Integer init, SortType sortType) {
+        String sortSql = getSqlBySortType(sortType);
         Session session = sessionFactory.getCurrentSession();
-        List<Book> books;
-        if (criteria != null && !criteria.isEmpty()) {
-            books = session.createQuery(BOOKS_WITHOUT_CONTENT +
+        return session.createQuery(BOOKS_WITHOUT_CONTENT + sortSql,
+                    Book.class)
+                    .setFirstResult(init).setMaxResults(booksOnPage).getResultList();
+    }
+
+    @Transactional
+    public List<Book> find(SearchCriteriaBooks criteria, Integer booksOnPage, Integer init, SortType sortType) {
+        String sortSql = getSqlBySortType(sortType);
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery(BOOKS_WITHOUT_CONTENT +
                             " where b.genre.id=:genre" +
                             " or b.publisher.id=:publisher" +
                             " or b.author.id=:author" +
@@ -95,12 +92,6 @@ public class BookDAOImpl {
                     .setParameter("letter", criteria.getLetter())
                     .setParameter("text", criteria.getText())
                     .setFirstResult(init).setMaxResults(booksOnPage).getResultList();
-        } else {
-            books = session.createQuery(BOOKS_WITHOUT_CONTENT + sortSql,
-                    Book.class)
-                    .setFirstResult(init).setMaxResults(booksOnPage).getResultList();
-        }
-        return books;
     }
 
 
@@ -117,9 +108,9 @@ public class BookDAOImpl {
     }
 
     @Transactional
-    public void delete(Long bookId) {
+    public void delete(Book book) {
         Session session = sessionFactory.getCurrentSession();
-        session.delete(findWithContent(bookId));
+        session.delete(book);
     }
 
     @Transactional
@@ -140,8 +131,7 @@ public class BookDAOImpl {
     @Transactional
     public Long getQuantityBooks(SearchCriteriaBooks criteria) {
         Session session = sessionFactory.getCurrentSession();
-
-        Long result = session.createQuery("select count(*) from Book b" +
+        return session.createQuery("select count(*) from Book b" +
                         " where b.genre.id=:genre" +
                         " or b.publisher.id=:publisher" +
                         " or b.author.id=:author" +
@@ -155,7 +145,6 @@ public class BookDAOImpl {
                 .setParameter("letter", criteria.getLetter())
                 .setParameter("text", criteria.getText())
                 .getSingleResult();
-        return result;
     }
 
     private String getSqlBySearchType(SearchType searchType){
@@ -177,6 +166,21 @@ public class BookDAOImpl {
             }
         }
         return stringSearchType;
+    }
+
+    private String getSqlBySortType(SortType sortType){
+        String sortSql = ORDER_BY_NAME;
+        if(sortType!=null){
+            switch (sortType){
+                case NAME:
+                    sortSql = ORDER_BY_NAME;
+                    break;
+                case CREATION_DATE:
+                    sortSql = ORDER_BY_CREATION;
+                    break;
+            }
+        }
+        return sortSql;
     }
 
 //    @Transactional

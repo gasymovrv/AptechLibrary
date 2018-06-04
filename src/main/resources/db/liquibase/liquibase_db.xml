@@ -97,7 +97,7 @@
     <changeSet author="rgasymov" id="20180526-07">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
-                SELECT count(*) FROM user_role WHERE role='ROLE_USER';
+                SELECT count(*) FROM user_role WHERE username='user';
             </sqlCheck>
         </preConditions>
         <sql>

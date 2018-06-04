@@ -4,6 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.aptech.library.entities.Author;
 import ru.aptech.library.enums.SortType;
@@ -46,37 +47,28 @@ public class AuthorDAOImpl {
     }
 
     @Transactional
-    public List<Author> find(SearchCriteriaAuthors criteria, Integer authorsOnPage, Integer selectedPage, SortType sortType) {
-        int init = (selectedPage - 1) * authorsOnPage;
-        String sortSql = ORDER_BY_NAME;
-        if (sortType != null) {
-            switch (sortType) {
-                case NAME:
-                    sortSql = ORDER_BY_NAME;
-                    break;
-                case CREATION_DATE:
-                    sortSql = ORDER_BY_CREATION;
-                    break;
-            }
-        }
+    public List<Author> find(Integer authorsOnPage, Integer init, SortType sortType) {
+        String sortSql = getSqlBySortType(sortType);
         Session session = sessionFactory.getCurrentSession();
-        List<Author> authorList;
-        if (criteria != null && !criteria.isEmpty()) {
-            authorList = session.createQuery(AUTHORS +
-                            " where a.fio like CONCAT('%', :text, '%')" +
-                            " and fio != 'Неизвестный автор'" +
-                            sortSql,
-                    Author.class)
-                    .setParameter("text", criteria.getText())
-                    .setFirstResult(init).setMaxResults(authorsOnPage).getResultList();
-        } else {
-            authorList = session.createQuery(AUTHORS +
-                            " where fio != 'Неизвестный автор'" +
-                            sortSql,
-                    Author.class)
-                    .setFirstResult(init).setMaxResults(authorsOnPage).getResultList();
-        }
-        return authorList;
+        return session.createQuery(AUTHORS +
+                        " where fio != 'Неизвестный автор'" +
+                        sortSql,
+                Author.class)
+                .setFirstResult(init).setMaxResults(authorsOnPage).getResultList();
+    }
+
+    @Transactional
+    public List<Author> find(SearchCriteriaAuthors criteria, Integer authorsOnPage, Integer init, SortType sortType) {
+        String sortSql = getSqlBySortType(sortType);
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery(AUTHORS +
+                        " where a.fio like CONCAT('%', :text, '%')" +
+                        " and fio != 'Неизвестный автор'" +
+                        sortSql,
+                Author.class)
+                .setParameter("text", criteria.getText())
+                .setFirstResult(init).setMaxResults(authorsOnPage).getResultList();
+
     }
 
 
@@ -93,25 +85,40 @@ public class AuthorDAOImpl {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void delete(Author author) {
         Session session = sessionFactory.getCurrentSession();
-        session.delete(find(id));
+        session.delete(author);
+    }
+
+    @Transactional
+    public Long getQuantityAuthors() {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("select count(*) from Author where fio != 'Неизвестный автор'", Long.class).getSingleResult();
     }
 
     @Transactional
     public Long getQuantityAuthors(SearchCriteriaAuthors criteria) {
         Session session = sessionFactory.getCurrentSession();
-        Long result;
-        if (criteria != null && !criteria.isEmpty()) {
-        result = session.createQuery("select count(*) from Author a" +
+        return session.createQuery("select count(*) from Author a" +
                         " where a.fio like CONCAT('%', :text, '%')" +
                         " and fio != 'Неизвестный автор'",
                 Long.class)
                 .setParameter("text", criteria.getText())
                 .getSingleResult();
-        } else {
-            result = session.createQuery("select count(*) from Author where fio != 'Неизвестный автор'", Long.class).getSingleResult();
+    }
+
+    private String getSqlBySortType(SortType sortType){
+        String sortSql = ORDER_BY_NAME;
+        if(sortType!=null){
+            switch (sortType){
+                case NAME:
+                    sortSql = ORDER_BY_NAME;
+                    break;
+                case CREATION_DATE:
+                    sortSql = ORDER_BY_CREATION;
+                    break;
+            }
         }
-        return result;
+        return sortSql;
     }
 }

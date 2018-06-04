@@ -1,22 +1,17 @@
 package ru.aptech.library.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import ru.aptech.library.dao.UserDAOImpl;
-import ru.aptech.library.dao.UserRoleDAOImpl;
 import ru.aptech.library.entities.User;
 import ru.aptech.library.entities.UserRole;
 import ru.aptech.library.enums.RoleType;
 
-import javax.servlet.http.HttpSession;
 import java.util.Set;
 
 /**
@@ -46,14 +41,7 @@ public class UserController extends BaseController{
     @RequestMapping(value = "registrationAction", method = RequestMethod.POST)
     public ModelAndView registrationAction(@ModelAttribute("user") User user, BindingResult result) {
         ModelAndView modelAndView = new ModelAndView("login-page");
-        encodeUserPass(user);
-        boolean isAdded;
-        try {
-            userDAO.save(user);
-            isAdded = true;
-        } catch (Exception e) {
-            isAdded = false;
-        }
+        boolean isAdded = userService.save(user);
         modelAndView.addObject("isAdded", isAdded);
         modelAndView.addObject("username", user.getUsername());
         return modelAndView;
@@ -85,11 +73,6 @@ public class UserController extends BaseController{
             }
         }
         return result;
-    }
-
-    private void encodeUserPass(User user){
-        String hashedPassword = bCrypt.encode(user.getPassword());
-        user.setPassword(hashedPassword);
     }
 
     @InitBinder

@@ -19,7 +19,7 @@ public class PublisherDAOImpl {
 
 
     @Transactional
-    public List<Publisher> getPublishers() {
+    public List<Publisher> find() {
         Session session = sessionFactory.getCurrentSession();
         List<Publisher> genreList = session.createQuery(PUBLISHERS + ORDER_BY_NAME,
                 Publisher.class).getResultList();
@@ -27,7 +27,7 @@ public class PublisherDAOImpl {
     }
 
     @Transactional
-    public Publisher getPublishers(Long id) {
+    public Publisher find(Long id) {
         Session session = sessionFactory.getCurrentSession();
         Publisher Publisher = session.createQuery(PUBLISHERS + " where p.id=:id",
                 Publisher.class).setParameter("id", id).getSingleResult();

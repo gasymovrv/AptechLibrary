@@ -13,13 +13,12 @@ import java.util.List;
 public class GenreDAOImpl {
     private final String GENRES = "select g from Genre g";
     private final String ORDER_BY_NAME = " order by g.name";
-
     @Autowired
     private SessionFactory sessionFactory;
 
 
     @Transactional
-    public List<Genre> getGenres() {
+    public List<Genre> find() {
         Session session = sessionFactory.getCurrentSession();
         List<Genre> genreList = session.createQuery(GENRES + ORDER_BY_NAME,
                 Genre.class).getResultList();
@@ -27,7 +26,7 @@ public class GenreDAOImpl {
     }
 
     @Transactional
-    public Genre getGenres(Long id) {
+    public Genre find(Long id) {
         Session session = sessionFactory.getCurrentSession();
         Genre genre = session.createQuery(GENRES + " where g.id=:id",
                 Genre.class).setParameter("id", id).getSingleResult();

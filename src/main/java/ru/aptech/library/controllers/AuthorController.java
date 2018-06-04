@@ -7,12 +7,10 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.aptech.library.entities.Author;
-import ru.aptech.library.entities.Book;
 import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaAuthors;
 
 import javax.servlet.http.HttpSession;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -41,7 +39,7 @@ public class AuthorController extends BaseController{
 
         List<Author> authors;
         if(isPagination!=null && isPagination){
-            authors = authorDAO.find(
+            authors = authorService.find(
                     (SearchCriteriaAuthors) session.getAttribute("criteriaAuthors"),
                     authorsOnPage,
                     selectedPage,
@@ -51,10 +49,10 @@ public class AuthorController extends BaseController{
             if(criteria.isEmpty() && session.getAttribute("criteriaAuthors")==null){
                 SearchCriteriaAuthors sca = new SearchCriteriaAuthors();
                 session.setAttribute("criteriaAuthors", sca);
-                authors = authorDAO.find(sca, authorsOnPage, selectedPage, (SortType)session.getAttribute("sortType"));
+                authors = authorService.find(sca, authorsOnPage, selectedPage, (SortType)session.getAttribute("sortType"));
             } else {
                 session.setAttribute("criteriaAuthors", criteria);
-                authors = authorDAO.find(criteria, authorsOnPage, selectedPage, (SortType)session.getAttribute("sortType"));
+                authors = authorService.find(criteria, authorsOnPage, selectedPage, (SortType)session.getAttribute("sortType"));
             }
         }
 
@@ -62,7 +60,7 @@ public class AuthorController extends BaseController{
         modelAndView.addObject("authorList", authors);
         modelAndView.addObject("sortTypeList", SortType.values());
         modelAndView.addObject("selectedPage", selectedPage);
-        modelAndView.addObject("quantityAuthors", authorDAO.getQuantityAuthors((SearchCriteriaAuthors)session.getAttribute("criteriaAuthors")));
+        modelAndView.addObject("quantityAuthors", authorService.getQuantityAuthors((SearchCriteriaAuthors)session.getAttribute("criteriaAuthors")));
         return modelAndView;
     }
 
@@ -76,7 +74,7 @@ public class AuthorController extends BaseController{
     @RequestMapping(value = "addAuthorAction", method = RequestMethod.POST)
     public ModelAndView addAuthorAction(@ModelAttribute Author author, @RequestParam String date, BindingResult result) {
         ModelAndView modelAndView = new ModelAndView("add-author-page");
-        boolean isAdded = saveAuthor(author, date);
+        boolean isAdded = authorService.save(author, date);
         modelAndView.addObject("isAdded", isAdded);
         addAttributesForAddOrEditAuthor(modelAndView, author);
         return modelAndView;
@@ -85,22 +83,22 @@ public class AuthorController extends BaseController{
     @RequestMapping(value = "editAuthorView", method = RequestMethod.GET)
     public ModelAndView editAuthorView(@RequestParam Long authorId) {
         ModelAndView modelAndView = new ModelAndView("edit-author-page");
-        addAttributesForAddOrEditAuthor(modelAndView, authorDAO.find(authorId));
+        addAttributesForAddOrEditAuthor(modelAndView, authorService.find(authorId));
         return modelAndView;
     }
 
     @RequestMapping(value = "editAuthorAction", method = RequestMethod.POST)
     public ModelAndView editAuthorAction(@ModelAttribute Author author, @RequestParam Long authorId, @RequestParam String date) {
         ModelAndView modelAndView = new ModelAndView("edit-author-page");
-        boolean isEdited  = updateAuthor(author, authorId, date);
+        boolean isEdited  = authorService.update(author, authorId, date);
         modelAndView.addObject("isEdited", isEdited);
-        addAttributesForAddOrEditAuthor(modelAndView, authorDAO.find(authorId));
+        addAttributesForAddOrEditAuthor(modelAndView, authorService.find(authorId));
         return modelAndView;
     }
 
     @RequestMapping(value = "deleteAuthor", method = RequestMethod.GET)
     public String deleteAuthor(@RequestParam(value = "authorId") Long authorId, HttpSession session) {
-        boolean isDeleted = deleteAuthor(authorId);
+        boolean isDeleted = authorService.delete(authorId);
         session.setAttribute("isDeleted", isDeleted);
         return "redirect:/authors/list";
     }
@@ -108,63 +106,10 @@ public class AuthorController extends BaseController{
     private void addAttributesForAddOrEditAuthor(ModelAndView modelAndView, Author author) {
         String birthday = author.getBirthday() != null ? author.getBirthday().format(DATE_FORMAT) : "";
         modelAndView.addObject("author", author);
-        modelAndView.addObject("bookList", bookDAO.find());
+        modelAndView.addObject("bookList", bookService.find());
         modelAndView.addObject("date", birthday);
     }
 
-    private boolean saveAuthor(Author author, String date){
-        try {
-            author.setBirthday(!date.equals("") ? LocalDate.parse(date, DATE_FORMAT) : null);
-            Set<Book> bookList = author.getBooks();
-            Author savedAuthor = authorDAO.find(authorDAO.save(author));
-            for(Book b : bookList) {
-                b.setAuthor(savedAuthor);
-                bookDAO.update(b);
-            }
-            //какая херня, но без нее почему-то селектор с книгами на странице add-or-edit-author.jsp очищается
-            author.setAllField(authorDAO.find(savedAuthor.getId()));
-            return true;
-        } catch (Exception e){
-            return false;
-        }
-    }
-
-    private boolean updateAuthor(Author author, Long authorId, String date){
-        try {
-            author.setBirthday(!date.equals("") ? LocalDate.parse(date, DATE_FORMAT) : null);
-            Author existAuthor = authorDAO.find(authorId);
-            Set<Book> newBookList = author.getBooks();
-            Set<Book> oldBookList = existAuthor.getBooks();
-            for(Book oB : oldBookList) {
-                if(!newBookList.contains(oB)){
-                    oB.setAuthor(authorDAO.find(UNKNOWN_AUTHOR));
-                    bookDAO.update(oB);
-                }
-            }
-            existAuthor.setAllField(author);
-            authorDAO.update(existAuthor);
-            for(Book nB : newBookList) {
-                nB.setAuthor(existAuthor);
-                bookDAO.update(nB);
-            }
-            return true;
-        } catch (Exception e){
-            return false;
-        }
-    }
-
-    private boolean deleteAuthor(Long authorId){
-        try {
-            for(Book b : authorDAO.find(authorId).getBooks()){
-                b.setAuthor(authorDAO.find(UNKNOWN_AUTHOR));
-                bookDAO.update(b);
-            }
-            authorDAO.delete(authorId);
-            return true;
-        } catch (Exception e){
-            return false;
-        }
-    }
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -178,7 +123,7 @@ public class AuthorController extends BaseController{
                 } else if (element instanceof Long) {
                     bookId = (Long) element;
                 }
-                return bookId != null ? bookDAO.findWithContent(bookId) : null;
+                return bookId != null ? bookService.findWithContent(bookId) : null;
             }
         });
     }

@@ -10,6 +10,9 @@ import ru.aptech.library.entities.UserRole;
 
 import java.util.List;
 
+/**
+* Пока не используется
+ * */
 @Repository
 public class UserRoleDAOImpl {
     @Autowired
