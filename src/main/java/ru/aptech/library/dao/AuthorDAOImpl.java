@@ -75,11 +75,6 @@ public class AuthorDAOImpl {
 
     public void update(Author author) {
         Session session = sessionFactory.getCurrentSession();
-        session.update(author);
-    }
-
-    public void merge(Author author) {
-        Session session = sessionFactory.getCurrentSession();
         session.merge(author);
     }
 

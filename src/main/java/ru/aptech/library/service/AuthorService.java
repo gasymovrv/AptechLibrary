@@ -70,15 +70,15 @@ public class AuthorService {
         for (Book oB : oldBookList) {
             if (!newBookList.contains(oB)) {
                 oB.setAuthor(authorDAO.find(UNKNOWN_AUTHOR));
-                bookDAO.merge(oB);
+                bookDAO.update(oB);
             }
         }
         existAuthor.setAllField(author);
         for (Book nB : newBookList) {
             nB.setAuthor(existAuthor);
-            bookDAO.merge(nB);
+            bookDAO.update(nB);
         }
-        authorDAO.merge(existAuthor);
+        authorDAO.update(existAuthor);
     }
 
     @Transactional(propagation=Propagation.REQUIRED, rollbackFor = Exception.class)

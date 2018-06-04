@@ -96,10 +96,6 @@ public class BookDAOImpl {
 
     public void update(Book book) {
         Session session = sessionFactory.getCurrentSession();
-        session.update(book);
-    }
-    public void merge(Book book) {
-        Session session = sessionFactory.getCurrentSession();
         session.merge(book);
     }
 
