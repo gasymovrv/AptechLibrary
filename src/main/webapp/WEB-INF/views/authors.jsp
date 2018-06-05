@@ -22,7 +22,9 @@
                             <div class="shop-item">
                                 <!-- Product Title -->
                                 <div class="title">
-                                    <h3>${author.fio}</h3>
+                                    <h3>
+                                        <a href="#" onclick="searchBooksByAuthor(${author.id}, '${author.fio}')">${author.fio}</a>
+                                    </h3>
                                 </div>
                                 <div class="title">
                                     <h3>Дата рождения:
@@ -40,9 +42,7 @@
                                     <h3>Количество книг: ${author.books.size()}</h3>
                                 </div>
                                 <div class="title">
-                                    <h3>
-                                        <a href="#" onclick="searchBooksByAuthor(${author.id}, '${author.fio}')"> Книги автора </a>
-                                    </h3>
+                                    <h3>Читатели: ${author.views}</h3>
                                 </div>
                                 <!-- Operations -->
                                 <div class="actions">

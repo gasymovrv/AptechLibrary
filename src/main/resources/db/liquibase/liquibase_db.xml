@@ -111,7 +111,10 @@
                 <columnExists schemaName="aplib" tableName="author" columnName="created"/>
             </not>
         </preConditions>
-        <sql>ALTER TABLE author ADD COLUMN created TIMESTAMP(6);</sql>
+        <sql>
+            ALTER TABLE author ADD COLUMN created datetime;
+            UPDATE author SET created = current_date();
+        </sql>
     </changeSet>
 
     <changeSet author="rgasymov" id="20180527-02">
@@ -120,7 +123,10 @@
                 <columnExists schemaName="aplib" tableName="book" columnName="created"/>
             </not>
         </preConditions>
-        <sql>ALTER TABLE book ADD COLUMN created TIMESTAMP(6);</sql>
+        <sql>
+            ALTER TABLE book ADD COLUMN created datetime;
+            UPDATE book SET created = current_date();
+        </sql>
     </changeSet>
 
     <changeSet author="rgasymov" id="20180529-01">
@@ -134,6 +140,29 @@
             </sqlCheck>
         </preConditions>
         <sql>INSERT INTO author (fio) VALUES ('Неизвестный автор');</sql>
+    </changeSet>
+
+    <changeSet author="rgasymov" id="20180604-01">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="aplib" tableName="book" columnName="views"/>
+            </not>
+        </preConditions>
+        <sql>
+            ALTER TABLE book ADD COLUMN views bigint(20) NOT NULL DEFAULT '0';
+        </sql>
+    </changeSet>
+
+    <changeSet author="rgasymov" id="20180604-02">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="aplib" tableName="author" columnName="views"/>
+            </not>
+        </preConditions>
+        <sql>
+            ALTER TABLE author ADD COLUMN views bigint(20) NOT NULL DEFAULT '0';
+            UPDATE author a SET a.views = IFNULL((SELECT sum(b.views) FROM book b WHERE b.author_id = a.id), 0);
+        </sql>
     </changeSet>
 
 </databaseChangeLog>

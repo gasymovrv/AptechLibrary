@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.aptech.library.entities.Author;
 import ru.aptech.library.entities.Book;
 import ru.aptech.library.enums.SearchType;
 import ru.aptech.library.enums.SortType;
@@ -31,10 +32,13 @@ public class BookDAOImpl {
                     "b.descr, " +
                     "b.bookcol, " +
                     "b.rating, " +
-                    "b.voteCount) from Book b";
+                    "b.voteCount," +
+                    "b.views" +
+                    ") from Book b";
 
     private final String ORDER_BY_NAME = " order by b.name";
     private final String ORDER_BY_CREATION = " order by b.created desc";
+    private final String ORDER_BY_POPULARITY = " order by b.views desc";
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -166,9 +170,17 @@ public class BookDAOImpl {
                 case CREATION_DATE:
                     sortSql = ORDER_BY_CREATION;
                     break;
+                case POPULARITY:
+                    sortSql = ORDER_BY_POPULARITY;
+                    break;
             }
         }
         return sortSql;
+    }
+
+    public void increaseView(Long bookId){
+        Session session = sessionFactory.getCurrentSession();
+        session.createQuery("update Book set views = views + 1 where id=:id").setParameter("id", bookId).executeUpdate();
     }
 
 //    public List<Book> find() {

@@ -12,6 +12,7 @@ import ru.aptech.library.entities.Book;
 import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaBooks;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -55,6 +56,8 @@ public class BookService {
     public void save(Book book, MultipartFile content, MultipartFile image) throws Exception {
         book.setContent(content.getBytes());
         book.setImage(image.getBytes());
+        if(book.getViews()==null){book.setViews(0L);}
+        book.setCreated(LocalDateTime.now());
         Long id = bookDAO.save(book);
         book.setAllField(bookDAO.find(id));
     }
@@ -74,8 +77,10 @@ public class BookService {
 
     @Transactional(propagation=Propagation.REQUIRED, rollbackFor = Exception.class)
     public void delete(Long bookId) throws Exception {
-        Book existBook = bookDAO.find(bookId);
-        bookDAO.delete(existBook);
+        Book book = bookDAO.find(bookId);
+        Author a = book.getAuthor();
+        authorDAO.setViews(a.getId(),a.getViews()-book.getViews());
+        bookDAO.delete(book);
     }
 
     @Transactional(propagation=Propagation.REQUIRED)
@@ -84,5 +89,10 @@ public class BookService {
             return bookDAO.getQuantityBooks(criteria);
         }
         return bookDAO.getQuantityBooks();
+    }
+
+    @Transactional(propagation=Propagation.REQUIRED)
+    public void increaseView(Long bookId){
+        bookDAO.increaseView(bookId);
     }
 }

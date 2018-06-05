@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -14,7 +15,8 @@ public class Author implements Serializable {
     private Long id;
     private String fio;
     private LocalDate birthday;
-    private Timestamp created;
+    private LocalDateTime created;
+    private Long views;
     @JsonIgnore
     private Set<Book> books = new HashSet<>(0);
 
@@ -60,12 +62,12 @@ public class Author implements Serializable {
     }
 
 
-    public Timestamp getCreated() {
+    public LocalDateTime getCreated() {
         return created;
     }
 
 
-    public void setCreated(Timestamp created) {
+    public void setCreated(LocalDateTime created) {
         this.created = created;
     }
 
@@ -77,6 +79,16 @@ public class Author implements Serializable {
 
     public void setBooks(Set<Book> books) {
         this.books = books;
+    }
+
+
+    public Long getViews() {
+        return views;
+    }
+
+
+    public void setViews(Long views) {
+        this.views = views == null ? 0L : views;
     }
 
 

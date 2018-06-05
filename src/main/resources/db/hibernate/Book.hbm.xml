@@ -55,7 +55,10 @@
             <column name="vote_count" sql-type="bigint(20)" not-null="true"/>
         </property>
         <property name="created">
-            <column name="created" sql-type="timestamp"/>
+            <column name="created" sql-type="datetime"/>
+        </property>
+        <property name="views">
+            <column name="views" sql-type="bigint(20)" not-null="true"/>
         </property>
     </class>
 </hibernate-mapping>

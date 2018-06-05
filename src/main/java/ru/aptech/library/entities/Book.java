@@ -2,7 +2,8 @@ package ru.aptech.library.entities;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Arrays;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Book implements Serializable {
@@ -20,7 +21,8 @@ public class Book implements Serializable {
     private String bookcol;
     private Integer rating;
     private Long voteCount;
-    private Timestamp created;
+    private LocalDateTime created;
+    private Long views;
 
 
     public Book() {
@@ -39,7 +41,8 @@ public class Book implements Serializable {
                 String descr,
                 String bookcol,
                 Integer rating,
-                Long voteCount) {
+                Long voteCount,
+                Long views) {
         this.id = id;
         this.name = name;
         this.pageCount = pageCount;
@@ -53,6 +56,7 @@ public class Book implements Serializable {
         this.bookcol = bookcol;
         this.rating = rating;
         this.voteCount = voteCount;
+        this.views = views;
     }
 
 
@@ -196,13 +200,23 @@ public class Book implements Serializable {
     }
 
 
-    public Timestamp getCreated() {
+    public LocalDateTime getCreated() {
         return created;
     }
 
 
-    public void setCreated(Timestamp created) {
+    public void setCreated(LocalDateTime created) {
         this.created = created;
+    }
+
+
+    public Long getViews() {
+        return views;
+    }
+
+
+    public void setViews(Long views) {
+        this.views = views == null ? 0L : views;
     }
 
 
@@ -222,7 +236,8 @@ public class Book implements Serializable {
                 Objects.equals(descr, book.descr) &&
                 Objects.equals(bookcol, book.bookcol) &&
                 Objects.equals(rating, book.rating) &&
-                Objects.equals(voteCount, book.voteCount);
+                Objects.equals(voteCount, book.voteCount) &&
+                Objects.equals(views, book.views);
     }
 
 

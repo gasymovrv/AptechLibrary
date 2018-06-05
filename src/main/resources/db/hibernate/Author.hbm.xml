@@ -16,7 +16,7 @@
             <column name="birthday" sql-type="date"/>
         </property>
         <property name="created">
-            <column name="created" sql-type="timestamp"/>
+            <column name="created" sql-type="datetime"/>
         </property>
         <set name="books" table="book" inverse="true" cascade="save-update" lazy="false" fetch="join">
             <key>
@@ -24,5 +24,8 @@
             </key>
             <one-to-many class="ru.aptech.library.entities.Book" />
         </set>
+        <property name="views">
+            <column name="views" sql-type="bigint(20)" not-null="true"/>
+        </property>
     </class>
 </hibernate-mapping>

@@ -12,13 +12,16 @@ import ru.aptech.library.entities.Book;
 import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaAuthors;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class AuthorDAOImpl {
     private final String AUTHORS = "select a from Author a";
     private final String ORDER_BY_NAME = " order by a.fio";
     private final String ORDER_BY_CREATION = " order by a.created desc";
+    private final String ORDER_BY_POPULARITY = " order by a.views desc";
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -70,6 +73,7 @@ public class AuthorDAOImpl {
 
     public Long save(Author author) {
         Session session = sessionFactory.getCurrentSession();
+
         return (Long)session.save(author);
     }
 
@@ -108,8 +112,24 @@ public class AuthorDAOImpl {
                 case CREATION_DATE:
                     sortSql = ORDER_BY_CREATION;
                     break;
+                case POPULARITY:
+                    sortSql = ORDER_BY_POPULARITY;
+                    break;
             }
         }
         return sortSql;
+    }
+
+    public void increaseView(Long authorId){
+        Session session = sessionFactory.getCurrentSession();
+        session.createQuery("update Author set views = views + 1 where id=:id").setParameter("id", authorId).executeUpdate();
+    }
+
+    public void setViews(Long authorId, Long views){
+        Session session = sessionFactory.getCurrentSession();
+        session.createQuery("update Author set views =:views where id=:id")
+                .setParameter("id", authorId)
+                .setParameter("views", views)
+                .executeUpdate();
     }
 }

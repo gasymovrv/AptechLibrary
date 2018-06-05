@@ -12,6 +12,7 @@ import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaAuthors;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
@@ -53,6 +54,8 @@ public class AuthorService {
     public Long save(Author author, String date) throws Exception {
         author.setBirthday(!date.equals("") ? LocalDate.parse(date, DATE_FORMAT) : null);
         Set<Book> bookList = author.getBooks();
+        updateViews(author);
+        author.setCreated(LocalDateTime.now());
         Long id = authorDAO.save(author);
         for (Book b : bookList) {
             b.setAuthor(author);
@@ -74,6 +77,7 @@ public class AuthorService {
             }
         }
         existAuthor.setAllField(author);
+        updateViews(existAuthor);
         for (Book nB : newBookList) {
             nB.setAuthor(existAuthor);
             bookDAO.update(nB);
@@ -98,5 +102,20 @@ public class AuthorService {
         }
         return authorDAO.getQuantityAuthors();
     }
+
+    @Transactional(propagation=Propagation.REQUIRED)
+    public void increaseView(Long authorId){
+        authorDAO.increaseView(authorId);
+    }
+
+    private void updateViews(Author author){
+        author.setViews(0L);
+        for (Book b :
+                author.getBooks()) {
+            author.setViews(author.getViews() + b.getViews());
+        }
+    }
+
+
 
 }

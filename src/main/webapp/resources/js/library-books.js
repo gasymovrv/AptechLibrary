@@ -195,6 +195,7 @@ function createHtmlItemsList(bookList, items) {
                 '            <h3>Жанр: <a class="genre-link" id="' + bookList[i].genre.id + '" href="#">' + bookList[i].genre.name + '</a></h3>\n' +
                 '            <h3>Издательство: <a class="publisher-link" id="' + bookList[i].publisher.id + '"  href="#">' + bookList[i].publisher.name + '</a></h3>\n' +
                 '            <h3>Год издания: ' + bookList[i].publishYear + '</h3>\n' +
+                '            <h3>Просмортов: ' + bookList[i].views + '</h3>\n' +
                 '        </div>\n' +
                 '        <div class="price">\n' +
                 '            $999.99\n' +

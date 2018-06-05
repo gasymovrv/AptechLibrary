@@ -83,7 +83,10 @@ public class BookController extends BaseController{
     public ModelAndView bookInfo(@RequestParam(value = "bookId") Long bookId) {
         ModelAndView modelAndView = new ModelAndView("home-page-one-book");
         addAttributesForCriteria(modelAndView);
-        modelAndView.addObject("book", bookService.find(bookId));
+        Book b = bookService.find(bookId);
+        modelAndView.addObject("book", b);
+        bookService.increaseView(bookId);
+        authorService.increaseView(b.getAuthor().getId());
         return modelAndView;
     }
 
@@ -173,17 +176,23 @@ public class BookController extends BaseController{
 
     @RequestMapping(value = "showBookContent", method = RequestMethod.GET)
     public void showBookContent(@RequestParam("bookId") Long bookId, HttpServletResponse response) throws IOException {
-        byte[] content = bookService.getBookContent(bookId);
+        Book b = bookService.findWithContent(bookId);
+        byte[] content = b.getContent();
         response.setContentType("application/pdf");
         response.getOutputStream().write(content);
         response.getOutputStream().close();
+        bookService.increaseView(bookId);
+        authorService.increaseView(b.getAuthor().getId());
     }
 
 
     @RequestMapping(value = "addToCart", method = RequestMethod.GET)
     public ModelAndView addToCart(@RequestParam("bookId") Long bookId) throws IOException {
         ModelAndView modelAndView = new ModelAndView("cart-page");
-        modelAndView.addObject("book", bookService.find(bookId));
+        Book b = bookService.find(bookId);
+        modelAndView.addObject("book", b);
+        bookService.increaseView(bookId);
+        authorService.increaseView(b.getAuthor().getId());
         return modelAndView;
     }
 

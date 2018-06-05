@@ -96,6 +96,10 @@
                             <td>Количестов голосов</td>
                             <td>${book.voteCount}</td>
                         </tr>
+                        <tr>
+                            <td>Количестов просмотров</td>
+                            <td>${book.views}</td>
+                        </tr>
                     </table>
                 </div>
             </div>
