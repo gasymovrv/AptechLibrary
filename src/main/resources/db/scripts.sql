@@ -16,4 +16,26 @@ SET a.views = ifnull((SELECT sum(b.views)
 
 ALTER TABLE author ADD COLUMN created DATETIME NOT NULL DEFAULT 0;
 
-UPDATE author SET created =current_date();
+UPDATE author SET created = current_date();
+
+CREATE TABLE users_views (
+  id bigint(20) NOT NULL AUTO_INCREMENT,
+  username VARCHAR(45) NOT NULL,
+  book_id bigint(20) NOT NULL,
+  CONSTRAINT fk_book FOREIGN KEY (book_id) REFERENCES book (id) ON UPDATE CASCADE,
+  PRIMARY KEY (id)
+);
+
+INSERT INTO users_views(username, book_id) VALUES ('user', 6);
+
+
+CREATE TABLE users_views (
+  id bigint(20) NOT NULL AUTO_INCREMENT,
+  username VARCHAR(45) NOT NULL,
+  book_id bigint(20) NOT NULL,
+  views bigint(20) NOT NULL DEFAULT '0',
+  UNIQUE KEY user_book_unq (username, book_id),
+  CONSTRAINT fk_book FOREIGN KEY (book_id) REFERENCES book (id),
+  CONSTRAINT fk_user FOREIGN KEY (username) REFERENCES user (username),
+  PRIMARY KEY (id)
+);

@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.aptech.library.dao.AuthorDAOImpl;
 import ru.aptech.library.dao.BookDAOImpl;
+import ru.aptech.library.dao.UserDAOImpl;
 import ru.aptech.library.entities.Author;
 import ru.aptech.library.entities.Book;
 import ru.aptech.library.enums.SortType;
@@ -22,6 +23,8 @@ public class BookService {
     protected BookDAOImpl bookDAO;
     @Autowired
     protected AuthorDAOImpl authorDAO;
+    @Autowired
+    protected UserDAOImpl userDAO;
 
     @Transactional(propagation= Propagation.REQUIRED)
     public List<Book> find() {
@@ -80,6 +83,7 @@ public class BookService {
         Book book = bookDAO.find(bookId);
         Author a = book.getAuthor();
         authorDAO.setViews(a.getId(),a.getViews()-book.getViews());
+        userDAO.deleteUsersViews(book);
         bookDAO.delete(book);
     }
 

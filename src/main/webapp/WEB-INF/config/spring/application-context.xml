@@ -40,13 +40,7 @@
         </property>
         <property name="mappingLocations">
             <list>
-                <value>classpath*:db/hibernate/Author.hbm.xml</value>
-                <value>classpath*:db/hibernate/Book.hbm.xml</value>
-                <value>classpath*:db/hibernate/Genre.hbm.xml</value>
-                <value>classpath*:db/hibernate/Publisher.hbm.xml</value>
-                <value>classpath*:db/hibernate/Vote.hbm.xml</value>
-                <value>classpath*:db/hibernate/UserRole.hbm.xml</value>
-                <value>classpath*:db/hibernate/User.hbm.xml</value>
+                <value>classpath*:db/hibernate/*.hbm.xml</value>
             </list>
         </property>
     </bean>

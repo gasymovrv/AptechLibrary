@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.aptech.library.entities.User;
 import ru.aptech.library.entities.UserRole;
+import ru.aptech.library.entities.UsersViews;
 import ru.aptech.library.enums.RoleType;
 
+import java.security.Principal;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -47,6 +50,22 @@ public class UserController extends BaseController{
         return modelAndView;
     }
 
+    @RequestMapping(value = "account", method = RequestMethod.GET)
+    public ModelAndView account(Principal principal) {
+        ModelAndView modelAndView = new ModelAndView("account-page");
+        User user = userService.findByUserName(principal.getName());
+        List<UsersViews> usersViews = userService.findUsersViews(user);
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("usersViews", usersViews);
+        modelAndView.addObject("activeTab", "info");
+        return modelAndView;
+    }
+
+
+
+    /**
+     * Методы для работы с ajax
+     * */
     @RequestMapping(value = "isAdmin", method = RequestMethod.GET)
     @ResponseBody
     public Boolean isAdmin(Authentication authentication) {
@@ -60,7 +79,6 @@ public class UserController extends BaseController{
         }
         return result;
     }
-
     @RequestMapping(value = "isUser", method = RequestMethod.GET)
     @ResponseBody
     public Boolean isUser(Authentication authentication) {

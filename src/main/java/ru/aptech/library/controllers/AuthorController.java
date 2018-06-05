@@ -19,6 +19,7 @@ import java.util.Set;
 @Controller
 @RequestMapping("authors/")
 public class AuthorController extends BaseController{
+
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public ModelAndView authorList(@RequestParam(required = false) Integer authorsOnPage,
                                    @RequestParam(required = false) Integer selectedPage,

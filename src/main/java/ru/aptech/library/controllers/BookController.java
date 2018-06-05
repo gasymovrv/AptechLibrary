@@ -5,10 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import ru.aptech.library.entities.Author;
-import ru.aptech.library.entities.Book;
-import ru.aptech.library.entities.Genre;
-import ru.aptech.library.entities.Publisher;
+import ru.aptech.library.entities.*;
 import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaBooks;
 
@@ -18,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -80,13 +78,12 @@ public class BookController extends BaseController{
 
 
     @RequestMapping(value = "bookInfo", method = RequestMethod.GET)
-    public ModelAndView bookInfo(@RequestParam(value = "bookId") Long bookId) {
+    public ModelAndView bookInfo(@RequestParam(value = "bookId") Long bookId, Principal principal) {
         ModelAndView modelAndView = new ModelAndView("home-page-one-book");
         addAttributesForCriteria(modelAndView);
-        Book b = bookService.find(bookId);
-        modelAndView.addObject("book", b);
-        bookService.increaseView(bookId);
-        authorService.increaseView(b.getAuthor().getId());
+        Book book = bookService.find(bookId);
+        increaseBookViews(book, principal);
+        modelAndView.addObject("book", book);
         return modelAndView;
     }
 
@@ -175,24 +172,26 @@ public class BookController extends BaseController{
 
 
     @RequestMapping(value = "showBookContent", method = RequestMethod.GET)
-    public void showBookContent(@RequestParam("bookId") Long bookId, HttpServletResponse response) throws IOException {
-        Book b = bookService.findWithContent(bookId);
-        byte[] content = b.getContent();
+    public void showBookContent(@RequestParam("bookId") Long bookId, HttpServletResponse response, Principal principal) throws IOException {
+        Book book = bookService.findWithContent(bookId);
+        byte[] content = book.getContent();
         response.setContentType("application/pdf");
         response.getOutputStream().write(content);
         response.getOutputStream().close();
-        bookService.increaseView(bookId);
-        authorService.increaseView(b.getAuthor().getId());
+        increaseBookViews(book, principal);
     }
 
 
     @RequestMapping(value = "addToCart", method = RequestMethod.GET)
-    public ModelAndView addToCart(@RequestParam("bookId") Long bookId) throws IOException {
-        ModelAndView modelAndView = new ModelAndView("cart-page");
-        Book b = bookService.find(bookId);
-        modelAndView.addObject("book", b);
-        bookService.increaseView(bookId);
-        authorService.increaseView(b.getAuthor().getId());
+    public ModelAndView addToCart(@RequestParam("bookId") Long bookId, Principal principal) throws IOException {
+        ModelAndView modelAndView = new ModelAndView("account-page");
+        Book book = bookService.find(bookId);
+        User user = userService.findByUserName(principal.getName());
+        List<UsersViews> usersViews = userService.findUsersViews(user);
+        modelAndView.addObject("book", book);
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("usersViews", usersViews);
+        modelAndView.addObject("activeTab", "cart");
         return modelAndView;
     }
 
@@ -207,6 +206,12 @@ public class BookController extends BaseController{
         modelAndView.addObject("unknownAuthor", unknownAuthor);
         modelAndView.addObject("publisherList", publishers);
         modelAndView.addObject("book", book);
+    }
+
+    private void increaseBookViews(Book book, Principal principal) {
+        bookService.increaseView(book.getId());
+        authorService.increaseView(book.getAuthor().getId());
+        userService.saveOrIncreaseUsersViews(principal, book);
     }
 
 
