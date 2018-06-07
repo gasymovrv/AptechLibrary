@@ -10,11 +10,13 @@
             <!-- Tabs -->
             <ul class="nav nav-tabs product-details-nav">
                 <li <c:if test="${activeTab eq 'info'}">class="active"</c:if>><a href="#tab1" data-toggle="tab">Личные данные</a></li>
-                <li <c:if test="${activeTab eq 'cart'}">class="active"</c:if>><a href="#tab2" data-toggle="tab">Корзина</a></li>
+                <li><a href="#tab2" data-toggle="tab">Заказы</a></li>
+                <li <c:if test="${activeTab eq 'cart'}">class="active"</c:if>><a href="#tab3" data-toggle="tab">Корзина</a></li>
             </ul>
-            <!-- Tab Content (person) -->
+
             <div class="tab-content product-detail-info orders-table">
 
+                <!-- Tab Content (person) -->
                 <div class="tab-pane <c:if test="${activeTab eq 'info'}">active</c:if>" id="tab1">
                     <h4>Личная информация</h4>
                     <table>
@@ -32,8 +34,7 @@
                             <td>Средств на счету</td>
                             <td id="user-money">${user.money} р.</td>
                             <td>
-                                <a href="${contextPath}" id="get-money" class="btn item-actions"
-                                   role="button">
+                                <a href="${accountPage}?addMoney=true" id="get-money" class="btn item-actions" role="button">
                                     Пополнить
                                 </a>
                             </td>
@@ -57,7 +58,10 @@
                             </tr>
                         </c:forEach>
                     </table>
-                    <h4>Заказы</h4>
+                </div>
+
+                <!-- Tab Content (orders) -->
+                <div class="tab-pane" id="tab2">
                     <table>
                         <c:set var="sumOrder" value="0"/>
                         <c:forEach var="order" items="${user.sortedOrders}" varStatus="loop">
@@ -97,7 +101,7 @@
                 </div>
 
                 <!-- Tab Content (cart) -->
-                <div class="tab-pane <c:if test="${activeTab eq 'cart'}">active</c:if>" id="tab2">
+                <div class="tab-pane <c:if test="${activeTab eq 'cart'}">active</c:if>" id="tab3">
                     <c:choose>
                         <c:when test="${empty user.cart.books}">
                             <h4>Корзина пуста</h4>
@@ -123,13 +127,8 @@
                                         <td>${b.name}</td>
                                         <td>${b.price} р.</td>
                                         <td>
-                                            <div class="btn-group-sm bottom-indent" role="group"
-                                                 aria-label="First group">
-                                                <a href="#" class="btn item-actions"
-                                                   role="button" data-placement="top" data-toggle="popover"
-                                                   data-content="Изменить">
-                                                    <i class="glyphicon glyphicon-pencil icon-white"></i></a>
-                                                <a href="#" class="btn item-actions"
+                                            <div class="btn-group-sm bottom-indent" role="group" aria-label="First group">
+                                                <a href="${accountPage}?delBookFromCart=${b.id}&tab=cart" class="btn item-actions"
                                                    role="button" data-placement="top" data-toggle="popover"
                                                    data-content="Удалить">
                                                     <i class="glyphicon glyphicon-trash icon-white"></i></a>

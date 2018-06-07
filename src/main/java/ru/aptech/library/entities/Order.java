@@ -3,6 +3,7 @@ package ru.aptech.library.entities;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -50,5 +51,23 @@ public class Order implements Serializable{
 
     public void setCreated(LocalDateTime created) {
         this.created = created;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return Objects.equals(id, order.id) &&
+                Objects.equals(user, order.user) &&
+                Objects.equals(created, order.created);
+    }
+
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, user, created);
     }
 }

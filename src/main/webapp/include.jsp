@@ -12,5 +12,6 @@
 <c:set var="showBookContent" value="${contextPath}books/showBookContent" scope="request"/>
 <c:set var="authorsPage" value="${contextPath}authors/list" scope="request"/>
 <c:set var="editAuthor" value="${contextPath}authors/editAuthorView" scope="request"/>
+<c:set var="accountPage" value="${contextPath}users/account" scope="request"/>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="customFn" uri = "/WEB-INF/tld/customFn.tld" %>

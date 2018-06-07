@@ -13,7 +13,7 @@
             <column name="username" sql-type="bigint(20)"/>
         </many-to-one>
 
-        <set name="books" table="orders_to_books" inverse="true" lazy="false">
+        <set name="books" table="orders_to_books" cascade="all" lazy="false">
             <key column="order_id"/>
             <many-to-many column="book_id" class="Book" />
         </set>

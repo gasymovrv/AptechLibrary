@@ -183,16 +183,12 @@ public class BookController extends BaseController{
 
 
     @RequestMapping(value = "addToCart", method = RequestMethod.GET)
-    public ModelAndView addToCart(@RequestParam("bookId") Long bookId, Principal principal) throws IOException {
-        ModelAndView modelAndView = new ModelAndView("account-page");
-        Book book = bookService.find(bookId);
+    public String addToCart(@RequestParam("bookId") Long bookId, Principal principal) {
+        Book book = bookService.findWithContent(bookId);
         User user = userService.findByUserName(principal.getName());
-        List<UsersViews> usersViews = userService.findUsersViews(user);
-        modelAndView.addObject("book", book);
-        modelAndView.addObject("user", user);
-        modelAndView.addObject("usersViews", usersViews);
-        modelAndView.addObject("activeTab", "cart");
-        return modelAndView;
+        user.getCart().getBooks().add(book);
+        userService.update(user);
+        return "redirect:/users/account?tab=cart";
     }
 
 

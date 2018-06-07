@@ -13,7 +13,7 @@
 
         <one-to-one name="user" class="User" constrained="true" lazy="false"/>
 
-        <set name="books" table="carts_to_books" inverse="true" lazy="false">
+        <set name="books" table="carts_to_books" cascade="all" lazy="false">
             <key column="username"/>
             <many-to-many column="book_id" class="Book" />
         </set>

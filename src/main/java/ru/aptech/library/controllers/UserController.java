@@ -4,6 +4,7 @@ import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -58,13 +59,24 @@ public class UserController extends BaseController{
     }
 
     @RequestMapping(value = "account", method = RequestMethod.GET)
-    public ModelAndView account(Principal principal) {
+    public ModelAndView account(@RequestParam(required = false) String tab,
+                                @RequestParam(required = false) Boolean addMoney,
+                                @RequestParam(required = false) Long delBookFromCart,
+                                Principal principal) {
         ModelAndView modelAndView = new ModelAndView("account-page");
         User user = userService.findByUserName(principal.getName());
+        if(addMoney!=null && addMoney){
+            user.setMoney(user.getMoney()+1000);//просто увеличиваем баланс на 1000 пока нет системы оплаты
+            userService.update(user);
+        }
+        if(delBookFromCart!=null){
+            user.getCart().removeBook(delBookFromCart);
+            userService.update(user);
+        }
         List<UsersViews> usersViews = userService.findUsersViews(user);
         modelAndView.addObject("user", user);
         modelAndView.addObject("usersViews", usersViews);
-        modelAndView.addObject("activeTab", "info");
+        modelAndView.addObject("activeTab", !StringUtils.isEmpty(tab) ? tab : "info");
         return modelAndView;
     }
 

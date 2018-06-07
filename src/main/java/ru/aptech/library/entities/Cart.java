@@ -4,6 +4,7 @@ import ru.aptech.library.enums.RoleType;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 
@@ -40,5 +41,17 @@ public class Cart implements Serializable {
 
     public void setBooks(Set<Book> books) {
         this.books = books;
+    }
+
+
+    public void removeBook(Long id){
+        Iterator<Book> iter = books.iterator();
+        while (iter.hasNext()) {
+            Book b = iter.next();
+            if(b.getId().equals(id)){
+                b.getCarts().remove(this);
+                iter.remove();
+            }
+        }
     }
 }

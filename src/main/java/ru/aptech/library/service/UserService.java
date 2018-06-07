@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.aptech.library.dao.UserDAOImpl;
 import ru.aptech.library.entities.Book;
+import ru.aptech.library.entities.Cart;
 import ru.aptech.library.entities.User;
 import ru.aptech.library.entities.UsersViews;
 
@@ -30,6 +31,16 @@ public class UserService {
         encodeUserPass(user);
         user.fillUserRoles();
         userDao.save(user);
+    }
+
+    @Transactional(propagation= Propagation.REQUIRED)
+    public void update(User user) {
+        userDao.update(user);
+    }
+
+    @Transactional(propagation= Propagation.REQUIRED)
+    public void updateCart(Cart cart) {
+        userDao.updateCart(cart);
     }
 
     @Transactional(propagation= Propagation.REQUIRED)
