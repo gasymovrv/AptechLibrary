@@ -14,6 +14,38 @@ function isAdmin() {
     return result;
 }
 
+function checkBuyBook(bookId) {
+    let result;
+    $.ajax({
+        type: 'GET',//тип запроса
+        url: getContextPath() + '/users/checkBuyBook?bookId='+bookId,//url адрес обработчика
+        async: false,
+        success: function (data) {//принимаемое от сервера (Response)
+            result = data;
+        },
+        error: function () {
+            alert('Ошибка в checkBuyBook');
+        }
+    });
+    return result;
+}
+
+function checkBookInCart(bookId) {
+    let result;
+    $.ajax({
+        type: 'GET',//тип запроса
+        url: getContextPath() + '/users/checkBookInCart?bookId='+bookId,//url адрес обработчика
+        async: false,
+        success: function (data) {//принимаемое от сервера (Response)
+            result = data;
+        },
+        error: function () {
+            alert('Ошибка в checkBookInCart');
+        }
+    });
+    return result;
+}
+
 function isUser() {
     let result;
     $.ajax({
@@ -43,31 +75,34 @@ function userValidation() {
         }
     );
 
-    $("#username, #password1, #password2").each(function () {
-        $(this).keyup(function () {
-            let boxDanger = $('#box-danger');
-            let username = $('#username').val();
-            let pass1 = $('#password1').val();
-            let pass2 = $('#password2').val();
+    $("#username").keyup(keyupValidation);
+    $("#password1").keyup(keyupValidation);
+    $("#password2").keyup(keyupValidation);
 
-            if (!pass1 || !pass2 || !username) {
-                $('#submit-new-user button').prop('disabled', true);
-                $(spanButton).popover('enable');
-                spanButton.attr('data-content', 'Необходимо заполнить обязательные поля');
-                boxDanger.empty();
-                boxDanger.hide();
-            } else if ((pass1 && pass2) && (pass1 !== pass2)) {
-                $('#submit-new-user button').prop('disabled', true);
-                $(spanButton).popover('enable');
-                spanButton.attr('data-content', 'Пароли должны совпадать');
-                boxDanger.text('Пароли не совпадают');
-                boxDanger.show();
-            } else {
-                $('#submit-new-user button').prop('disabled', false);
-                $(spanButton).popover('disable');
-                boxDanger.empty();
-                boxDanger.hide();
-            }
-        });
-    });
+    function keyupValidation() {
+        let spanButton = $('#submit-new-user');
+        let boxDanger = $('#box-danger');
+        let username = $('#username').val();
+        let pass1 = $('#password1').val();
+        let pass2 = $('#password2').val();
+
+        if (!pass1 || !pass2 || !username) {
+            $('#submit-new-user button').prop('disabled', true);
+            $(spanButton).popover('enable');
+            spanButton.attr('data-content', 'Необходимо заполнить обязательные поля');
+            boxDanger.empty();
+            boxDanger.hide();
+        } else if ((pass1 && pass2) && (pass1 !== pass2)) {
+            $('#submit-new-user button').prop('disabled', true);
+            $(spanButton).popover('enable');
+            spanButton.attr('data-content', 'Пароли должны совпадать');
+            boxDanger.text('Пароли не совпадают');
+            boxDanger.show();
+        } else {
+            $('#submit-new-user button').prop('disabled', false);
+            $(spanButton).popover('disable');
+            boxDanger.empty();
+            boxDanger.hide();
+        }
+    }
 }

@@ -9,9 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import ru.aptech.library.entities.User;
-import ru.aptech.library.entities.UserRole;
-import ru.aptech.library.entities.UsersViews;
+import ru.aptech.library.entities.*;
 import ru.aptech.library.enums.RoleType;
 
 import java.security.Principal;
@@ -44,17 +42,21 @@ public class UserController extends BaseController{
 
     @RequestMapping(value = "registrationAction", method = RequestMethod.POST)
     public ModelAndView registrationAction(@ModelAttribute("user") User user, BindingResult result) {
-        ModelAndView modelAndView = new ModelAndView("login-page");
+        ModelAndView modelAndView = new ModelAndView();
         boolean isAdded;
         try {
             userService.save(user);
             isAdded = true;
+            modelAndView.setViewName("login-page");
+            modelAndView.addObject("username", user.getUsername());
         } catch (Exception e){
             isAdded = false;
+            modelAndView.setViewName("registration-page");
+            modelAndView.addObject("user", new User());
+            modelAndView.addObject("userRoles", RoleType.values());
             e.printStackTrace();
         }
         modelAndView.addObject("isAdded", isAdded);
-        modelAndView.addObject("username", user.getUsername());
         return modelAndView;
     }
 
@@ -62,6 +64,8 @@ public class UserController extends BaseController{
     public ModelAndView account(@RequestParam(required = false) String tab,
                                 @RequestParam(required = false) Boolean addMoney,
                                 @RequestParam(required = false) Long delBookFromCart,
+                                @RequestParam(required = false) Boolean buy,
+                                @RequestParam(required = false) Boolean clearCart,
                                 Principal principal) {
         ModelAndView modelAndView = new ModelAndView("account-page");
         User user = userService.findByUserName(principal.getName());
@@ -73,7 +77,28 @@ public class UserController extends BaseController{
             user.getCart().removeBook(delBookFromCart);
             userService.update(user);
         }
+
+        Boolean enoughMoney = null;
+        Boolean successBuy = null;
+        if(buy!=null && buy && !user.getCart().getBooks().isEmpty()){
+            enoughMoney = user.getCart().getSum() <= user.getMoney();
+            if(enoughMoney) {
+                try {
+                    userService.buyBooksFromCart(user);
+                    successBuy = true;
+                } catch (Exception e) {
+                    successBuy = false;
+                    e.printStackTrace();
+                }
+            }
+        }
+        if(clearCart!=null && clearCart){
+            user.getCart().removeAllBooks();
+            userService.update(user);
+        }
         List<UsersViews> usersViews = userService.findUsersViews(user);
+        modelAndView.addObject("enoughMoney", enoughMoney);
+        modelAndView.addObject("successBuy", successBuy);
         modelAndView.addObject("user", user);
         modelAndView.addObject("usersViews", usersViews);
         modelAndView.addObject("activeTab", !StringUtils.isEmpty(tab) ? tab : "info");
@@ -107,6 +132,34 @@ public class UserController extends BaseController{
                 if(g.getAuthority().equals("ROLE_USER")){
                     result = true;
                 }
+            }
+        }
+        return result;
+    }
+    @RequestMapping(value = "checkBuyBook", method = RequestMethod.GET)
+    @ResponseBody
+    public Boolean checkBuyBook(@RequestParam Long bookId, Authentication authentication) {
+        boolean result = false;
+        if(authentication != null){
+            Book book = bookService.find(bookId);
+            User user = userService.findByUserName(authentication.getName());
+            for(Order o : user.getOrders()){
+                if(o.getBooks().contains(book)){
+                    result = true;
+                }
+            }
+        }
+        return result;
+    }
+    @RequestMapping(value = "checkBookInCart", method = RequestMethod.GET)
+    @ResponseBody
+    public Boolean checkBookInCart(@RequestParam Long bookId, Authentication authentication) {
+        boolean result = false;
+        if(authentication != null){
+            Book book = bookService.find(bookId);
+            User user = userService.findByUserName(authentication.getName());
+            if (user.getCart().getBooks().contains(book)) {
+                result = true;
             }
         }
         return result;

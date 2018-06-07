@@ -6,6 +6,25 @@
 
     <!-- Full Description & Specification -->
     <div class="col-sm-12">
+        <c:if test="${not empty enoughMoney and not enoughMoney}">
+            <div class="alert alert-danger" role="alert">
+                Недостаточно средств для покупки!
+            </div>
+        </c:if>
+        <c:if test="${not empty successBuy}">
+            <c:choose>
+                <c:when test="${successBuy}">
+                    <div class="alert alert-success" role="alert">
+                        Покупка успешно совершена!
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="alert alert-danger" role="alert">
+                        Произошла ошибка во время покупки!
+                    </div>
+                </c:otherwise>
+            </c:choose>
+        </c:if>
         <div class="tabbable">
             <!-- Tabs -->
             <ul class="nav nav-tabs product-details-nav">
@@ -53,7 +72,7 @@
                         </colgroup>
                         <c:forEach var="uv" items="${usersViews}">
                             <tr>
-                                <td>${uv.book.name}</td>
+                                <td><a href="${bookInfo}?bookId=${b.id}">${uv.book.name}</a></td>
                                 <td>${uv.views}</td>
                             </tr>
                         </c:forEach>
@@ -62,42 +81,49 @@
 
                 <!-- Tab Content (orders) -->
                 <div class="tab-pane" id="tab2">
-                    <table>
-                        <c:set var="sumOrder" value="0"/>
-                        <c:forEach var="order" items="${user.sortedOrders}" varStatus="loop">
-                            <tr>
-                                <td>
-                                    <h4>№${loop.count}</h4>
-                                    <table>
-                                        <colgroup>
-                                            <col style="width: 10%"/>
-                                            <col style="width: 70%"/>
-                                            <col style="width: 20%"/>
-                                        </colgroup>
-                                        <c:forEach var="b" items="${order.books}" varStatus="loop">
-                                            <tr>
-                                                <td>${loop.count}</td>
-                                                <td>${b.name}</td>
-                                                <td>${b.price} р.</td>
-                                            </tr>
-                                            <c:set var="sumOrder" value="${sumOrder+b.price}"/>
-                                        </c:forEach>
-                                        <tr>
-                                            <td>Дата заказа</td>
-                                            <td></td>
-                                            <td>${order.created}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Сумма</td>
-                                            <td></td>
-                                            <td>${sumOrder}</td>
-                                        </tr>
-                                        <c:set var="sumOrder" value="0"/>
-                                    </table>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </table>
+                    <c:choose>
+                        <c:when test="${empty user.orders}">
+                            <h4>Заказы отсутствуют</h4>
+                        </c:when>
+                        <c:otherwise>
+                            <table>
+                                <c:set var="sumOrder" value="0"/>
+                                <c:forEach var="order" items="${user.sortedOrders}" varStatus="loop">
+                                    <tr>
+                                        <td>
+                                            <h4>№${(user.orders.size()+1)-loop.count}</h4>
+                                            <table>
+                                                <colgroup>
+                                                    <col style="width: 10%"/>
+                                                    <col style="width: 70%"/>
+                                                    <col style="width: 20%"/>
+                                                </colgroup>
+                                                <c:forEach var="b" items="${order.books}" varStatus="loop">
+                                                    <tr>
+                                                        <td>${loop.count}</td>
+                                                        <td><a href="${bookInfo}?bookId=${b.id}">${b.name}</a></td>
+                                                        <td>${b.price} р.</td>
+                                                    </tr>
+                                                    <c:set var="sumOrder" value="${sumOrder+b.price}"/>
+                                                </c:forEach>
+                                                <tr>
+                                                    <td>Дата заказа</td>
+                                                    <td></td>
+                                                    <td>${order.formattedCreated}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Сумма</td>
+                                                    <td></td>
+                                                    <td>${sumOrder}</td>
+                                                </tr>
+                                                <c:set var="sumOrder" value="0"/>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </table>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
 
                 <!-- Tab Content (cart) -->
@@ -124,10 +150,10 @@
                                 <c:forEach var="b" items="${user.cart.books}" varStatus="loop">
                                     <tr>
                                         <td>${loop.count}</td>
-                                        <td>${b.name}</td>
+                                        <td><a href="${bookInfo}?bookId=${b.id}">${b.name}</a></td>
                                         <td>${b.price} р.</td>
                                         <td>
-                                            <div class="btn-group-sm bottom-indent" role="group" aria-label="First group">
+                                            <div class="btn-group-sm bottom-indent" role="group">
                                                 <a href="${accountPage}?delBookFromCart=${b.id}&tab=cart" class="btn item-actions"
                                                    role="button" data-placement="top" data-toggle="popover"
                                                    data-content="Удалить">
@@ -144,7 +170,15 @@
                                     <td></td>
                                 </tr>
                             </table>
-                            <button class="btn btn-sm">Купить</button>
+                            <form>
+                                <input type="hidden" name="buy" value="true">
+                                <input type="hidden" name="tab" value="cart">
+                                <div class="btn-group-sm bottom-indent" role="group">
+                                    <button type="submit" class="btn item-actions">Купить</button>
+                                    <a href="${accountPage}?clearCart=true&tab=cart" class="btn item-actions"
+                                       role="button">Очистить корзину</a>
+                                </div>
+                            </form>
                         </c:otherwise>
                     </c:choose>
                 </div>

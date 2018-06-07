@@ -1,13 +1,18 @@
 package ru.aptech.library.entities;
 
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 
 public class Order implements Serializable{
+    @Transient
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+
     private Long id;
     private User user;
     private Set<Book> books = new HashSet<>(0);
@@ -53,6 +58,10 @@ public class Order implements Serializable{
         this.created = created;
     }
 
+    @Transient
+    public String getFormattedCreated() {
+        return created.format(DATE_TIME_FORMATTER);
+    }
 
     @Override
     public boolean equals(Object o) {

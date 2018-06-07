@@ -169,9 +169,9 @@ function createHtmlItemsList(bookList, items) {
 
     let j = 0;
     for (let i = 0; i < bookList.length; i++) {
-        let price = 'БЕСПЛАТНО';
+        let priceText = 'БЕСПЛАТНО';
         if(bookList[i].price!=0){
-            price = bookList[i].price + ' р.';
+            priceText = bookList[i].price + ' р.';
         }
 
         //вложенный аджакс для того чтобы заранее подготовить все обложки книг
@@ -202,15 +202,19 @@ function createHtmlItemsList(bookList, items) {
                 '            <h3>Год издания: ' + bookList[i].publishYear + '</h3>\n' +
                 '            <h3>Просмортов: ' + bookList[i].views + '</h3>\n' +
                 '        </div>\n' +
-                '        <div class="price">' + price + '</div>\n' +
+                '        <div class="price">' + priceText + '</div>\n' +
                 '        <div class="actions">\n' +
                 '            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">\n' +
-                '                <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">\n' +
-                '                    <a href="#" onclick="confirmAddToCart(' + bookList[i].id + ', \'' + bookList[i].name + '\')" ' +
-                '                        class="btn item-actions" role="button"\n' +
-                '                        data-placement="top" data-toggle="popover" data-content="В корзину">' +
-                '                       <i class="glyphicon glyphicon-shopping-cart icon-white"></i></a>\n' +
-                '                    <a href="#" onclick="confirmShowBookContent(' + bookList[i].id + ', \'' + bookList[i].name + '\')" ' +
+                '                <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">\n';
+            if(bookList[i].price!=0) {
+                html +=
+                    '                    <a href="#" onclick="confirmAddToCart(' + bookList[i].id + ', \'' + bookList[i].name + '\')" ' +
+                    '                        class="btn item-actions" role="button"\n' +
+                    '                        data-placement="top" data-toggle="popover" data-content="В корзину">' +
+                    '                       <i class="glyphicon glyphicon-shopping-cart icon-white"></i></a>\n';
+            }
+            html +=
+                '                    <a href="#" onclick="confirmShowBookContent(' + bookList[i].id + ', \'' + bookList[i].name + '\',' + bookList[i].price + ')" ' +
                 '                        class="btn item-actions" role="button"\n' +
                 '                        data-placement="top" data-toggle="popover" data-content="Читать">' +
                 '                       <i class="glyphicon glyphicon-eye-open icon-white"></i></a>\n' +
@@ -289,23 +293,34 @@ function confirmDeleteBook(bookId, bookName) {
     }
 }
 
-function confirmShowBookContent(bookId, bookName) {
+function confirmShowBookContent(bookId, bookName, price) {
     let showBookContentLink = getContextPath() + '/books/showBookContent?bookId=';
     if (!isUser()) {
-        if (confirm("Чтобы читать книгу '" + bookName + "' вам необходимо авторизоваться")) {
+        if (confirm("Чтобы читать книгу '" + bookName + "' Вам необходимо авторизоваться")) {
             window.location = (showBookContentLink + bookId);
         }
-    } else {
+    } else if(price>0.0){
+        if (checkBuyBook(bookId)) {
+            window.location = (showBookContentLink + bookId);
+        } else {
+            alert("Вы еще не купили книгу '" + bookName + "'");
+        }
+    } else if(price===0.0){
         window.location = (showBookContentLink + bookId);
     }
+
 }
 
 function confirmAddToCart(bookId, bookName) {
     let addToCartLink = getContextPath() + '/books/addToCart?bookId=';
     if (!isUser()) {
-        if (confirm("Чтобы купить книгу '" + bookName + "' вам необходимо авторизоваться")) {
+        if (confirm("Чтобы купить книгу '" + bookName + "' Вам необходимо авторизоваться")) {
             window.location = (addToCartLink + bookId);
         }
+    } else if (checkBookInCart(bookId)) {
+        alert("Книга '" + bookName + "' уже добавлена в корзину");
+    } else if (checkBuyBook(bookId)) {
+        alert("Вы уже купили книгу '" + bookName + "'");
     } else {
         window.location = (addToCartLink + bookId);
     }

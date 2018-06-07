@@ -6,18 +6,19 @@
 <div class="center-block col-sm-5" style="float: none;">
     <div class="basic-login">
         <form:form name='form_login' action="${contextPath}users/registrationAction" method='POST' modelAttribute="user">
+            <c:if test="${not empty isAdded and not isAdded}"><p class="alert alert-danger">Ошибка при добавлении пользователя ${username}! Попробуйте другое имя</p></c:if>
             <div class="form-group">
                 <p hidden="hidden" id="box-danger" class="alert alert-danger"></p>
                 <label for="username"><b title="Обязательно для заполнения">Имя или email<sup style="color: red">*</sup></b></label>
-                <form:input class="form-control" id="username" path='username'/>
+                <form:input class="form-control user-validation" id="username" path='username'/>
             </div>
             <div class="form-group">
                 <label for="password1"><b title="Обязательно для заполнения">Пароль<sup style="color: red">*</sup></b></label>
-                <input id="password1" class="form-control" type="password">
+                <input id="password1" class="form-control user-validation" type="password">
             </div>
             <div class="form-group">
                 <label for="password2"><b title="Обязательно для заполнения">Подтвердите пароль<sup style="color: red">*</sup></b></label>
-                <form:password class="form-control" id="password2" path='password'/>
+                <form:password class="form-control user-validation" id="password2" path='password'/>
             </div>
             <security:authorize access="hasRole('ROLE_ADMIN')">
                 <div class="form-group">

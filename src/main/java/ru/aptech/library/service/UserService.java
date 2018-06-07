@@ -6,12 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.aptech.library.dao.UserDAOImpl;
-import ru.aptech.library.entities.Book;
-import ru.aptech.library.entities.Cart;
-import ru.aptech.library.entities.User;
-import ru.aptech.library.entities.UsersViews;
+import ru.aptech.library.entities.*;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -30,6 +28,10 @@ public class UserService {
     public void save(User user) {
         encodeUserPass(user);
         user.fillUserRoles();
+        Cart c = new Cart();
+        c.setUser(user);
+        user.setCart(c);
+        user.setMoney(0.0);
         userDao.save(user);
     }
 
@@ -38,10 +40,19 @@ public class UserService {
         userDao.update(user);
     }
 
+
     @Transactional(propagation= Propagation.REQUIRED)
-    public void updateCart(Cart cart) {
-        userDao.updateCart(cart);
+    public void buyBooksFromCart(User user) {
+        Order o = new Order();
+        o.setUser(user);
+        o.setCreated(LocalDateTime.now());
+        o.getBooks().addAll(user.getCart().getBooks());
+        user.setMoney(user.getMoney()-user.getCart().getSum());
+        user.getOrders().add(o);
+        user.getCart().removeAllBooks();
+        userDao.update(user);
     }
+
 
     @Transactional(propagation= Propagation.REQUIRED)
     public void saveOrIncreaseUsersViews(Principal principal, Book book) {

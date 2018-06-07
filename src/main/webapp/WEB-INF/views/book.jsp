@@ -34,7 +34,7 @@
                    class="btn item-actions"
                    role="button" data-placement="top" data-toggle="popover" data-content="В корзину">
                     <i class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
-                <a href="#" onclick="confirmShowBookContent(${book.id}, '${book.name}')"
+                <a href="#" onclick="confirmShowBookContent(${book.id}, '${book.name}', ${book.price})"
                    class="btn item-actions"
                    role="button" data-placement="top" data-toggle="popover" data-content="Читать">
                     <i class="glyphicon glyphicon-eye-open icon-white"></i></a>

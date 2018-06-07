@@ -304,5 +304,6 @@ public class Book implements Serializable {
         this.bookcol = book.bookcol;
         this.rating = book.rating;
         this.voteCount = book.voteCount;
+        this.price = book.price;
     }
 }

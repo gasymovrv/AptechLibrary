@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.aptech.library.entities.Book;
-import ru.aptech.library.entities.Cart;
-import ru.aptech.library.entities.User;
-import ru.aptech.library.entities.UsersViews;
+import ru.aptech.library.entities.*;
 
 import java.util.List;
 
@@ -36,11 +33,6 @@ public class UserDAOImpl {
     public void update(User user) {
         Session session = sessionFactory.getCurrentSession();
         session.merge(user);
-    }
-
-    public void updateCart(Cart cart) {
-        Session session = sessionFactory.getCurrentSession();
-        session.merge(cart);
     }
 
     public void saveUsersViews(UsersViews usersViews) {

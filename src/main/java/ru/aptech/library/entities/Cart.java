@@ -1,10 +1,10 @@
 package ru.aptech.library.entities;
 
-import ru.aptech.library.enums.RoleType;
-
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -53,5 +53,39 @@ public class Cart implements Serializable {
                 iter.remove();
             }
         }
+    }
+
+    public void removeAllBooks(){
+        Iterator<Book> iter = books.iterator();
+        while (iter.hasNext()) {
+            Book b = iter.next();
+            b.getCarts().remove(this);
+            iter.remove();
+        }
+    }
+
+
+    @Transient
+    public double getSum(){
+        double sumCart = 0;
+        for (Book b : books) {
+            sumCart += b.getPrice();
+        }
+        return sumCart;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cart cart = (Cart) o;
+        return Objects.equals(username, cart.username) &&
+                Objects.equals(user, cart.user);
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, user);
     }
 }

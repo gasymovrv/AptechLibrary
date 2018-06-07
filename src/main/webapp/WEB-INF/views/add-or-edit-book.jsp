@@ -41,6 +41,12 @@
                 <form:input id='publishYear' name='publishYear' path="publishYear" type="number" class="form-control"/>
             </div>
         </div>
+        <div class="form-group row">
+            <label for="price" class="col-sm-2 col-form-label">Цена</label>
+            <div class="col-sm-10">
+                <form:input id='price' name='price' path="price" type="number" class="form-control"/>
+            </div>
+        </div>
 
         <div class="form-group row">
             <label for="genre" class="col-sm-2 col-form-label">Жанр</label>
@@ -135,6 +141,7 @@
                 <form:input id='descr' name='descr' path="descr" type="text" class="form-control"/>
             </div>
         </div>
+
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group-sm pull-right" role="group" aria-label="First group">
                 <button type="submit" class="btn btn-sm">Сохранить</button>
