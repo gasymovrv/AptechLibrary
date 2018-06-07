@@ -44,9 +44,7 @@ public class UserService {
         try {
             user = userDao.findByUserName(principal.getName());
             usersViews = userDao.findUsersViews(user, book);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+        } catch (Exception ignored){}
         if (usersViews == null && user != null) {
             usersViews = new UsersViews();
             usersViews.setBook(book);

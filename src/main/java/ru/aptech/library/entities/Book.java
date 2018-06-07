@@ -23,6 +23,7 @@ public class Book implements Serializable {
     private Long voteCount;
     private LocalDateTime created;
     private Long views;
+    private Double price;
 
 
     public Book() {
@@ -42,7 +43,8 @@ public class Book implements Serializable {
                 String bookcol,
                 Integer rating,
                 Long voteCount,
-                Long views) {
+                Long views,
+                Double price) {
         this.id = id;
         this.name = name;
         this.pageCount = pageCount;
@@ -57,6 +59,7 @@ public class Book implements Serializable {
         this.rating = rating;
         this.voteCount = voteCount;
         this.views = views;
+        this.price = price;
     }
 
 
@@ -220,6 +223,16 @@ public class Book implements Serializable {
     }
 
 
+    public Double getPrice() {
+        return price;
+    }
+
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -237,13 +250,14 @@ public class Book implements Serializable {
                 Objects.equals(bookcol, book.bookcol) &&
                 Objects.equals(rating, book.rating) &&
                 Objects.equals(voteCount, book.voteCount) &&
-                Objects.equals(views, book.views);
+                Objects.equals(views, book.views) &&
+                Objects.equals(price, book.price);
     }
 
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, name, pageCount, isbn, genre, author, publishYear, publisher, descr, bookcol, rating, voteCount);
+        int result = Objects.hash(id, name, pageCount, isbn, genre, author, publishYear, publisher, descr, bookcol, rating, voteCount, views, price);
         result = 31 * result;
         return result;
     }

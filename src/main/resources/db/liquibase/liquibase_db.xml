@@ -185,4 +185,16 @@
         </sql>
     </changeSet>
 
+    <changeSet author="rgasymov" id="20180606-01">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="aplib" tableName="book" columnName="price"/>
+            </not>
+        </preConditions>
+        <sql>
+            ALTER TABLE book ADD COLUMN price DECIMAL(16, 2) NOT NULL;
+            UPDATE book SET price = (rand()*5000)+200;
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

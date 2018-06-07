@@ -33,7 +33,8 @@ public class BookDAOImpl {
                     "b.bookcol, " +
                     "b.rating, " +
                     "b.voteCount," +
-                    "b.views" +
+                    "b.views," +
+                    "b.price" +
                     ") from Book b";
 
     private final String ORDER_BY_NAME = " order by b.name";

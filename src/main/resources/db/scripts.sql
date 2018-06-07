@@ -1,3 +1,5 @@
+# Здесь разные тестовые скрипты
+
 SELECT * FROM book b where b.genre_id in (select g.id from genre g where g.name like '%ю%');
 
 SELECT b.name, g.name FROM book b
@@ -39,3 +41,6 @@ CREATE TABLE users_views (
   CONSTRAINT fk_user FOREIGN KEY (username) REFERENCES user (username),
   PRIMARY KEY (id)
 );
+
+ALTER TABLE book ADD COLUMN price DECIMAL(16, 2) NOT NULL;
+UPDATE book SET price = (rand()*10000)+300;

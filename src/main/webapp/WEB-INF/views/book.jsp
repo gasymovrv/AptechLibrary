@@ -13,7 +13,7 @@
     <div class="col-sm-7 product-details">
         <h4>${book.name}</h4>
         <div class="price">
-            <span class="price-was">$959.99</span> $999.99
+            ${book.price} р.
         </div>
         <h5>Краткое описание</h5>
         <p>

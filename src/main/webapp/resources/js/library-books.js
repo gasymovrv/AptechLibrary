@@ -197,9 +197,7 @@ function createHtmlItemsList(bookList, items) {
                 '            <h3>Год издания: ' + bookList[i].publishYear + '</h3>\n' +
                 '            <h3>Просмортов: ' + bookList[i].views + '</h3>\n' +
                 '        </div>\n' +
-                '        <div class="price">\n' +
-                '            $999.99\n' +
-                '        </div>\n' +
+                '        <div class="price">' + bookList[i].price + ' р.</div>\n' +
                 '        <div class="actions">\n' +
                 '            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">\n' +
                 '                <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">\n' +
