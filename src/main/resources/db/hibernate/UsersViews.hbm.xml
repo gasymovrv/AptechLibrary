@@ -2,17 +2,17 @@
 <!DOCTYPE hibernate-mapping PUBLIC
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<hibernate-mapping>
+<hibernate-mapping package="ru.aptech.library.entities">
 
-    <class name="ru.aptech.library.entities.UsersViews" table="users_views" schema="aplib">
+    <class name="UsersViews" table="users_views" schema="aplib">
         <id name="id">
             <column name="id" sql-type="bigint(20)"/>
             <generator class="identity"/>
         </id>
-        <many-to-one name="user" class="ru.aptech.library.entities.User" fetch="join" not-null="true" lazy="false">
+        <many-to-one name="user" class="User" fetch="join" not-null="true" lazy="false">
             <column name="username" sql-type="varchar(45)"/>
         </many-to-one>
-        <many-to-one name="book" class="ru.aptech.library.entities.Book" fetch="join" not-null="true" lazy="false">
+        <many-to-one name="book" class="Book" fetch="join" not-null="true" lazy="false">
             <column name="book_id" sql-type="bigint(20)"/>
         </many-to-one>
         <property name="views">

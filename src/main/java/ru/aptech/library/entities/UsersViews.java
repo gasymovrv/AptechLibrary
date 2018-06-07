@@ -1,6 +1,8 @@
 package ru.aptech.library.entities;
 
-public class UsersViews {
+import java.io.Serializable;
+
+public class UsersViews implements Serializable {
     private Long id;
     private User user;
     private Book book;

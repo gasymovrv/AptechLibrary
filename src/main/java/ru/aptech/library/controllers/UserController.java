@@ -44,7 +44,14 @@ public class UserController extends BaseController{
     @RequestMapping(value = "registrationAction", method = RequestMethod.POST)
     public ModelAndView registrationAction(@ModelAttribute("user") User user, BindingResult result) {
         ModelAndView modelAndView = new ModelAndView("login-page");
-        boolean isAdded = userService.save(user);
+        boolean isAdded;
+        try {
+            userService.save(user);
+            isAdded = true;
+        } catch (Exception e){
+            isAdded = false;
+            e.printStackTrace();
+        }
         modelAndView.addObject("isAdded", isAdded);
         modelAndView.addObject("username", user.getUsername());
         return modelAndView;

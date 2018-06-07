@@ -28,6 +28,8 @@
         <!--Страницы авторизованного юзера-->
         <intercept-url pattern="/books/showBookContent**" method="GET" access="hasRole('ROLE_USER')" />
         <intercept-url pattern="/books/addToCart**" method="GET" access="hasRole('ROLE_USER')" />
+        <!--Страницы авторизованного-->
+        <intercept-url pattern="/users/account**" method="GET" access="isAuthenticated()" />
         <!--Остальные страницы доступны анонимам-->
 
         <form-login login-page='/users/authorization'

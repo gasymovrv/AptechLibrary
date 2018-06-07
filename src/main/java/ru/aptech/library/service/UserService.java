@@ -26,15 +26,10 @@ public class UserService {
     }
 
     @Transactional(propagation= Propagation.REQUIRED)
-    public boolean save(User user) {
-        try {
-            encodeUserPass(user);
-            user.fillUserRoles();
-            userDao.save(user);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public void save(User user) {
+        encodeUserPass(user);
+        user.fillUserRoles();
+        userDao.save(user);
     }
 
     @Transactional(propagation= Propagation.REQUIRED)

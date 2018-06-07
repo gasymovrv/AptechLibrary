@@ -2,9 +2,9 @@
 <!DOCTYPE hibernate-mapping PUBLIC
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<hibernate-mapping>
+<hibernate-mapping package="ru.aptech.library.entities">
 
-    <class name="ru.aptech.library.entities.Publisher" table="publisher" schema="aplib">
+    <class name="Publisher" table="publisher" schema="aplib">
         <id name="id">
             <column name="id" sql-type="bigint(20)"/>
             <generator class="identity"/>

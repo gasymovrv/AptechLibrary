@@ -1,8 +1,9 @@
 package ru.aptech.library.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
-public class UserRole{
+public class UserRole implements Serializable {
     private Integer userRoleId;
     private User user;
     private String role;

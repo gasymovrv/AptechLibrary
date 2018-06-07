@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<hibernate-mapping>
-    <class name="ru.aptech.library.entities.UserRole" table="user_role" schema="aplib">
+<hibernate-mapping package="ru.aptech.library.entities">
+    <class name="UserRole" table="user_role" schema="aplib">
         <id name="userRoleId" type="java.lang.Integer">
             <column name="user_role_id" />
             <generator class="identity" />
         </id>
-        <many-to-one name="user" class="ru.aptech.library.entities.User" cascade="all" fetch="join">
+        <many-to-one name="user" class="User" cascade="all" fetch="join">
             <column name="username" length="45" not-null="true"/>
         </many-to-one>
         <property name="role" type="string">

@@ -2,9 +2,9 @@
 <!DOCTYPE hibernate-mapping PUBLIC
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<hibernate-mapping>
+<hibernate-mapping package="ru.aptech.library.entities">
 
-    <class name="ru.aptech.library.entities.Author" table="author" schema="aplib">
+    <class name="Author" table="author" schema="aplib">
         <id name="id">
             <column name="id" sql-type="bigint(20)"/>
             <generator class="identity"/>
@@ -22,7 +22,7 @@
             <key>
                 <column name="author_id" not-null="true"/>
             </key>
-            <one-to-many class="ru.aptech.library.entities.Book" />
+            <one-to-many class="Book" />
         </set>
         <property name="views">
             <column name="views" sql-type="bigint(20)" not-null="true"/>

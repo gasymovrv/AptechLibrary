@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.aptech.library.entities">
+    <class name="Order" table="order_" schema="aplib">
+
+        <id name="id">
+            <column name="id" sql-type="bigint(20)"/>
+            <generator class="identity"/>
+        </id>
+
+        <many-to-one name="user" class="User" fetch="join" not-null="true" lazy="false">
+            <column name="username" sql-type="bigint(20)"/>
+        </many-to-one>
+
+        <set name="books" table="orders_to_books" inverse="true" lazy="false">
+            <key column="order_id"/>
+            <many-to-many column="book_id" class="Book" />
+        </set>
+
+        <property name="created">
+            <column name="created" sql-type="datetime"/>
+        </property>
+    </class>
+</hibernate-mapping>

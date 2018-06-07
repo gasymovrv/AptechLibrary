@@ -13,7 +13,14 @@
     <div class="col-sm-7 product-details">
         <h4>${book.name}</h4>
         <div class="price">
-            ${book.price} р.
+            <c:choose>
+                <c:when test="${book.price==0.0}">
+                    БЕСПЛАТНО
+                </c:when>
+                <c:otherwise>
+                    ${book.price} р.
+                </c:otherwise>
+            </c:choose>
         </div>
         <h5>Краткое описание</h5>
         <p>

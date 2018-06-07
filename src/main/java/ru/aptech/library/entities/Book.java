@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class Book implements Serializable {
     private Long id;
@@ -24,6 +26,8 @@ public class Book implements Serializable {
     private LocalDateTime created;
     private Long views;
     private Double price;
+    private Set<Cart> carts = new HashSet<>(0);
+    private Set<Order> orders = new HashSet<>(0);
 
 
     public Book() {
@@ -230,6 +234,26 @@ public class Book implements Serializable {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+
+    public Set<Cart> getCarts() {
+        return carts;
+    }
+
+
+    public void setCarts(Set<Cart> carts) {
+        this.carts = carts;
+    }
+
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 
 

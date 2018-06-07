@@ -169,6 +169,11 @@ function createHtmlItemsList(bookList, items) {
 
     let j = 0;
     for (let i = 0; i < bookList.length; i++) {
+        let price = 'БЕСПЛАТНО';
+        if(bookList[i].price!=0){
+            price = bookList[i].price + ' р.';
+        }
+
         //вложенный аджакс для того чтобы заранее подготовить все обложки книг
         $.ajax({
             url: getContextPath() + "/books/showBookImage",
@@ -197,7 +202,7 @@ function createHtmlItemsList(bookList, items) {
                 '            <h3>Год издания: ' + bookList[i].publishYear + '</h3>\n' +
                 '            <h3>Просмортов: ' + bookList[i].views + '</h3>\n' +
                 '        </div>\n' +
-                '        <div class="price">' + bookList[i].price + ' р.</div>\n' +
+                '        <div class="price">' + price + '</div>\n' +
                 '        <div class="actions">\n' +
                 '            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">\n' +
                 '                <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">\n' +

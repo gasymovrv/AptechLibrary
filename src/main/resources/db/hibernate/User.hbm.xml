@@ -1,23 +1,41 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<hibernate-mapping>
-    <class name="ru.aptech.library.entities.User" table="user" schema="aplib">
+<hibernate-mapping package="ru.aptech.library.entities">
+    <class name="User" table="user" schema="aplib">
+
         <id name="username" type="string">
             <column name="username" length="45" />
             <generator class="assigned" />
         </id>
+
         <property name="password" type="string">
             <column name="password" length="64" not-null="true" />
         </property>
+
         <property name="enabled" type="boolean">
             <column name="enabled" not-null="true" />
         </property>
+
         <set name="userRole" table="user_role" inverse="false" cascade="all" lazy="false" fetch="join">
             <key>
                 <column name="username" length="45" not-null="true" />
             </key>
-            <one-to-many class="ru.aptech.library.entities.UserRole" />
+            <one-to-many class="UserRole" />
         </set>
+
+        <one-to-one name="cart" class="Cart" cascade="all" lazy="false"/>
+
+        <set name="orders" table="order" cascade="all" lazy="false" fetch="join">
+            <key>
+                <column name="username" length="45" not-null="true" />
+            </key>
+            <one-to-many class="Order" />
+        </set>
+
+        <property name="money">
+            <column name="money" sql-type="decimal(16, 2)" not-null="true"/>
+        </property>
+
     </class>
 </hibernate-mapping>
