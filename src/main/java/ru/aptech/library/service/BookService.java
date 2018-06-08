@@ -1,15 +1,21 @@
 package ru.aptech.library.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import ru.aptech.library.dao.AuthorDAOImpl;
-import ru.aptech.library.dao.BookDAOImpl;
-import ru.aptech.library.dao.UserDAOImpl;
+import ru.aptech.library.dao.CommonDAO;
+import ru.aptech.library.dao.UserDAO;
+import ru.aptech.library.dao.impl.AuthorDAOImpl;
+import ru.aptech.library.dao.impl.BookDAOImpl;
+import ru.aptech.library.dao.impl.UserDAOImpl;
+import ru.aptech.library.dao.impl.UsersViewsDAOImpl;
 import ru.aptech.library.entities.Author;
 import ru.aptech.library.entities.Book;
+import ru.aptech.library.entities.User;
+import ru.aptech.library.entities.UsersViews;
 import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaBooks;
 
@@ -20,11 +26,14 @@ import java.util.List;
 @Transactional(propagation=Propagation.REQUIRED)
 public class BookService {
     @Autowired
-    protected BookDAOImpl bookDAO;
+    @Qualifier("bookDAO")
+    private CommonDAO<Book> bookDAO;
     @Autowired
-    protected AuthorDAOImpl authorDAO;
+    @Qualifier("authorDAO")
+    private CommonDAO<Author> authorDAO;
     @Autowired
-    protected UserDAOImpl userDAO;
+    @Qualifier("usersViewsDAO")
+    private UserDAO<UsersViews, Long> usersViewsDAO;
 
     @Transactional(propagation= Propagation.REQUIRED)
     public List<Book> find() {
@@ -32,7 +41,7 @@ public class BookService {
     }
 
     @Transactional(propagation=Propagation.REQUIRED)
-    public Book find(Long id) {
+    public Book find(long id) {
         return bookDAO.find(id);
     }
 
@@ -43,16 +52,6 @@ public class BookService {
             return bookDAO.find(criteria, booksOnPage, init, sortType);
         }
         return bookDAO.find(booksOnPage, init, sortType);
-    }
-
-    @Transactional(propagation=Propagation.REQUIRED)
-    public Book findWithContent(long id) {
-        return bookDAO.findWithContent(id);
-    }
-
-    @Transactional(propagation=Propagation.REQUIRED)
-    public byte[] getBookContent(long id) {
-        return bookDAO.getBookContent(id);
     }
 
     @Transactional(propagation=Propagation.REQUIRED, rollbackFor = Exception.class)
@@ -67,7 +66,7 @@ public class BookService {
 
     @Transactional(propagation=Propagation.REQUIRED, rollbackFor = Exception.class)
     public void update(Book updatedBook, MultipartFile content, MultipartFile image, Long bookId) throws Exception {
-        Book existBook = bookDAO.findWithContent(bookId);
+        Book existBook = bookDAO.find(bookId);
         existBook.setAllField(updatedBook);
         if (content != null && content.getSize() > 0) {
             existBook.setContent(content.getBytes());
@@ -83,16 +82,16 @@ public class BookService {
         Book book = bookDAO.find(bookId);
         Author a = book.getAuthor();
         authorDAO.setViews(a.getId(),a.getViews()-book.getViews());
-        userDAO.deleteUsersViews(book);
+        usersViewsDAO.delete(book);
         bookDAO.delete(book);
     }
 
     @Transactional(propagation=Propagation.REQUIRED)
     public Long getQuantityBooks(SearchCriteriaBooks criteria) {
         if (criteria != null && !criteria.isEmpty()) {
-            return bookDAO.getQuantityBooks(criteria);
+            return bookDAO.getQuantity(criteria);
         }
-        return bookDAO.getQuantityBooks();
+        return bookDAO.getQuantity();
     }
 
     @Transactional(propagation=Propagation.REQUIRED)

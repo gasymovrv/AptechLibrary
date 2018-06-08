@@ -1,10 +1,10 @@
 package ru.aptech.library.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.aptech.library.dao.PublisherDAOImpl;
+import ru.aptech.library.dao.CommonDAO;
+import ru.aptech.library.dao.impl.PublisherDAOImpl;
 import ru.aptech.library.entities.Publisher;
 
 import java.util.List;
@@ -12,7 +12,8 @@ import java.util.List;
 @Service
 public class PublisherService {
     @Autowired
-    private PublisherDAOImpl publisherDAO;
+    @Qualifier("publisherDAO")
+    private CommonDAO<Publisher> publisherDAO;
 
 
     public List<Publisher> find() {

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -14,19 +15,21 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import org.springframework.stereotype.Service;
-import ru.aptech.library.dao.UserDAOImpl;
+import ru.aptech.library.dao.UserDAO;
+import ru.aptech.library.dao.impl.UserDAOImpl;
 import ru.aptech.library.entities.UserRole;
 
 @Service("userDetailsServiceImpl")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private UserDAOImpl userDao;
+    @Qualifier("userDAO")
+    private UserDAO<ru.aptech.library.entities.User, String> userDAO;
 
     @Override
     public UserDetails loadUserByUsername(final String username)
             throws UsernameNotFoundException {
-        ru.aptech.library.entities.User user = userDao.findByUserName(username);
+        ru.aptech.library.entities.User user = userDAO.find(username);
         List<GrantedAuthority> authorities = buildUserAuthority(user.getUserRole());
         return buildUserForAuthentication(user, authorities);
     }

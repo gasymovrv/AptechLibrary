@@ -54,6 +54,7 @@ public class UserController extends BaseController{
             modelAndView.setViewName("registration-page");
             modelAndView.addObject("user", new User());
             modelAndView.addObject("userRoles", RoleType.values());
+            modelAndView.addObject("username", user.getUsername());
             e.printStackTrace();
         }
         modelAndView.addObject("isAdded", isAdded);
@@ -68,7 +69,7 @@ public class UserController extends BaseController{
                                 @RequestParam(required = false) Boolean clearCart,
                                 Principal principal) {
         ModelAndView modelAndView = new ModelAndView("account-page");
-        User user = userService.findByUserName(principal.getName());
+        User user = userService.find(principal.getName());
         if(addMoney!=null && addMoney){
             user.setMoney(user.getMoney()+1000);//просто увеличиваем баланс на 1000 пока нет системы оплаты
             userService.update(user);
@@ -142,7 +143,7 @@ public class UserController extends BaseController{
         boolean result = false;
         if(authentication != null){
             Book book = bookService.find(bookId);
-            User user = userService.findByUserName(authentication.getName());
+            User user = userService.find(authentication.getName());
             for(Order o : user.getOrders()){
                 if(o.getBooks().contains(book)){
                     result = true;
@@ -157,7 +158,7 @@ public class UserController extends BaseController{
         boolean result = false;
         if(authentication != null){
             Book book = bookService.find(bookId);
-            User user = userService.findByUserName(authentication.getName());
+            User user = userService.find(authentication.getName());
             if (user.getCart().getBooks().contains(book)) {
                 result = true;
             }

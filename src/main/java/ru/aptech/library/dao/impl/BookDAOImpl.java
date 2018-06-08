@@ -1,22 +1,20 @@
-package ru.aptech.library.dao;
+package ru.aptech.library.dao.impl;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import ru.aptech.library.entities.Author;
+import ru.aptech.library.dao.CommonDAO;
 import ru.aptech.library.entities.Book;
 import ru.aptech.library.enums.SearchType;
 import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaBooks;
 
 import java.util.List;
-import java.util.Set;
 
-@Repository
-public class BookDAOImpl {
+@Repository("bookDAO")
+public class BookDAOImpl implements CommonDAO<Book> {
     //с помощью JPQL исключаем поле контент
     private final String BOOKS_WITHOUT_CONTENT =
             "select new Book(" +
@@ -36,6 +34,7 @@ public class BookDAOImpl {
                     "b.views," +
                     "b.price" +
                     ") from Book b";
+    private final String BOOKS = "select b from Book b";
 
     private final String ORDER_BY_NAME = " order by b.name";
     private final String ORDER_BY_CREATION = " order by b.created desc";
@@ -51,17 +50,14 @@ public class BookDAOImpl {
         return bookList;
     }
 
-    public Book find(long id) {
+    public Book find(Long id) {
         Session session = sessionFactory.getCurrentSession();
-        Book book = session.createQuery(BOOKS_WITHOUT_CONTENT
-                        + " where b.id=:id",
-                Book.class).setParameter("id", id).getSingleResult();
-        return book;
-    }
-
-    public Book findWithContent(long id) {
-        Session session = sessionFactory.getCurrentSession();
-        return session.get(Book.class, id);
+        Query<Book> query = session.createQuery(BOOKS + " where b.id=:id", Book.class).setParameter("id", id);
+        try {
+            return query.getSingleResult();
+        }catch (Exception e){
+            return null;
+        }
     }
 
     public List<Book> find(Integer booksOnPage, Integer init, SortType sortType) {
@@ -110,19 +106,12 @@ public class BookDAOImpl {
         session.delete(book);
     }
 
-    public byte[] getBookContent(long id) {
-        Session session = sessionFactory.getCurrentSession();
-        byte[] content = (byte[])session.createQuery("select b.content from Book b where b.id=:id")
-                .setParameter("id", id).getSingleResult();
-        return content;
-    }
-
-    public Long getQuantityBooks() {
+    public Long getQuantity() {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select count(*) from Book", Long.class).getSingleResult();
     }
 
-    public Long getQuantityBooks(SearchCriteriaBooks criteria) {
+    public Long getQuantity(SearchCriteriaBooks criteria) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select count(*) from Book b" +
                         " where b.genre.id=:genre" +

@@ -1,23 +1,19 @@
-package ru.aptech.library.dao;
+package ru.aptech.library.dao.impl;
 
-import org.hibernate.Cache;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import ru.aptech.library.dao.CommonDAO;
 import ru.aptech.library.entities.Author;
-import ru.aptech.library.entities.Book;
 import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaAuthors;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
-@Repository
-public class AuthorDAOImpl {
+@Repository("authorDAO")
+public class AuthorDAOImpl implements CommonDAO<Author> {
     private final String AUTHORS = "select a from Author a";
     private final String ORDER_BY_NAME = " order by a.fio";
     private final String ORDER_BY_CREATION = " order by a.created desc";
@@ -35,9 +31,12 @@ public class AuthorDAOImpl {
 
     public Author find(Long id) {
         Session session = sessionFactory.getCurrentSession();
-        Author author = session.createQuery(AUTHORS + " where a.id=:id",
-                Author.class).setParameter("id", id).getSingleResult();
-        return author;
+        Query<Author> query = session.createQuery(AUTHORS + " where a.id=:id", Author.class).setParameter("id", id);
+        try {
+            return query.getSingleResult();
+        }catch (Exception e){
+            return null;
+        }
     }
 
     public Author find(String fio) {
@@ -87,12 +86,12 @@ public class AuthorDAOImpl {
         session.delete(author);
     }
 
-    public Long getQuantityAuthors() {
+    public Long getQuantity() {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select count(*) from Author where fio != 'Неизвестный автор'", Long.class).getSingleResult();
     }
 
-    public Long getQuantityAuthors(SearchCriteriaAuthors criteria) {
+    public Long getQuantity(SearchCriteriaAuthors criteria) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select count(*) from Author a" +
                         " where a.fio like CONCAT('%', :text, '%')" +

@@ -1,13 +1,11 @@
 package ru.aptech.library.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import ru.aptech.library.dao.AuthorDAOImpl;
 import ru.aptech.library.entities.Author;
 import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaAuthors;
@@ -148,7 +146,7 @@ public class AuthorController extends BaseController{
                 } else if (element instanceof Long) {
                     bookId = (Long) element;
                 }
-                return bookId != null ? bookService.findWithContent(bookId) : null;
+                return bookId != null ? bookService.find(bookId) : null;
             }
         });
     }

@@ -1,11 +1,13 @@
 package ru.aptech.library.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.aptech.library.dao.AuthorDAOImpl;
-import ru.aptech.library.dao.BookDAOImpl;
+import ru.aptech.library.dao.CommonDAO;
+import ru.aptech.library.dao.impl.AuthorDAOImpl;
+import ru.aptech.library.dao.impl.BookDAOImpl;
 import ru.aptech.library.entities.Author;
 import ru.aptech.library.entities.Book;
 import ru.aptech.library.enums.SortType;
@@ -14,6 +16,7 @@ import ru.aptech.library.util.SearchCriteriaAuthors;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -22,9 +25,11 @@ public class AuthorService {
     protected static final String UNKNOWN_AUTHOR = "Неизвестный автор";
     protected static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     @Autowired
-    protected BookDAOImpl bookDAO;
+    @Qualifier("bookDAO")
+    private CommonDAO<Book> bookDAO;
     @Autowired
-    protected AuthorDAOImpl authorDAO;
+    @Qualifier("authorDAO")
+    private CommonDAO<Author> authorDAO;
 
     @Transactional(propagation=Propagation.REQUIRED)
     public List<Author> find() {
@@ -70,6 +75,7 @@ public class AuthorService {
         Author existAuthor = authorDAO.find(authorId);
         Set<Book> newBookList = author.getBooks();
         Set<Book> oldBookList = existAuthor.getBooks();
+        //стрый список книг
         for (Book oB : oldBookList) {
             if (!newBookList.contains(oB)) {
                 oB.setAuthor(authorDAO.find(UNKNOWN_AUTHOR));
@@ -78,7 +84,13 @@ public class AuthorService {
         }
         existAuthor.setAllField(author);
         updateViews(existAuthor);
+        //новый список книг
         for (Book nB : newBookList) {
+            Author oldAuthor = nB.getAuthor();
+            if (!oldAuthor.equals(existAuthor)) {
+                removeViews(oldAuthor, nB.getViews());//удаляем просмотры у старого автора
+                authorDAO.update(oldAuthor);
+            }
             nB.setAuthor(existAuthor);
             bookDAO.update(nB);
         }
@@ -98,9 +110,9 @@ public class AuthorService {
     @Transactional(propagation=Propagation.REQUIRED)
     public Long getQuantityAuthors(SearchCriteriaAuthors criteria) {
         if (criteria != null && !criteria.isEmpty()) {
-            return authorDAO.getQuantityAuthors(criteria);
+            return authorDAO.getQuantity(criteria);
         }
-        return authorDAO.getQuantityAuthors();
+        return authorDAO.getQuantity();
     }
 
     @Transactional(propagation=Propagation.REQUIRED)
@@ -110,10 +122,13 @@ public class AuthorService {
 
     private void updateViews(Author author){
         author.setViews(0L);
-        for (Book b :
-                author.getBooks()) {
+        for (Book b : author.getBooks()) {
             author.setViews(author.getViews() + b.getViews());
         }
+    }
+
+    private void removeViews(Author author, Long views){
+        author.setViews(author.getViews()-views);
     }
 
 

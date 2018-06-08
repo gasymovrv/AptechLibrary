@@ -72,7 +72,7 @@
                         </colgroup>
                         <c:forEach var="uv" items="${usersViews}">
                             <tr>
-                                <td><a href="${bookInfo}?bookId=${b.id}">${uv.book.name}</a></td>
+                                <td><a href="${bookInfo}?bookId=${uv.book.id}">${uv.book.name}</a></td>
                                 <td>${uv.views}</td>
                             </tr>
                         </c:forEach>
@@ -170,15 +170,12 @@
                                     <td></td>
                                 </tr>
                             </table>
-                            <form>
-                                <input type="hidden" name="buy" value="true">
-                                <input type="hidden" name="tab" value="cart">
                                 <div class="btn-group-sm bottom-indent" role="group">
-                                    <button type="submit" class="btn item-actions">Купить</button>
+                                    <a href="${accountPage}?buy=true&tab=cart" class="btn item-actions"
+                                       role="button">Купить</a>
                                     <a href="${accountPage}?clearCart=true&tab=cart" class="btn item-actions"
                                        role="button">Очистить корзину</a>
                                 </div>
-                            </form>
                         </c:otherwise>
                     </c:choose>
                 </div>

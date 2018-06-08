@@ -1,10 +1,10 @@
 package ru.aptech.library.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.aptech.library.dao.GenreDAOImpl;
+import ru.aptech.library.dao.CommonDAO;
+import ru.aptech.library.dao.impl.GenreDAOImpl;
 import ru.aptech.library.entities.Genre;
 
 import java.util.List;
@@ -12,7 +12,8 @@ import java.util.List;
 @Service
 public class GenreService {
     @Autowired
-    protected GenreDAOImpl genreDAO;
+    @Qualifier("genreDAO")
+    private CommonDAO<Genre> genreDAO;
 
 
     public List<Genre> find() {

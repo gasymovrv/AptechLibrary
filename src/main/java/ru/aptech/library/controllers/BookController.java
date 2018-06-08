@@ -173,7 +173,7 @@ public class BookController extends BaseController{
 
     @RequestMapping(value = "showBookContent", method = RequestMethod.GET)
     public void showBookContent(@RequestParam("bookId") Long bookId, HttpServletResponse response, Principal principal) throws IOException {
-        Book book = bookService.findWithContent(bookId);
+        Book book = bookService.find(bookId);
         byte[] content = book.getContent();
         response.setContentType("application/pdf");
         response.getOutputStream().write(content);
@@ -184,8 +184,8 @@ public class BookController extends BaseController{
 
     @RequestMapping(value = "addToCart", method = RequestMethod.GET)
     public String addToCart(@RequestParam("bookId") Long bookId, Principal principal) {
-        Book book = bookService.findWithContent(bookId);
-        User user = userService.findByUserName(principal.getName());
+        Book book = bookService.find(bookId);
+        User user = userService.find(principal.getName());
         user.getCart().getBooks().add(book);
         userService.update(user);
         return "redirect:/users/account?tab=cart";

@@ -1,11 +1,14 @@
 package ru.aptech.library.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.aptech.library.dao.UserDAOImpl;
+import ru.aptech.library.dao.UserDAO;
+import ru.aptech.library.dao.impl.UserDAOImpl;
+import ru.aptech.library.dao.impl.UsersViewsDAOImpl;
 import ru.aptech.library.entities.*;
 
 import java.security.Principal;
@@ -15,13 +18,17 @@ import java.util.List;
 @Service
 public class UserService {
     @Autowired
-    private UserDAOImpl userDao;
+    @Qualifier("userDAO")
+    private UserDAO<User, String> userDAO;
+    @Autowired
+    @Qualifier("usersViewsDAO")
+    private UserDAO<UsersViews, Long> usersViewsDAO;
     @Autowired
     protected BCryptPasswordEncoder bCrypt;
 
 
-    public User findByUserName(String username) {
-        return userDao.findByUserName(username);
+    public User find(String username) {
+        return userDAO.find(username);
     }
 
     @Transactional(propagation= Propagation.REQUIRED)
@@ -32,12 +39,12 @@ public class UserService {
         c.setUser(user);
         user.setCart(c);
         user.setMoney(0.0);
-        userDao.save(user);
+        userDAO.save(user);
     }
 
     @Transactional(propagation= Propagation.REQUIRED)
     public void update(User user) {
-        userDao.update(user);
+        userDAO.update(user);
     }
 
 
@@ -50,7 +57,7 @@ public class UserService {
         user.setMoney(user.getMoney()-user.getCart().getSum());
         user.getOrders().add(o);
         user.getCart().removeAllBooks();
-        userDao.update(user);
+        userDAO.update(user);
     }
 
 
@@ -59,28 +66,28 @@ public class UserService {
         User user = null;
         UsersViews usersViews = null;
         try {
-            user = userDao.findByUserName(principal.getName());
-            usersViews = userDao.findUsersViews(user, book);
+            user = userDAO.find(principal.getName());
+            usersViews = usersViewsDAO.find(user, book);
         } catch (Exception ignored){}
         if (usersViews == null && user != null) {
             usersViews = new UsersViews();
             usersViews.setBook(book);
             usersViews.setUser(user);
             usersViews.setViews(1L);
-            userDao.saveUsersViews(usersViews);
+            usersViewsDAO.save(usersViews);
         } else if (user != null) {
-            userDao.increaseView(usersViews);
+            usersViewsDAO.increaseView(usersViews);
         }
     }
 
     @Transactional(propagation= Propagation.REQUIRED)
     public List<UsersViews> findUsersViews(User user){
-        return userDao.findUsersViews(user);
+        return usersViewsDAO.find(user);
     }
 
     @Transactional(propagation= Propagation.REQUIRED)
     public void deleteUsersViews(Book book){
-        userDao.deleteUsersViews(book);
+        usersViewsDAO.delete(book);
     }
 
     private void encodeUserPass(User user){
