@@ -34,6 +34,11 @@ public class BookService {
     @Autowired
     @Qualifier("usersViewsDAO")
     private UserDAO<UsersViews, Long> usersViewsDAO;
+    @Autowired
+    @Qualifier("userDAO")
+    private UserDAO<User, String> userDAO;
+    @Autowired
+    protected UserService userService;
 
     @Transactional(propagation= Propagation.REQUIRED)
     public List<Book> find() {
@@ -82,6 +87,13 @@ public class BookService {
         Book book = bookDAO.find(bookId);
         Author a = book.getAuthor();
         authorDAO.setViews(a.getId(),a.getViews()-book.getViews());
+        List<User> users = userDAO.find();
+        for (User u : users) {
+            if (u.getCart().getBooks().contains(book)) {
+                u.getCart().removeBook(book.getId());
+                userService.update(u);
+            }
+        }
         usersViewsDAO.delete(book);
         bookDAO.delete(book);
     }

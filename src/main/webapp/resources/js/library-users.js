@@ -14,6 +14,22 @@ function isAdmin() {
     return result;
 }
 
+function isUser() {
+    let result;
+    $.ajax({
+        type: 'GET',//тип запроса
+        url: getContextPath() + '/users/isUser',//url адрес обработчика
+        async: false,
+        success: function (data) {//принимаемое от сервера (Response)
+            result = data;
+        },
+        error: function () {
+            getAlert('Ошибка в isUser');
+        }
+    });
+    return result;
+}
+
 function checkBuyBook(bookId) {
     let result;
     $.ajax({
@@ -57,22 +73,6 @@ function checkBookInOrders(bookId) {
         },
         error: function () {
             getAlert('Ошибка в checkBookInOrders');
-        }
-    });
-    return result;
-}
-
-function isUser() {
-    let result;
-    $.ajax({
-        type: 'GET',//тип запроса
-        url: getContextPath() + '/users/isUser',//url адрес обработчика
-        async: false,
-        success: function (data) {//принимаемое от сервера (Response)
-            result = data;
-        },
-        error: function () {
-            getAlert('Ошибка в isUser');
         }
     });
     return result;

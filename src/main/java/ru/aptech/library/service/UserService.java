@@ -42,7 +42,7 @@ public class UserService {
         userDAO.save(user);
     }
 
-    @Transactional(propagation= Propagation.REQUIRED)
+    @Transactional(propagation= Propagation.REQUIRES_NEW)
     public void update(User user) {
         userDAO.update(user);
     }

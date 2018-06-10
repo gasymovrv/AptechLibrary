@@ -8,22 +8,19 @@
         <c:if test="${not empty sessionScope.isDeleted}">
             <c:choose>
                 <c:when test="${sessionScope.isDeleted}">
-                    <div class="alert alert-success delete-message" role="alert" hidden>
+                    <div class="alert alert-success info-message" role="alert" hidden>
                         Книга успешно удалена!
                     </div>
-                    <script>
-                        showDeleteMessage();
-                    </script>
                 </c:when>
                 <c:otherwise>
-                    <div class="alert alert-danger delete-message" role="alert" hidden>
+                    <div class="alert alert-danger info-message" role="alert" hidden>
                         Произошла ошибка при удалении!
                     </div>
-                    <script>
-                        showDeleteMessage();
-                    </script>
                 </c:otherwise>
             </c:choose>
+            <script>
+                showInfoMessage(10);
+            </script>
             <%session.setAttribute("isDeleted", null);%>
         </c:if>
     </div>

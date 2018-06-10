@@ -186,7 +186,7 @@ function createHtmlItemsList(bookList, items) {
                 '<div class="col-sm-4">\n' +
                 '    <div class="shop-item">\n' +
                 '        <div class="image">\n' +
-                '            <a href="' + bookInfoLink + bookList[i].id + '"><img class="img-rounded"\n' +
+                '            <a name="after-modal-'+bookList[i].id+'" href="' + bookInfoLink + bookList[i].id + '"><img class="img-rounded"\n' +
                 // '                    src="data:image/jpeg;base64,' + bookList[i].image + '"\n' + //вариант без вложенного аджакса и без контроллера
                 '                    src="' + showImgLink + bookList[i].id + '"\n' +
                 '                     alt="Изображение отсутствует"></a>\n' +
@@ -209,13 +209,15 @@ function createHtmlItemsList(bookList, items) {
                 '                <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">\n';
             if(bookList[i].price!=0 && !isBuy) {
                 html +=
-                    '                    <a href="#" onclick="confirmAddToCart(' + bookList[i].id + ', \'' + bookList[i].name + '\')" ' +
+                    '                    <a href="#after-modal-'+bookList[i].id+'"' +
+                    '                        onclick="confirmAddToCart(' + bookList[i].id + ', \'' + bookList[i].name + '\')" ' +
                     '                        class="btn item-actions" role="button"\n' +
                     '                        data-placement="top" data-toggle="popover" data-content="В корзину">' +
                     '                       <i class="glyphicon glyphicon-shopping-cart icon-white"></i></a>\n';
             }
             html +=
-                '                    <a href="#" onclick="confirmShowBookContent(' + bookList[i].id + ', \'' + bookList[i].name + '\',' + bookList[i].price + ')" ' +
+                '                    <a href="#after-modal-'+bookList[i].id+'"' +
+                '                        onclick="confirmShowBookContent(' + bookList[i].id + ', \'' + bookList[i].name + '\',' + bookList[i].price + ')" ' +
                 '                        class="btn item-actions" role="button"\n' +
                 '                        data-placement="top" data-toggle="popover" data-content="Читать">' +
                 '                       <i class="glyphicon glyphicon-eye-open icon-white"></i></a>\n' +
@@ -228,7 +230,8 @@ function createHtmlItemsList(bookList, items) {
                     '                    <a href="' + editBookLink + bookList[i].id + '" class="btn admin-button item-actions" role="button"\n' +
                     '                        data-placement="top" data-toggle="popover" data-content="Изменить">' +
                     '                       <i class="glyphicon glyphicon-pencil icon-white"></i></a>\n' +
-                    '                    <a href="#" onclick="confirmDeleteBook(' + bookList[i].id + ', \'' + bookList[i].name + '\')"' +
+                    '                    <a href="#after-modal-'+bookList[i].id+'"' +
+                    '                        onclick="confirmDeleteBook(' + bookList[i].id + ', \'' + bookList[i].name + '\')"' +
                     '                        class="btn admin-button item-actions" role="button"\n' +
                     '                        data-placement="top" data-toggle="popover" data-content="Удалить">' +
                     '                       <i class="glyphicon glyphicon-trash icon-white"></i></a>\n' +
@@ -291,7 +294,13 @@ function getCriteria() {
 function confirmDeleteBook(bookId, bookName) {
     if(checkBookInOrders(bookId)){
         getAlert("Книга '" + bookName + "' куплена пользователями, ее нельзя удалить");
-    } else {
+    } else if(checkBookInCart(bookId)){
+        getConfirm("Книга '" + bookName + "' находится в корзине у некоторых пользователей, удалить все равно?", function(choose) {
+            if(choose){
+                window.location = (getContextPath() + '/books/deleteBook?bookId=' + bookId);
+            }
+        });
+    }else {
         getConfirm("Уверены что хотите удалить книгу '" + bookName + "'?", function(choose) {
             if(choose){
                 window.location = (getContextPath() + '/books/deleteBook?bookId=' + bookId);

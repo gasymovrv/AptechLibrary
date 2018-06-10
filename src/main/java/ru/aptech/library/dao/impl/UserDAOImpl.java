@@ -20,7 +20,7 @@ public class UserDAOImpl implements UserDAO<User, String> {
 
     public List<User> find() {
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("from User where username=:username", User.class).getResultList();
+        return session.createQuery("from User", User.class).getResultList();
     }
 
 

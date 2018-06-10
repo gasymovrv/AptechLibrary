@@ -7,16 +7,19 @@
     <c:if test="${not empty isAdded}">
         <c:choose>
             <c:when test="${isAdded}">
-                <div class="alert alert-success" role="alert">
+                <div class="alert alert-success info-message" role="alert" hidden>
                     Книга успешно добавлена!
                 </div>
             </c:when>
             <c:otherwise>
-                <div class="alert alert-danger" role="alert">
+                <div class="alert alert-danger info-message" role="alert" hidden>
                     Произошла ошибка при добавлении! Возможно такая книга уже существует
                 </div>
             </c:otherwise>
         </c:choose>
+        <script>
+            showInfoMessage();
+        </script>
     </c:if>
     <form:form method="post" modelAttribute="book" action="${contextPath}books/addBookAction" enctype="multipart/form-data">
         <jsp:include page="add-or-edit-book.jsp"/>

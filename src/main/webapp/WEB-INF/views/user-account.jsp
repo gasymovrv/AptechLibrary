@@ -7,24 +7,30 @@
     <!-- Full Description & Specification -->
     <div class="col-sm-12">
         <c:if test="${not empty enoughMoney and not enoughMoney}">
-            <div class="alert alert-danger" role="alert">
+            <div class="alert alert-danger info-message" role="alert" hidden>
                 Недостаточно средств для покупки!
             </div>
+            <script>
+                showInfoMessage();
+            </script>
             <%request.setAttribute("enoughMoney", null);%>
         </c:if>
         <c:if test="${not empty successBuy}">
             <c:choose>
                 <c:when test="${successBuy}">
-                    <div class="alert alert-success" role="alert">
+                    <div class="alert alert-success info-message" role="alert" hidden>
                         Покупка успешно совершена!
                     </div>
                 </c:when>
                 <c:otherwise>
-                    <div class="alert alert-danger" role="alert">
+                    <div class="alert alert-danger info-message" role="alert" hidden>
                         Произошла ошибка во время покупки!
                     </div>
                 </c:otherwise>
             </c:choose>
+            <script>
+                showInfoMessage(10);
+            </script>
             <%request.setAttribute("successBuy", null);%>
         </c:if>
         <div class="tabbable">

@@ -7,16 +7,19 @@
     <c:if test="${not empty isEdited}">
         <c:choose>
             <c:when test="${isEdited}">
-                <div class="alert alert-success" role="alert">
+                <div class="alert alert-success info-message" role="alert" hidden>
                     Информация о книге успешно изменена!
                 </div>
             </c:when>
             <c:otherwise>
-                <div class="alert alert-danger" role="alert">
+                <div class="alert alert-danger info-message" role="alert" hidden>
                     Произошла ошибка при попытке обновить книгу!
                 </div>
             </c:otherwise>
         </c:choose>
+        <script>
+            showInfoMessage();
+        </script>
     </c:if>
     <form:form method="post" modelAttribute="book" action="${contextPath}books/editBookAction?bookId=${book.id}"  enctype="multipart/form-data">
         <jsp:include page="add-or-edit-book.jsp"/>

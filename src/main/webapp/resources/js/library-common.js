@@ -2,9 +2,13 @@ $(document).ready(function () {
     itemsOnPageValidation();
     changeSortType();
 });
-function showDeleteMessage() {
-    $(".delete-message").show('slow');
-    setTimeout(function() { $(".delete-message").hide('slow'); }, 10000);
+
+//duration - длительность показывания инф.блока в секундах
+function showInfoMessage(duration) {
+    $(".info-message").show('slow');
+    if(duration){
+        setTimeout(function() { $(".info-message").hide('slow'); }, duration*1000);
+    }
 }
 
 function getAlert(dialog) {
