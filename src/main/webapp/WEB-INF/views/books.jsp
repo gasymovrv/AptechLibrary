@@ -3,27 +3,44 @@
 <%--@elvariable id="criteria" type="ru.aptech.library.util.SearchCriteriaBooks"--%>
 <!-- Main box (search) - books-->
 <div id="main-box">
+
+    <div class="row">
+        <c:if test="${not empty sessionScope.isDeleted}">
+            <c:choose>
+                <c:when test="${sessionScope.isDeleted}">
+                    <div class="alert alert-success delete-message" role="alert" hidden>
+                        Книга успешно удалена!
+                    </div>
+                    <script>
+                        showDeleteMessage();
+                    </script>
+                </c:when>
+                <c:otherwise>
+                    <div class="alert alert-danger delete-message" role="alert" hidden>
+                        Произошла ошибка при удалении!
+                    </div>
+                    <script>
+                        showDeleteMessage();
+                    </script>
+                </c:otherwise>
+            </c:choose>
+            <%session.setAttribute("isDeleted", null);%>
+        </c:if>
+    </div>
+
     <div id="row-info" class="row">
         <%--template for ajax--%>
     </div>
+
     <div id="box-with-rows-for-books" class="row">
         <%--template for ajax--%>
     </div>
+
 </div>
 
 <tiles:insertAttribute name="pagination"/>
 
 <script>
-
-    <c:if test="${not empty sessionScope.isDeleted}">
-    if (${sessionScope.isDeleted}) {
-        alert("Книга успешно удалена!");
-    } else {
-        alert("Произошла ошибка при удалении!");
-    }
-    <%session.setAttribute("isDeleted", null);%>
-    </c:if>
-
     let criteria = null;
     <c:if test="${not empty criteriaBooks}">
     criteria = {

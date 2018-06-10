@@ -10,6 +10,7 @@
             <div class="alert alert-danger" role="alert">
                 Недостаточно средств для покупки!
             </div>
+            <%request.setAttribute("enoughMoney", null);%>
         </c:if>
         <c:if test="${not empty successBuy}">
             <c:choose>
@@ -24,6 +25,7 @@
                     </div>
                 </c:otherwise>
             </c:choose>
+            <%request.setAttribute("successBuy", null);%>
         </c:if>
         <div class="tabbable">
             <!-- Tabs -->

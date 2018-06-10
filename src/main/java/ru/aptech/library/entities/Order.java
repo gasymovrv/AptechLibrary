@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Set;
 
 
-public class Order implements Serializable{
+public class Order implements Serializable, Comparable<Order>{
     @Transient
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
@@ -76,7 +76,17 @@ public class Order implements Serializable{
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id, user, created);
+    }
+
+
+    @Override
+    public int compareTo(Order o) {
+        if(this.equals(o)){
+            return 0;
+        } else if (this.created.compareTo(o.created)==0){
+            return -1;
+        }
+        return o.created.compareTo(this.created); //сортировка по убыванию даты
     }
 }

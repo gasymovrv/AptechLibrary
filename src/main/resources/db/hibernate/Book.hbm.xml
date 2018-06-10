@@ -66,14 +66,14 @@
             <column name="price" sql-type="decimal(16, 2)" not-null="true"/>
         </property>
 
-        <set name="carts" table="carts_to_books" inverse="true" lazy="false" fetch="join">
+        <set name="carts" table="carts_to_books" cascade="all" inverse="true" lazy="false" fetch="join">
             <key column="book_id"/>
             <many-to-many column="username" class="Cart" />
         </set>
 
-        <set name="orders" table="orders_to_books" inverse="true" lazy="false" fetch="join">
+        <set name="orders" table="orders_to_books" cascade="all" inverse="true" lazy="false" fetch="join">
             <key column="book_id"/>
-            <many-to-many column="order_id" class="Cart" />
+            <many-to-many column="order_id" class="Order" />
         </set>
 
     </class>

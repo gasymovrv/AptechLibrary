@@ -2,6 +2,32 @@ $(document).ready(function () {
     itemsOnPageValidation();
     changeSortType();
 });
+function showDeleteMessage() {
+    $(".delete-message").show('slow');
+    setTimeout(function() { $(".delete-message").hide('slow'); }, 10000);
+}
+
+function getAlert(dialog) {
+    $("#exampleModal .modal-body").text(dialog);
+    $("#exampleModal").modal('show');
+}
+
+function getConfirm (dialog, callback) {
+    $('#exampleModalConfirm').modal({show:true,
+        backdrop:false,
+        keyboard: false,
+    });
+    $("#exampleModalConfirm .modal-body").html(dialog);
+
+    $("#exampleModalConfirm .btn-default").on('click', function () {
+        $('#exampleModalConfirm').modal('hide');
+        if(callback){callback(false);}
+    });
+    $("#exampleModalConfirm .btn-primary").on('click', function () {
+        $('#exampleModalConfirm').modal('hide');
+        if(callback){callback(true);}
+    });
+}
 
 function  popovers() {
     let actions = $('.item-actions');
@@ -35,7 +61,7 @@ function getFoundResultText() {
             result = text;
         },
         error: function () {
-            alert('Ошибка в script getFoundResultText');
+            getAlert('Ошибка в script getFoundResultText');
         }
     });
     return result;

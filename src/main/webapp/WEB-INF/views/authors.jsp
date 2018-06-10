@@ -3,6 +3,31 @@
 
 <!-- Main box (non search) - authors-->
 <div class="center-block col-sm-9" style="float: none;">
+
+    <div class="row">
+        <c:if test="${not empty sessionScope.isDeleted}">
+            <c:choose>
+                <c:when test="${sessionScope.isDeleted}">
+                    <div class="alert alert-success delete-message" role="alert" hidden>
+                        Автор успешно удален!
+                    </div>
+                    <script>
+                        showDeleteMessage();
+                    </script>
+                </c:when>
+                <c:otherwise>
+                    <div class="alert alert-danger delete-message" role="alert" hidden>
+                        Произошла ошибка при удалении!
+                    </div>
+                    <script>
+                        showDeleteMessage();
+                    </script>
+                </c:otherwise>
+            </c:choose>
+            <%session.setAttribute("isDeleted", null);%>
+        </c:if>
+    </div>
+
     <div id="row-info" class="row">
         <security:authorize access="hasRole('ROLE_ADMIN')">
             <div class="col-sm-2">
@@ -10,6 +35,7 @@
             </div>
         </security:authorize>
     </div>
+
     <div id="box-with-rows-for-authors" class="row">
         <c:set var="i" value="0" scope="page"/>
         <c:forEach begin="1" end="${authorList.size()}" step="3">
@@ -70,15 +96,5 @@
 
 </div>
 <script>
-
-    <c:if test="${not empty sessionScope.isDeleted}">
-    if (${sessionScope.isDeleted}) {
-        alert("Автор успешно удален!");
-    } else {
-        alert("Произошла ошибка при удалении!");
-    }
-    <%session.setAttribute("isDeleted", null);%>
-    </c:if>
-
     popovers();
 </script>

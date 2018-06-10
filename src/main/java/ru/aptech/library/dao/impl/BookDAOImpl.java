@@ -39,6 +39,7 @@ public class BookDAOImpl implements CommonDAO<Book> {
     private final String ORDER_BY_NAME = " order by b.name";
     private final String ORDER_BY_CREATION = " order by b.created desc";
     private final String ORDER_BY_POPULARITY = " order by b.views desc";
+    private final String ORDER_BY_PRICE = " order by b.price";
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -162,6 +163,9 @@ public class BookDAOImpl implements CommonDAO<Book> {
                     break;
                 case POPULARITY:
                     sortSql = ORDER_BY_POPULARITY;
+                    break;
+                case PRICE:
+                    sortSql = ORDER_BY_PRICE;
                     break;
             }
         }

@@ -90,9 +90,7 @@ public class User implements Serializable {
     @Transient
     public Set<Order> getSortedOrders() {
         //создаем сет, сортирующий по убаванию даты из поля created
-        Set<Order> sortedSet = new TreeSet<>((e1, e2) -> e2.getCreated().compareTo(e1.getCreated()));
-        sortedSet.addAll(orders);
-        return sortedSet;
+        return new TreeSet<>(orders);
     }
 
 

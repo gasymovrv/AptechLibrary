@@ -1,7 +1,9 @@
 function confirmDeleteAuthor(authorId, authorName) {
-    if (confirm("Уверены что хотите удалить автора '" + authorName + "'?")) {
-        window.location = (getContextPath() + '/authors/deleteAuthor?authorId=' + authorId);
-    }
+    getConfirm("Уверены что хотите удалить автора '" + authorName + "'?", function(choose) {
+        if(choose){
+            window.location = (getContextPath() + '/authors/deleteAuthor?authorId=' + authorId);
+        }
+    });
 }
 
 function authorsPagination(quantityAuthors, authorsOnPage, selectedPage) {

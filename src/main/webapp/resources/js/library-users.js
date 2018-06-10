@@ -8,7 +8,7 @@ function isAdmin() {
             result = data;
         },
         error: function () {
-            alert('Ошибка в isAdmin');
+            getAlert('Ошибка в isAdmin');
         }
     });
     return result;
@@ -24,7 +24,7 @@ function checkBuyBook(bookId) {
             result = data;
         },
         error: function () {
-            alert('Ошибка в checkBuyBook');
+            getAlert('Ошибка в checkBuyBook');
         }
     });
     return result;
@@ -40,7 +40,23 @@ function checkBookInCart(bookId) {
             result = data;
         },
         error: function () {
-            alert('Ошибка в checkBookInCart');
+            getAlert('Ошибка в checkBookInCart');
+        }
+    });
+    return result;
+}
+
+function checkBookInOrders(bookId) {
+    let result;
+    $.ajax({
+        type: 'GET',//тип запроса
+        url: getContextPath() + '/users/checkBookInOrders?bookId='+bookId,//url адрес обработчика
+        async: false,
+        success: function (data) {//принимаемое от сервера (Response)
+            result = data;
+        },
+        error: function () {
+            getAlert('Ошибка в checkBookInOrders');
         }
     });
     return result;
@@ -56,7 +72,7 @@ function isUser() {
             result = data;
         },
         error: function () {
-            alert('Ошибка в isUser');
+            getAlert('Ошибка в isUser');
         }
     });
     return result;

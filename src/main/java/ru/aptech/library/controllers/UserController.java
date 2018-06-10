@@ -165,7 +165,14 @@ public class UserController extends BaseController{
         }
         return result;
     }
+    @RequestMapping(value = "checkBookInOrders", method = RequestMethod.GET)
+    @ResponseBody
+    public Boolean checkBookInOrders(@RequestParam Long bookId) {
+        Book book = bookService.find(bookId);
+        return book.getOrders()!=null && !book.getOrders().isEmpty();
+    }
 
+    
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(Set.class, "userRole", new CustomCollectionEditor(Set.class)

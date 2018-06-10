@@ -3,7 +3,8 @@ package ru.aptech.library.enums;
 public enum SortType {
     NAME("По названию/имени"),
     CREATION_DATE("По дате добавления"),
-    POPULARITY("По популярности");
+    POPULARITY("По популярности"),
+    PRICE("По цене");
 
     private String text;
 
