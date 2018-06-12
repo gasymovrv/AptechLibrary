@@ -30,10 +30,12 @@
         <!-- Operations -->
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group-lg bottom-indent" role="group" aria-label="First group">
-                <a href="#" onclick="confirmAddToCart(${book.id}, '${book.name}')"
-                   class="btn item-actions"
-                   role="button" data-placement="top" data-toggle="popover" data-content="В корзину">
-                    <i class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
+                <c:if test="${book.price!=0.0}">
+                    <a href="#" onclick="confirmAddToCart(${book.id}, '${book.name}')"
+                       class="btn item-actions"
+                       role="button" data-placement="top" data-toggle="popover" data-content="В корзину">
+                        <i class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
+                </c:if>
                 <a href="#" onclick="confirmShowBookContent(${book.id}, '${book.name}', ${book.price})"
                    class="btn item-actions"
                    role="button" data-placement="top" data-toggle="popover" data-content="Читать">
