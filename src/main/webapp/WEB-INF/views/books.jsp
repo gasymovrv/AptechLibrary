@@ -1,30 +1,30 @@
 <%@include file="../../include.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%--@elvariable id="criteria" type="ru.aptech.library.util.SearchCriteriaBooks"--%>
+
+<div class="row">
+    <c:if test="${not empty sessionScope.isDeleted}">
+        <c:choose>
+            <c:when test="${sessionScope.isDeleted}">
+                <div class="alert alert-success info-message" role="alert" hidden>
+                    Книга успешно удалена!
+                </div>
+            </c:when>
+            <c:otherwise>
+                <div class="alert alert-danger info-message" role="alert" hidden>
+                    Произошла ошибка при удалении!
+                </div>
+            </c:otherwise>
+        </c:choose>
+        <script>
+            showInfoMessage(10);
+        </script>
+        <%session.setAttribute("isDeleted", null);%>
+    </c:if>
+</div>
+
 <!-- Main box (search) - books-->
 <div id="main-box">
-
-    <div class="row">
-        <c:if test="${not empty sessionScope.isDeleted}">
-            <c:choose>
-                <c:when test="${sessionScope.isDeleted}">
-                    <div class="alert alert-success info-message" role="alert" hidden>
-                        Книга успешно удалена!
-                    </div>
-                </c:when>
-                <c:otherwise>
-                    <div class="alert alert-danger info-message" role="alert" hidden>
-                        Произошла ошибка при удалении!
-                    </div>
-                </c:otherwise>
-            </c:choose>
-            <script>
-                showInfoMessage(10);
-            </script>
-            <%session.setAttribute("isDeleted", null);%>
-        </c:if>
-    </div>
-
     <div id="row-info" class="row">
         <%--template for ajax--%>
     </div>

@@ -69,7 +69,7 @@ public class UserController extends BaseController{
                                 @RequestParam(required = false) Boolean clearCart,
                                 Principal principal) {
         ModelAndView modelAndView = new ModelAndView("account-page");
-        User user = userService.find(principal.getName());
+        User user = userService.find(principal.getName(), "booksInCart", "booksInOrders");
         if(addMoney!=null && addMoney){
             user.setMoney(user.getMoney()+1000);//просто увеличиваем баланс на 1000 пока нет системы оплаты
             userService.update(user);
@@ -142,8 +142,8 @@ public class UserController extends BaseController{
     public Boolean checkBuyBook(@RequestParam Long bookId, Authentication authentication) {
         boolean result = false;
         if(authentication != null){
-            Book book = bookService.find(bookId);
-            User user = userService.find(authentication.getName());
+            Book book = bookService.find(bookId, false);
+            User user = userService.find(authentication.getName(), "booksInOrders");
             for(Order o : user.getOrders()){
                 if(o.getBooks().contains(book)){
                     result = true;
@@ -157,8 +157,8 @@ public class UserController extends BaseController{
     public Boolean checkBookInCart(@RequestParam Long bookId, Authentication authentication) {
         boolean result = false;
         if(authentication != null){
-            Book book = bookService.find(bookId);
-            User user = userService.find(authentication.getName());
+            Book book = bookService.find(bookId, false);
+            User user = userService.find(authentication.getName(), "booksInCart");
             if (user.getCart().getBooks().contains(book)) {
                 result = true;
             }
@@ -168,7 +168,7 @@ public class UserController extends BaseController{
     @RequestMapping(value = "checkBookInOrders", method = RequestMethod.GET)
     @ResponseBody
     public Boolean checkBookInOrders(@RequestParam Long bookId) {
-        Book book = bookService.find(bookId);
+        Book book = bookService.find(bookId, true);
         return book.getOrders()!=null && !book.getOrders().isEmpty();
     }
 

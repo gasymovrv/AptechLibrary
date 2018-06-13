@@ -1,5 +1,6 @@
 package ru.aptech.library.service;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -46,8 +47,13 @@ public class BookService {
     }
 
     @Transactional(propagation=Propagation.REQUIRED)
-    public Book find(long id) {
-        return bookDAO.find(id);
+    public Book find(Long id, Boolean initSets) {
+        Book b = bookDAO.find(id);
+        if(initSets!=null && initSets){
+            Hibernate.initialize(b.getOrders());
+            Hibernate.initialize(b.getCarts());
+        }
+        return b;
     }
 
     @Transactional(propagation=Propagation.REQUIRED)

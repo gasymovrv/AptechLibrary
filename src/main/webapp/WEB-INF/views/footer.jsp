@@ -25,10 +25,9 @@
             <div class="col-footer col-md-4 col-xs-6">
                 <h3>Контакты</h3>
                 <p class="contact-us-details">
-                    <b>Address:</b> 123 Fake Street, LN1 2ST, London, United Kingdom<br/>
-                    <b>Phone:</b> +44 123 654321<br/>
-                    <b>Fax:</b> +44 123 654321<br/>
-                    <b>Email:</b> <a href="mailto:getintoutch@yourcompanydomain.com">getintoutch@yourcompanydomain.com</a>
+                    <b>Адрес:</b>г. Саратов, ул.Политехническая, 77<br/>
+                    <b>Телефон:</b>+7(8452)123456<br/>
+                    <b>Email:</b> <a href="mailto:getintoutch@yourcompanydomain.com">besmart@gmail.com</a>
                 </p>
             </div>
             <%--<div class="col-footer col-md-2 col-xs-6">--%>

@@ -26,7 +26,7 @@
 
         <one-to-one name="cart" class="Cart" cascade="all" lazy="false"/>
 
-        <set name="orders" table="order" cascade="all" lazy="false" fetch="join">
+        <set name="orders" table="order" cascade="all" lazy="true" fetch="join">
             <key>
                 <column name="username" length="45" not-null="true" />
             </key>

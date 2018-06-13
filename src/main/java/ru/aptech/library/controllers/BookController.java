@@ -81,7 +81,7 @@ public class BookController extends BaseController{
     public ModelAndView bookInfo(@RequestParam(value = "bookId") Long bookId, Principal principal) {
         ModelAndView modelAndView = new ModelAndView("home-page-one-book");
         addAttributesForCriteria(modelAndView);
-        Book book = bookService.find(bookId);
+        Book book = bookService.find(bookId, false);
         increaseBookViews(book, principal);
         modelAndView.addObject("book", book);
         return modelAndView;
@@ -115,7 +115,7 @@ public class BookController extends BaseController{
     @RequestMapping(value = "editBookView", method = RequestMethod.GET)
     public ModelAndView editBookView(@RequestParam Long bookId) {
         ModelAndView modelAndView = new ModelAndView("edit-book-page");
-        addAttributesForAddOrEditBook(modelAndView, bookService.find(bookId));
+        addAttributesForAddOrEditBook(modelAndView, bookService.find(bookId, false));
         return modelAndView;
     }
 
@@ -134,7 +134,7 @@ public class BookController extends BaseController{
             e.printStackTrace();
         }
         modelAndView.addObject("isEdited", isEdited);
-        addAttributesForAddOrEditBook(modelAndView, bookService.find(bookId));
+        addAttributesForAddOrEditBook(modelAndView, bookService.find(bookId, false));
         return modelAndView;
     }
 
@@ -154,7 +154,7 @@ public class BookController extends BaseController{
 
     @RequestMapping(value = "showBookImage", method = RequestMethod.GET)
     public void showImage(@RequestParam("bookId") Long bookId, HttpServletResponse response, HttpServletRequest request) throws IOException {
-        Book book = bookService.find(bookId);
+        Book book = bookService.find(bookId, false);
         //получаем дефолтное изображение из статических ресурсов
         String path = request.getSession().getServletContext().getRealPath("/resources/img/nophoto.jpg");
         InputStream inputStream = new FileSystemResource(new File(path)).getInputStream();
@@ -173,7 +173,7 @@ public class BookController extends BaseController{
 
     @RequestMapping(value = "showBookContent", method = RequestMethod.GET)
     public void showBookContent(@RequestParam("bookId") Long bookId, HttpServletResponse response, Principal principal) throws IOException {
-        Book book = bookService.find(bookId);
+        Book book = bookService.find(bookId, false);
         byte[] content = book.getContent();
         response.setContentType("application/pdf");
         response.getOutputStream().write(content);
@@ -184,8 +184,8 @@ public class BookController extends BaseController{
 
     @RequestMapping(value = "addToCart", method = RequestMethod.GET)
     public String addToCart(@RequestParam("bookId") Long bookId, Principal principal) {
-        Book book = bookService.find(bookId);
-        User user = userService.find(principal.getName());
+        Book book = bookService.find(bookId, false);
+        User user = userService.find(principal.getName(), "booksInCart");
         user.getCart().getBooks().add(book);
         userService.update(user);
         return "redirect:/users/account?tab=cart";

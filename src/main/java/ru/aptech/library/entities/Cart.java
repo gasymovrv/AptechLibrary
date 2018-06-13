@@ -49,19 +49,20 @@ public class Cart implements Serializable {
         while (iter.hasNext()) {
             Book b = iter.next();
             if(b.getId().equals(id)){
-                b.getCarts().remove(this);
+//                b.getCarts().remove(this);
                 iter.remove();
             }
         }
     }
 
     public void removeAllBooks(){
-        Iterator<Book> iter = books.iterator();
-        while (iter.hasNext()) {
-            Book b = iter.next();
-            b.getCarts().remove(this);
-            iter.remove();
-        }
+//        Iterator<Book> iter = books.iterator();
+//        while (iter.hasNext()) {
+//            Book b = iter.next();
+//            b.getCarts().remove(this);
+//            iter.remove();
+//        }
+        books.clear();
     }
 
 

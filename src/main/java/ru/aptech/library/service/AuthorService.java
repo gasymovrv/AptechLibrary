@@ -1,5 +1,6 @@
 package ru.aptech.library.service;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -47,12 +48,20 @@ public class AuthorService {
     }
 
     @Transactional(propagation=Propagation.REQUIRED)
-    public List<Author> find(SearchCriteriaAuthors criteria, Integer authorsOnPage, Integer selectedPage, SortType sortType) {
+    public List<Author> find(SearchCriteriaAuthors criteria, Integer authorsOnPage, Integer selectedPage, SortType sortType, Boolean initSets) {
+        List<Author> authors;
         int init = (selectedPage - 1) * authorsOnPage;
         if (criteria != null && !criteria.isEmpty()) {
-            return authorDAO.find(criteria, authorsOnPage, init, sortType);
+            authors = authorDAO.find(criteria, authorsOnPage, init, sortType);
+        } else {
+            authors = authorDAO.find(authorsOnPage, init, sortType);
         }
-        return authorDAO.find(authorsOnPage, init, sortType);
+        if (initSets != null && initSets) {
+            for (Author a : authors) {
+                Hibernate.initialize(a.getBooks());
+            }
+        }
+        return authors;
     }
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)

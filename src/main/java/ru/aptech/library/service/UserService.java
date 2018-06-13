@@ -1,5 +1,6 @@
 package ru.aptech.library.service;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,9 +27,31 @@ public class UserService {
     @Autowired
     protected BCryptPasswordEncoder bCrypt;
 
-
-    public User find(String username) {
-        return userDAO.find(username);
+    @Transactional(propagation= Propagation.REQUIRED)
+    public User find(String username, String... setsName) {
+        User u = userDAO.find(username);
+        if (setsName != null && setsName.length > 0) {
+            for (String s : setsName) {
+                switch (s) {
+                    case "booksInCart": {
+                        Hibernate.initialize(u.getCart().getBooks());
+                        break;
+                    }
+                    case "booksInOrders": {
+                        Hibernate.initialize(u.getOrders());
+                        for (Order o : u.getOrders()) {
+                            Hibernate.initialize(o.getBooks());
+                        }
+                        break;
+                    }
+                    case "orders": {
+                        Hibernate.initialize(u.getOrders());
+                        break;
+                    }
+                }
+            }
+        }
+        return u;
     }
 
     @Transactional(propagation= Propagation.REQUIRED)

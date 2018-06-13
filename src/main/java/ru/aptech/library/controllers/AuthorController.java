@@ -43,16 +43,17 @@ public class AuthorController extends BaseController{
                     (SearchCriteriaAuthors) session.getAttribute("criteriaAuthors"),
                     authorsOnPage,
                     selectedPage,
-                    (SortType) session.getAttribute("sortType")
+                    (SortType) session.getAttribute("sortType"),
+                    true
             );
         } else {
             if(criteria.isEmpty() && session.getAttribute("criteriaAuthors")==null){
                 SearchCriteriaAuthors sca = new SearchCriteriaAuthors();
                 session.setAttribute("criteriaAuthors", sca);
-                authors = authorService.find(sca, authorsOnPage, selectedPage, (SortType)session.getAttribute("sortType"));
+                authors = authorService.find(sca, authorsOnPage, selectedPage, (SortType)session.getAttribute("sortType"), true);
             } else {
                 session.setAttribute("criteriaAuthors", criteria);
-                authors = authorService.find(criteria, authorsOnPage, selectedPage, (SortType)session.getAttribute("sortType"));
+                authors = authorService.find(criteria, authorsOnPage, selectedPage, (SortType)session.getAttribute("sortType"), true);
             }
         }
 
@@ -146,7 +147,7 @@ public class AuthorController extends BaseController{
                 } else if (element instanceof Long) {
                     bookId = (Long) element;
                 }
-                return bookId != null ? bookService.find(bookId) : null;
+                return bookId != null ? bookService.find(bookId, false) : null;
             }
         });
     }

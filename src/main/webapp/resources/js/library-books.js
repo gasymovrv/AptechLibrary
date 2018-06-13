@@ -151,11 +151,14 @@ function createHtmlItemsList(bookList, items) {
     let admin = isAdmin();
     let rowId = 'row-with-books_0';
 
-    $('#box-with-rows-for-books').html('<div id="' + rowId + '" class="row"></div>');
+    $('#main-box').html(
+        '<div id="row-info" class="row"></div>\n' +
+        '<div id="box-with-rows-for-books" class="row">' +
+        '    <div id="' + rowId + '" class="row"></div>' +
+        '</div>\n');
+
     if (foundResultText) {//если атрибут foundResultText не пустой
         $('#row-info').html('<div class="col-sm-8" id="books-count"><h3>' + foundResultText + ' ' + items + '</h3></div>');
-    } else {
-        $('#row-info').empty();
     }
     if(admin){
         $('#row-info').append(

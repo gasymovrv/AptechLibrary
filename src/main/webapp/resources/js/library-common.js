@@ -47,10 +47,12 @@ function  popovers() {
 
 //сохраняем значение атрибута foundResultText в сессии
 function saveFoundResultText(foundResultText) {
+    if(!foundResultText){
+        foundResultText = "";
+    }
     $.ajax({
         type: 'POST',//тип запроса
         url: getContextPath() + '/saveFoundResultText?foundResultText=' + foundResultText,//url адрес обработчика
-        async: false
     });
 }
 

@@ -62,7 +62,7 @@ public class BaseController {
         return (String)session.getAttribute("foundResultText");
     }
     @RequestMapping(value = "saveFoundResultText", method = RequestMethod.POST)
-    public void saveFoundResultText(@RequestParam String foundResultText, HttpSession session) {
+    public void saveFoundResultText(@RequestParam(required = false) String foundResultText, HttpSession session) {
         session.setAttribute("foundResultText", foundResultText);
     }
     @RequestMapping(value = "getSortType", method = RequestMethod.GET, produces = "application/json")
