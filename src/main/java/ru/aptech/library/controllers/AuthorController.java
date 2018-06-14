@@ -86,14 +86,14 @@ public class AuthorController extends BaseController{
             e.printStackTrace();
         }
         modelAndView.addObject("isAdded", isAdded);
-        addAttributesForAddOrEditAuthor(modelAndView, savedAuthorId == null ? author : authorService.find(savedAuthorId));
+        addAttributesForAddOrEditAuthor(modelAndView, savedAuthorId == null ? author : authorService.find(savedAuthorId, true));
         return modelAndView;
     }
 
     @RequestMapping(value = "editAuthorView", method = RequestMethod.GET)
     public ModelAndView editAuthorView(@RequestParam Long authorId) {
         ModelAndView modelAndView = new ModelAndView("edit-author-page");
-        addAttributesForAddOrEditAuthor(modelAndView, authorService.find(authorId));
+        addAttributesForAddOrEditAuthor(modelAndView, authorService.find(authorId, true));
         return modelAndView;
     }
 
@@ -109,7 +109,7 @@ public class AuthorController extends BaseController{
             e.printStackTrace();
         }
         modelAndView.addObject("isEdited", isEdited);
-        addAttributesForAddOrEditAuthor(modelAndView, authorService.find(authorId));
+        addAttributesForAddOrEditAuthor(modelAndView, authorService.find(authorId, true));
         return modelAndView;
     }
 

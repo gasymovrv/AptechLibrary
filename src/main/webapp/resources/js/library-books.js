@@ -139,7 +139,7 @@ function getItemsByAjax(page, itemsOnPage, criteria, async, items) {
 }
 
 function createHtmlItemsList(bookList, items) {
-    //костыль для того чтобы при обновлении после аджакс-поиска всегда
+    //костыль для того чтобы при обновлении после аджакс-поиска всегда был адрес /home
     window.history.pushState(null, null, getContextPath() + '/home');
 
     let showImgLink = getContextPath() + '/books/showBookImage?bookId=';
@@ -148,7 +148,6 @@ function createHtmlItemsList(bookList, items) {
     let addBookLink = getContextPath() + '/books/addBookView';
     let foundResultText = getFoundResultText();
     saveFoundResultText("");//обнуляем, иначе отображается старый текст при нажатии кнопки назад
-    let admin = isAdmin();
     let rowId = 'row-with-books_0';
 
     $('#main-box').html(
@@ -160,7 +159,7 @@ function createHtmlItemsList(bookList, items) {
     if (foundResultText) {//если атрибут foundResultText не пустой
         $('#row-info').html('<div class="col-sm-8" id="books-count"><h3>' + foundResultText + ' ' + items + '</h3></div>');
     }
-    if(admin){
+    if(currentUserIsAdmin){
         $('#row-info').append(
             '<div class="col-sm-2">\n' +
             '    <a href="' + addBookLink + '" type="button" role="button" class="btn btn-md admin-button">Добавить книгу</a>\n' +
@@ -169,7 +168,7 @@ function createHtmlItemsList(bookList, items) {
 
     let j = 0;
     for (let i = 0; i < bookList.length; i++) {
-        let isBuy = checkBuyBook(bookList[i].id);
+        let isBuy = (booksIdInOrdersCurrentUser.indexOf(bookList[i].id) !== -1);
         let priceText = 'БЕСПЛАТНО';
         if(bookList[i].price!=0){
             priceText = bookList[i].price + ' р.';
@@ -226,7 +225,7 @@ function createHtmlItemsList(bookList, items) {
                 '                       <i class="glyphicon glyphicon-eye-open icon-white"></i></a>\n' +
                 '                </div>\n' +
                 '            </div>\n';
-            if (admin) {
+            if (currentUserIsAdmin) {
                 html +=
                     '            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">\n' +
                     '                <div class="btn-group-lg" role="group" aria-label="First group">\n' +
@@ -295,7 +294,7 @@ function getCriteria() {
 }
 
 function confirmDeleteBook(bookId, bookName) {
-    if(checkBookInOrders(bookId)){
+    if(booksIdInOrdersCurrentUser.indexOf(bookId) !== -1){
         getAlert("Книга '" + bookName + "' куплена пользователями, ее нельзя удалить");
     } else if(checkBookInCart(bookId)){
         getConfirm("Книга '" + bookName + "' находится в корзине у некоторых пользователей, удалить все равно?", function(choose) {
@@ -303,7 +302,7 @@ function confirmDeleteBook(bookId, bookName) {
                 window.location = (getContextPath() + '/books/deleteBook?bookId=' + bookId);
             }
         });
-    }else {
+    } else {
         getConfirm("Уверены что хотите удалить книгу '" + bookName + "'?", function(choose) {
             if(choose){
                 window.location = (getContextPath() + '/books/deleteBook?bookId=' + bookId);
@@ -314,14 +313,14 @@ function confirmDeleteBook(bookId, bookName) {
 
 function confirmShowBookContent(bookId, bookName, price) {
     let showBookContentLink = getContextPath() + '/books/showBookContent?bookId=';
-    if (!isUser()) {
+    if (!currentUserIsUser) {
         getConfirm("Чтобы читать книгу '" + bookName + "' Вам необходимо авторизоваться", function(choose) {
             if(choose){
                 window.location = (showBookContentLink + bookId);
             }
         });
     } else if(price>0.0){
-        if (checkBuyBook(bookId)) {
+        if (booksIdInOrdersCurrentUser.indexOf(bookId) !== -1) {
             window.location = (showBookContentLink + bookId);
         } else {
             getAlert("Вы еще не купили книгу '" + bookName + "'");
@@ -335,7 +334,7 @@ function confirmShowBookContent(bookId, bookName, price) {
 function confirmAddToCart(bookId, bookName) {
     let addToCartLink = getContextPath() + '/books/addToCart?bookId=';
     let authorizationLink = getContextPath() + '/users/authorization';
-    if (!isUser()) {
+    if (!currentUserIsUser) {
         getConfirm("Чтобы купить книгу '" + bookName + "' Вам необходимо авторизоваться", function(choose) {
             if(choose){
                 window.location = authorizationLink;
@@ -343,7 +342,7 @@ function confirmAddToCart(bookId, bookName) {
         });
     } else if (checkBookInCart(bookId)) {
         getAlert("Книга '" + bookName + "' уже добавлена в корзину");
-    } else if (checkBuyBook(bookId)) {
+    } else if (booksIdInOrdersCurrentUser.indexOf(bookId) !== -1) {
         getAlert("Вы уже купили книгу '" + bookName + "'");
     } else {
         window.location = (addToCartLink + bookId);

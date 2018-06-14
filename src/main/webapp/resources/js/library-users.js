@@ -30,17 +30,18 @@ function isUser() {
     return result;
 }
 
-function checkBuyBook(bookId) {
+function getBooksInOrders() {
     let result;
     $.ajax({
         type: 'GET',//тип запроса
-        url: getContextPath() + '/users/checkBuyBook?bookId='+bookId,//url адрес обработчика
+        dataType: 'json',//принимаемый тип (из контроллера)
+        url: getContextPath() + '/users/getBooksInOrders',//url адрес обработчика
         async: false,
         success: function (data) {//принимаемое от сервера (Response)
             result = data;
         },
         error: function () {
-            getAlert('Ошибка в checkBuyBook');
+            getAlert('Ошибка в getBooksInOrders');
         }
     });
     return result;
@@ -57,22 +58,6 @@ function checkBookInCart(bookId) {
         },
         error: function () {
             getAlert('Ошибка в checkBookInCart');
-        }
-    });
-    return result;
-}
-
-function checkBookInOrders(bookId) {
-    let result;
-    $.ajax({
-        type: 'GET',//тип запроса
-        url: getContextPath() + '/users/checkBookInOrders?bookId='+bookId,//url адрес обработчика
-        async: false,
-        success: function (data) {//принимаемое от сервера (Response)
-            result = data;
-        },
-        error: function () {
-            getAlert('Ошибка в checkBookInOrders');
         }
     });
     return result;

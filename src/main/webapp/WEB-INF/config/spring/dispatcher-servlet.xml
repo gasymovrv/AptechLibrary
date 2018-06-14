@@ -29,7 +29,7 @@
         <property name="order" value="0" />
     </bean>
 
-    <!--&lt;!&ndash;WebFlow&ndash;&gt;-->
+    <!--WebFlow-->
     <!--<bean class="org.springframework.webflow.mvc.servlet.FlowHandlerAdapter">-->
         <!--<property name="flowExecutor" ref="flowExecutor"/>-->
     <!--</bean>-->
@@ -38,7 +38,7 @@
         <!--<property name="order" value="1"/>-->
     <!--</bean>-->
 
-    <!--&lt;!&ndash;Spring-MVC&ndash;&gt;-->
+    <!--Spring-MVC-->
     <!--<bean id="viewResolver"-->
           <!--class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
         <!--<property name="prefix" value="/WEB-INF/views/"/>-->

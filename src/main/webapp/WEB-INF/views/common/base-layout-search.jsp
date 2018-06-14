@@ -1,6 +1,15 @@
 <%@include file="../../../include.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
+<script>
+    //глобальная переменная - наличие прав админа
+    let currentUserIsAdmin = isAdmin();
+    //глобальная переменная - наличие прав юзера
+    let currentUserIsUser = isUser();
+    //глобальная переменная - список id книг из всех заказов текущего юзера
+    let booksIdInOrdersCurrentUser = getBooksInOrders();
+</script>
+
 <tiles:insertAttribute name="header"/>
 <tiles:insertAttribute name="top-panel"/>
 <tiles:insertAttribute name="letters"/>

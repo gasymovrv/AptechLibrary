@@ -13,6 +13,7 @@ import ru.aptech.library.entities.*;
 import ru.aptech.library.enums.RoleType;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -23,6 +24,15 @@ import java.util.Set;
 @RequestMapping("users/")
 public class UserController extends BaseController{
 
+    /**
+     * Метод работает в связке со Spring-Security
+     *
+     * На отображенной странице используется атрибут формы action="/login",
+     * который вызывает метод UserDetailsServiceImpl.loadUserByUsername
+     * Далее:
+     * Если пользователь найден - default-target-url="/home",
+     * если нет - authentication-failure-url="/users/authorization?error=true"
+     */
     @RequestMapping(value = "authorization", method = RequestMethod.GET)
     public ModelAndView authorization(@RequestParam(value = "error", required = false) String error) {
         ModelAndView modelAndView = new ModelAndView("login-page");
@@ -110,7 +120,7 @@ public class UserController extends BaseController{
 
     /**
      * Методы для работы с ajax
-     * */
+     */
     @RequestMapping(value = "isAdmin", method = RequestMethod.GET)
     @ResponseBody
     public Boolean isAdmin(Authentication authentication) {
@@ -137,21 +147,6 @@ public class UserController extends BaseController{
         }
         return result;
     }
-    @RequestMapping(value = "checkBuyBook", method = RequestMethod.GET)
-    @ResponseBody
-    public Boolean checkBuyBook(@RequestParam Long bookId, Authentication authentication) {
-        boolean result = false;
-        if(authentication != null){
-            Book book = bookService.find(bookId, false);
-            User user = userService.find(authentication.getName(), "booksInOrders");
-            for(Order o : user.getOrders()){
-                if(o.getBooks().contains(book)){
-                    result = true;
-                }
-            }
-        }
-        return result;
-    }
     @RequestMapping(value = "checkBookInCart", method = RequestMethod.GET)
     @ResponseBody
     public Boolean checkBookInCart(@RequestParam Long bookId, Authentication authentication) {
@@ -165,11 +160,19 @@ public class UserController extends BaseController{
         }
         return result;
     }
-    @RequestMapping(value = "checkBookInOrders", method = RequestMethod.GET)
+    @RequestMapping(value = "getBooksInOrders", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public Boolean checkBookInOrders(@RequestParam Long bookId) {
-        Book book = bookService.find(bookId, true);
-        return book.getOrders()!=null && !book.getOrders().isEmpty();
+    public List<Long> getBooksInOrders(Authentication authentication) {
+        List<Long> result = new ArrayList<>();
+        if(authentication != null){
+            User user = userService.find(authentication.getName(), "booksInOrders");
+            for(Order o : user.getOrders()){
+                for (Book b : o.getBooks()) {
+                    result.add(b.getId());
+                }
+            }
+        }
+        return result;
     }
 
     

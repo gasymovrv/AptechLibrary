@@ -1,29 +1,30 @@
 <%@include file="../../include.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<div class="row">
-    <c:if test="${not empty sessionScope.isDeleted}">
-        <c:choose>
-            <c:when test="${sessionScope.isDeleted}">
-                <div class="alert alert-success info-message" role="alert" hidden>
-                    Автор успешно удален!
-                </div>
-            </c:when>
-            <c:otherwise>
-                <div class="alert alert-danger info-message" role="alert" hidden>
-                    Произошла ошибка при удалении!
-                </div>
-            </c:otherwise>
-        </c:choose>
-        <script>
-            showInfoMessage(10);
-        </script>
-        <%session.setAttribute("isDeleted", null);%>
-    </c:if>
-</div>
 
 <!-- Main box (non search) - authors-->
 <div class="center-block col-sm-9" style="float: none;">
+
+    <div class="row">
+        <c:if test="${not empty sessionScope.isDeleted}">
+            <c:choose>
+                <c:when test="${sessionScope.isDeleted}">
+                    <div class="alert alert-success info-message" role="alert" hidden>
+                        Автор успешно удален!
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="alert alert-danger info-message" role="alert" hidden>
+                        Произошла ошибка при удалении!
+                    </div>
+                </c:otherwise>
+            </c:choose>
+            <script>
+                showInfoMessage(10);
+            </script>
+            <%session.setAttribute("isDeleted", null);%>
+        </c:if>
+    </div>
 
     <div id="row-info" class="row">
         <security:authorize access="hasRole('ROLE_ADMIN')">

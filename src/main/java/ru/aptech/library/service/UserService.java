@@ -28,10 +28,10 @@ public class UserService {
     protected BCryptPasswordEncoder bCrypt;
 
     @Transactional(propagation= Propagation.REQUIRED)
-    public User find(String username, String... setsName) {
+    public User find(String username, String... initSets) {
         User u = userDAO.find(username);
-        if (setsName != null && setsName.length > 0) {
-            for (String s : setsName) {
+        if (initSets != null && initSets.length > 0) {
+            for (String s : initSets) {
                 switch (s) {
                     case "booksInCart": {
                         Hibernate.initialize(u.getCart().getBooks());

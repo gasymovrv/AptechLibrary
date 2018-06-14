@@ -14,6 +14,9 @@
     </beans:bean>
 
     <http use-expressions="true">
+        <!--Переброс на главную, если нет доступа-->
+        <access-denied-handler error-page="/home" />
+
         <!--Страницы админа-->
         <intercept-url pattern="/books/deleteBook**" method="GET" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/books/editBookView**" method="GET" access="hasRole('ROLE_ADMIN')" />

@@ -47,12 +47,14 @@ function  popovers() {
 
 //сохраняем значение атрибута foundResultText в сессии
 function saveFoundResultText(foundResultText) {
-    if(!foundResultText){
-        foundResultText = "";
+    let url = getContextPath() + '/saveFoundResultText';
+    if(foundResultText){
+        url = getContextPath() + '/saveFoundResultText?foundResultText=' + foundResultText;
     }
     $.ajax({
         type: 'POST',//тип запроса
-        url: getContextPath() + '/saveFoundResultText?foundResultText=' + foundResultText,//url адрес обработчика
+        url: url,//url адрес обработчика
+        async: false
     });
 }
 
@@ -104,4 +106,12 @@ function itemsOnPageValidation() {
 //!!! работает только с корневым именем, не содержащим '/'
 function getContextPath() {
     return window.location.pathname.substring(0, window.location.pathname.indexOf("/", 2));
+}
+
+function fixedFooter() {
+    if ($(document).height() > $(window).height()){
+        $("div.footer").addClass("navbar-fixed-bottom");
+    } else {
+        $("div.footer").removeClass("navbar-fixed-bottom");
+    }
 }
