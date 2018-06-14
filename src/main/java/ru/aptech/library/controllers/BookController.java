@@ -1,5 +1,10 @@
 package ru.aptech.library.controllers;
 
+import eu.medsea.mimeutil.MimeType;
+import eu.medsea.mimeutil.MimeUtil;
+import eu.medsea.mimeutil.MimeUtil2;
+import eu.medsea.mimeutil.detector.MagicMimeMimeDetector;
+import eu.medsea.mimeutil.detector.MimeDetector;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -9,13 +14,17 @@ import ru.aptech.library.entities.*;
 import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaBooks;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLConnection;
 import java.security.Principal;
+import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -175,7 +184,43 @@ public class BookController extends BaseController{
     public void showBookContent(@RequestParam("bookId") Long bookId, HttpServletResponse response, Principal principal) throws IOException {
         Book book = bookService.find(bookId, false);
         byte[] content = book.getContent();
-        response.setContentType("application/pdf");
+
+        //определяем mime-type (для pdf - application/pdf)
+        MimeDetector md = new MagicMimeMimeDetector();
+        Collection mimeTypes = md.getMimeTypes(content);
+        MimeType mimeType = MimeUtil2.getMostSpecificMimeType(mimeTypes);
+        if (mimeType != null) {
+            response.setContentType(mimeType.toString());
+        } else {
+            response.setContentType("application/pdf");
+        }
+        /* "Content-Disposition : inline" will show viewable types [like images/text/pdf/anything viewable by browser] right on browser
+        while others(zip e.g) will be directly downloaded [may provide save as popup, based on your browser setting.]*/
+        response.setHeader("Content-Disposition", String.format("inline; filename=\"%s.%s\"", book.getName(),  book.getFileExtension()));
+        response.setContentLength(content.length);
+        response.getOutputStream().write(content);
+        response.getOutputStream().close();
+        increaseBookViews(book, principal);
+    }
+
+
+    @RequestMapping(value = "downloadBookContent", method = RequestMethod.GET)
+    public void downloadBookContent(@RequestParam("bookId") Long bookId, HttpServletResponse response, Principal principal) throws IOException {
+        Book book = bookService.find(bookId, false);
+        byte[] content = book.getContent();
+
+        //определяем mime-type (для pdf - application/pdf)
+        MimeDetector md = new MagicMimeMimeDetector();
+        Collection mimeTypes = md.getMimeTypes(content);
+        MimeType mimeType = MimeUtil2.getMostSpecificMimeType(mimeTypes);
+        if (mimeType != null) {
+            response.setContentType(mimeType.toString());
+        } else {
+            response.setContentType("application/pdf");
+        }
+        /* "Content-Disposition : attachment" will be directly download, may provide save as popup, based on your browser setting*/
+        response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s.%s\"", book.getName(), book.getFileExtension()));
+        response.setContentLength(content.length);
         response.getOutputStream().write(content);
         response.getOutputStream().close();
         increaseBookViews(book, principal);

@@ -253,4 +253,15 @@
         </sql>
     </changeSet>
 
+    <changeSet author="rgasymov" id="20180614-01">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="aplib" tableName="book" columnName="file_extension"/>
+            </not>
+        </preConditions>
+        <sql>
+            ALTER TABLE book ADD COLUMN file_extension varchar(20) DEFAULT '.pdf' NOT NULL;
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

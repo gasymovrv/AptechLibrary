@@ -312,21 +312,41 @@ function confirmDeleteBook(bookId, bookName) {
 }
 
 function confirmShowBookContent(bookId, bookName, price) {
-    let showBookContentLink = getContextPath() + '/books/showBookContent?bookId=';
+    let showBookContentLink = getContextPath() + '/books/showBookContent?bookId=' + bookId;
     if (!currentUserIsUser) {
         getConfirm("Чтобы читать книгу '" + bookName + "' Вам необходимо авторизоваться", function(choose) {
             if(choose){
-                window.location = (showBookContentLink + bookId);
+                window.location = showBookContentLink;
             }
         });
     } else if(price>0.0){
         if (booksIdInOrdersCurrentUser.indexOf(bookId) !== -1) {
-            window.location = (showBookContentLink + bookId);
+            window.location = showBookContentLink;
         } else {
             getAlert("Вы еще не купили книгу '" + bookName + "'");
         }
     } else if(price===0.0){
-        window.location = (showBookContentLink + bookId);
+        window.location = showBookContentLink;
+    }
+
+}
+
+function confirmDownloadBookContent(bookId, bookName, price) {
+    let downloadBookContentLink = getContextPath() + '/books/downloadBookContent?bookId=' + bookId;
+    if (!currentUserIsUser) {
+        getConfirm("Чтобы скачать книгу '" + bookName + "' Вам необходимо авторизоваться", function(choose) {
+            if(choose){
+                window.location = downloadBookContentLink;
+            }
+        });
+    } else if(price>0.0){
+        if (booksIdInOrdersCurrentUser.indexOf(bookId) !== -1) {
+            window.location = downloadBookContentLink;
+        } else {
+            getAlert("Вы еще не купили книгу '" + bookName + "'");
+        }
+    } else if(price===0.0){
+        window.location = downloadBookContentLink;
     }
 
 }

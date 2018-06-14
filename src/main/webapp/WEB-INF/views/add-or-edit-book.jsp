@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="form-group row">
-            <label for="content" class="col-sm-2 col-form-label">Загрузите книгу (в формате .pdf)</label>
+            <label for="content" class="col-sm-2 col-form-label">Загрузите книгу</label>
             <div class="col-sm-10">
                 <%--загружаем файл, используя библиотеку commons-fileupload и бин multipartResolver--%>
                 <input id="content" type="file" name="file1" class="form-control-file"/>

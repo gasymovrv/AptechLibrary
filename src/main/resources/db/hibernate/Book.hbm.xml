@@ -65,6 +65,9 @@
         <property name="price">
             <column name="price" sql-type="decimal(16, 2)" not-null="true"/>
         </property>
+        <property name="fileExtension">
+            <column name="file_extension" sql-type="varchar(20)" not-null="true"/>
+        </property>
 
         <set name="carts" table="carts_to_books" inverse="true" lazy="true" fetch="join">
             <key column="book_id"/>

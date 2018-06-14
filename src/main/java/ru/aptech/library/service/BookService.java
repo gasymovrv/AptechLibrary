@@ -1,5 +1,6 @@
 package ru.aptech.library.service;
 
+import org.apache.commons.io.FilenameUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -69,6 +70,7 @@ public class BookService {
     public void save(Book book, MultipartFile content, MultipartFile image) throws Exception {
         book.setContent(content.getBytes());
         book.setImage(image.getBytes());
+        book.setFileExtension(FilenameUtils.getExtension(content.getOriginalFilename()));
         if(book.getViews()==null){book.setViews(0L);}
         book.setCreated(LocalDateTime.now());
         Long id = bookDAO.save(book);
@@ -81,6 +83,7 @@ public class BookService {
         existBook.setAllField(updatedBook);
         if (content != null && content.getSize() > 0) {
             existBook.setContent(content.getBytes());
+            existBook.setFileExtension(FilenameUtils.getExtension(content.getOriginalFilename()));
         }
         if (image != null && image.getSize() > 0) {
             existBook.setImage(image.getBytes());

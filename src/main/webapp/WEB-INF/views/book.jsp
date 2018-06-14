@@ -40,6 +40,10 @@
                    class="btn item-actions"
                    role="button" data-placement="top" data-toggle="popover" data-content="Читать">
                     <i class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                <a href="#" onclick="confirmDownloadBookContent(${book.id}, '${book.name}', ${book.price})"
+                   class="btn item-actions"
+                   role="button" data-placement="top" data-toggle="popover" data-content="Скачать">
+                    <i class="glyphicon glyphicon-download icon-white"></i></a>
                 <security:authorize access="hasRole('ROLE_ADMIN')">
                     <a href="${editBook}?bookId=${book.id}" class="btn admin-button item-actions"
                        role="button" data-placement="top" data-toggle="popover" data-content="Изменить">

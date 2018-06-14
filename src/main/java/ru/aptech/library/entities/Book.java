@@ -28,6 +28,7 @@ public class Book implements Serializable {
     private Double price;
     private Set<Cart> carts = new HashSet<>(0);
     private Set<Order> orders = new HashSet<>(0);
+    private String fileExtension;
 
 
     public Book() {
@@ -257,6 +258,16 @@ public class Book implements Serializable {
     }
 
 
+    public String getFileExtension() {
+        return fileExtension;
+    }
+
+
+    public void setFileExtension(String fileExtension) {
+        this.fileExtension = fileExtension;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -275,13 +286,14 @@ public class Book implements Serializable {
                 Objects.equals(rating, book.rating) &&
                 Objects.equals(voteCount, book.voteCount) &&
                 Objects.equals(views, book.views) &&
-                Objects.equals(price, book.price);
+                Objects.equals(price, book.price) &&
+                Objects.equals(fileExtension, book.fileExtension);
     }
 
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, name, pageCount, isbn, genre, author, publishYear, publisher, descr, bookcol, rating, voteCount, views, price);
+        int result = Objects.hash(id, name, pageCount, isbn, genre, author, publishYear, publisher, descr, bookcol, rating, voteCount, views, price, fileExtension);
         result = 31 * result;
         return result;
     }
