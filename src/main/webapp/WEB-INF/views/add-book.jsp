@@ -4,6 +4,7 @@
 
 <!-- Main box (non search) - add book-->
 <div class="center-block col-sm-9" style="float: none;">
+
     <c:if test="${not empty isAdded}">
         <c:choose>
             <c:when test="${isAdded}">
@@ -21,6 +22,7 @@
             showInfoMessage();
         </script>
     </c:if>
+
     <form:form method="post" modelAttribute="book" action="${contextPath}books/addBookAction" enctype="multipart/form-data">
         <jsp:include page="add-or-edit-book.jsp"/>
     </form:form>

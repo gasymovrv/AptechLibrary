@@ -7,13 +7,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ru.aptech.library.dao.CommonDAO;
 import ru.aptech.library.dao.UserDAO;
-import ru.aptech.library.dao.impl.AuthorDAOImpl;
-import ru.aptech.library.dao.impl.BookDAOImpl;
-import ru.aptech.library.dao.impl.UserDAOImpl;
-import ru.aptech.library.dao.impl.UsersViewsDAOImpl;
 import ru.aptech.library.entities.Author;
 import ru.aptech.library.entities.Book;
 import ru.aptech.library.entities.User;
@@ -48,8 +45,13 @@ public class BookService {
     }
 
     @Transactional(propagation=Propagation.REQUIRED)
-    public Book find(Long id, Boolean initSets) {
-        Book b = bookDAO.find(id);
+    public Book find(Long id, Boolean initSets, Boolean noContent) {
+        Book b;
+        if(noContent!=null && noContent){
+            b = bookDAO.findWithoutContent(id);
+        } else {
+            b = bookDAO.find(id);
+        }
         if(initSets!=null && initSets){
             Hibernate.initialize(b.getOrders());
             Hibernate.initialize(b.getCarts());
@@ -66,11 +68,18 @@ public class BookService {
         return bookDAO.find(booksOnPage, init, sortType);
     }
 
+    @Transactional(propagation=Propagation.REQUIRED)
+    public byte[] findImage(Long id) {
+        return bookDAO.findBookImage(id);
+    }
+
     @Transactional(propagation=Propagation.REQUIRED, rollbackFor = Exception.class)
     public void save(Book book, MultipartFile content, MultipartFile image) throws Exception {
         book.setContent(content.getBytes());
+        String ext = FilenameUtils.getExtension(content.getOriginalFilename());
+        book.setContentType(StringUtils.isEmpty(ext) ? null : content.getContentType());
+        book.setFileExtension(ext);
         book.setImage(image.getBytes());
-        book.setFileExtension(FilenameUtils.getExtension(content.getOriginalFilename()));
         if(book.getViews()==null){book.setViews(0L);}
         book.setCreated(LocalDateTime.now());
         Long id = bookDAO.save(book);
@@ -83,7 +92,9 @@ public class BookService {
         existBook.setAllField(updatedBook);
         if (content != null && content.getSize() > 0) {
             existBook.setContent(content.getBytes());
-            existBook.setFileExtension(FilenameUtils.getExtension(content.getOriginalFilename()));
+            String ext = FilenameUtils.getExtension(content.getOriginalFilename());
+            existBook.setContentType(StringUtils.isEmpty(ext) ? null : content.getContentType());
+            existBook.setFileExtension(ext);
         }
         if (image != null && image.getSize() > 0) {
             existBook.setImage(image.getBytes());

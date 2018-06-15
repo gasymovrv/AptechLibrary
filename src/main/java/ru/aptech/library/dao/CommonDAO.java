@@ -30,6 +30,16 @@ public interface CommonDAO<T> extends DAO<T, Long> {
     }
 
     @Transactional
+    default T findWithoutContent(Long id){
+        throw new UnsupportedOperationException();
+    }
+
+    @Transactional
+    default byte[] findBookImage(Long id){
+        throw new UnsupportedOperationException();
+    }
+
+    @Transactional
     default void increaseView(Long id){throw new UnsupportedOperationException();}
 
     @Transactional

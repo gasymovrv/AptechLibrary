@@ -10,7 +10,6 @@
 <c:set var="bookInfo" value="${contextPath}books/bookInfo" scope="request"/>
 <c:set var="editBook" value="${contextPath}books/editBookView" scope="request"/>
 <c:set var="showImg" value="${contextPath}books/showBookImage" scope="request"/>
-<c:set var="showBookContent" value="${contextPath}books/showBookContent" scope="request"/>
 <c:set var="authorsPage" value="${contextPath}authors/list" scope="request"/>
 <c:set var="editAuthor" value="${contextPath}authors/editAuthorView" scope="request"/>
 <c:set var="accountPage" value="${contextPath}users/account" scope="request"/>

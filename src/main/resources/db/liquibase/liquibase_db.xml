@@ -260,7 +260,18 @@
             </not>
         </preConditions>
         <sql>
-            ALTER TABLE book ADD COLUMN file_extension varchar(20) DEFAULT '.pdf' NOT NULL;
+            ALTER TABLE book ADD COLUMN file_extension varchar(20) DEFAULT 'pdf' NOT NULL;
+        </sql>
+    </changeSet>
+
+    <changeSet author="rgasymov" id="20180615-01">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="aplib" tableName="book" columnName="content_type"/>
+            </not>
+        </preConditions>
+        <sql>
+            ALTER TABLE book ADD COLUMN content_type varchar(45) DEFAULT 'application/pdf' NULL;
         </sql>
     </changeSet>
 

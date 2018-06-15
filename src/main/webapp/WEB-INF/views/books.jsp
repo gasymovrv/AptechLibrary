@@ -2,8 +2,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%--@elvariable id="criteria" type="ru.aptech.library.util.SearchCriteriaBooks"--%>
 
-<div class="row">
-    <c:if test="${not empty sessionScope.isDeleted}">
+<c:if test="${not empty sessionScope.isDeleted}">
+    <div class="row">
         <c:choose>
             <c:when test="${sessionScope.isDeleted}">
                 <div class="alert alert-success info-message" role="alert" hidden>
@@ -20,8 +20,8 @@
             showInfoMessage(10);
         </script>
         <%session.setAttribute("isDeleted", null);%>
-    </c:if>
-</div>
+    </div>
+</c:if>
 
 <!-- Main box (search) - books-->
 <div id="main-box">

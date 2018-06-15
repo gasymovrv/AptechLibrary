@@ -1,6 +1,18 @@
 <%@include file="../../include.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
+
+<c:if test="${not empty errorContent and errorContent}">
+    <div class="row">
+        <div class="alert alert-warning info-message" role="alert" hidden>
+            Содержимое файла нельзя отобразить в браузере. Но вы можете скачать его
+        </div>
+        <script>
+            showInfoMessage(10);
+        </script>
+    </div>
+</c:if>
+
 <!-- Main box (search) - book info-->
 <div id="main-box">
     <div class="col-sm-4">
@@ -100,6 +112,10 @@
                         <tr>
                             <td>ISBN</td>
                             <td>${book.isbn}</td>
+                        </tr>
+                        <tr>
+                            <td>Расширение файла</td>
+                            <td>${book.fileExtension}</td>
                         </tr>
                         <tr>
                             <td>Рейтинг</td>

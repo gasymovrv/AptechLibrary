@@ -1,3 +1,5 @@
+<%@ page import="java.util.Locale" %>
+<%@ page import="ru.aptech.library.entities.User" %>
 <%@include file="../../include.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -59,7 +61,7 @@
                         </tr>
                         <tr>
                             <td>Средств на счету</td>
-                            <td id="user-money">${user.money} р.</td>
+                            <td id="user-money"><%=String.format(Locale.US, "%.2f", ((User)request.getAttribute("user")).getMoney())%> р.</td>
                             <td>
                                 <a href="${accountPage}?addMoney=true" id="get-money" class="btn item-actions" role="button">
                                     Пополнить
@@ -122,7 +124,7 @@
                                                 <tr>
                                                     <td>Сумма</td>
                                                     <td></td>
-                                                    <td>${sumOrder}</td>
+                                                    <td><b><%=String.format(Locale.US, "%.2f", (double)pageContext.getAttribute("sumOrder"))%> р.</b></td>
                                                 </tr>
                                                 <c:set var="sumOrder" value="0"/>
                                             </table>

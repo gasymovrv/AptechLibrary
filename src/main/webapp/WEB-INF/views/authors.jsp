@@ -5,8 +5,8 @@
 <!-- Main box (non search) - authors-->
 <div class="center-block col-sm-9" style="float: none;">
 
-    <div class="row">
-        <c:if test="${not empty sessionScope.isDeleted}">
+    <c:if test="${not empty sessionScope.isDeleted}">
+        <div class="row">
             <c:choose>
                 <c:when test="${sessionScope.isDeleted}">
                     <div class="alert alert-success info-message" role="alert" hidden>
@@ -23,8 +23,8 @@
                 showInfoMessage(10);
             </script>
             <%session.setAttribute("isDeleted", null);%>
-        </c:if>
-    </div>
+        </div>
+    </c:if>
 
     <div id="row-info" class="row">
         <security:authorize access="hasRole('ROLE_ADMIN')">
@@ -66,7 +66,7 @@
                                     <h3>Количество книг: ${author.books.size()}</h3>
                                 </div>
                                 <div class="title">
-                                    <h3>Читатели: ${author.views}</h3>
+                                    <h3>Просмотры книг: ${author.views}</h3>
                                 </div>
                                 <!-- Operations -->
                                 <div class="actions">

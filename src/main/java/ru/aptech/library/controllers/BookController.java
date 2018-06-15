@@ -1,12 +1,8 @@
 package ru.aptech.library.controllers;
 
-import eu.medsea.mimeutil.MimeType;
-import eu.medsea.mimeutil.MimeUtil;
-import eu.medsea.mimeutil.MimeUtil2;
-import eu.medsea.mimeutil.detector.MagicMimeMimeDetector;
-import eu.medsea.mimeutil.detector.MimeDetector;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,17 +10,13 @@ import ru.aptech.library.entities.*;
 import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaBooks;
 
-import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLConnection;
 import java.security.Principal;
-import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -87,12 +79,15 @@ public class BookController extends BaseController{
 
 
     @RequestMapping(value = "bookInfo", method = RequestMethod.GET)
-    public ModelAndView bookInfo(@RequestParam(value = "bookId") Long bookId, Principal principal) {
+    public ModelAndView bookInfo(@RequestParam(value = "bookId") Long bookId,
+                                 @RequestParam(value = "errorContent", required = false) Boolean errorContent,
+                                 Principal principal) {
         ModelAndView modelAndView = new ModelAndView("home-page-one-book");
         addAttributesForCriteria(modelAndView);
-        Book book = bookService.find(bookId, false);
+        Book book = bookService.find(bookId, false, true);
         increaseBookViews(book, principal);
         modelAndView.addObject("book", book);
+        modelAndView.addObject("errorContent", errorContent);
         return modelAndView;
     }
 
@@ -124,7 +119,7 @@ public class BookController extends BaseController{
     @RequestMapping(value = "editBookView", method = RequestMethod.GET)
     public ModelAndView editBookView(@RequestParam Long bookId) {
         ModelAndView modelAndView = new ModelAndView("edit-book-page");
-        addAttributesForAddOrEditBook(modelAndView, bookService.find(bookId, false));
+        addAttributesForAddOrEditBook(modelAndView, bookService.find(bookId, false, false));
         return modelAndView;
     }
 
@@ -143,7 +138,7 @@ public class BookController extends BaseController{
             e.printStackTrace();
         }
         modelAndView.addObject("isEdited", isEdited);
-        addAttributesForAddOrEditBook(modelAndView, bookService.find(bookId, false));
+        addAttributesForAddOrEditBook(modelAndView, bookService.find(bookId, false, false));
         return modelAndView;
     }
 
@@ -163,7 +158,7 @@ public class BookController extends BaseController{
 
     @RequestMapping(value = "showBookImage", method = RequestMethod.GET)
     public void showImage(@RequestParam("bookId") Long bookId, HttpServletResponse response, HttpServletRequest request) throws IOException {
-        Book book = bookService.find(bookId, false);
+        byte[] bookImage = bookService.findImage(bookId);
         //получаем дефолтное изображение из статических ресурсов
         String path = request.getSession().getServletContext().getRealPath("/resources/img/nophoto.jpg");
         InputStream inputStream = new FileSystemResource(new File(path)).getInputStream();
@@ -171,28 +166,30 @@ public class BookController extends BaseController{
         inputStream.read(defaultImage);
 
         response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
-        if(book.getImage()==null || book.getImage().length==0){
+        if(bookImage==null || bookImage.length==0){
             response.getOutputStream().write(defaultImage);
         } else {
-            response.getOutputStream().write(book.getImage());
+            response.getOutputStream().write(bookImage);
         }
         response.getOutputStream().close();
     }
 
 
     @RequestMapping(value = "showBookContent", method = RequestMethod.GET)
-    public void showBookContent(@RequestParam("bookId") Long bookId, HttpServletResponse response, Principal principal) throws IOException {
-        Book book = bookService.find(bookId, false);
+    public String showBookContent(@RequestParam("bookId") Long bookId, HttpServletResponse response, HttpServletRequest request, Principal principal) throws IOException {
+        Book book = bookService.find(bookId, false, false);
         byte[] content = book.getContent();
 
-        //определяем mime-type (для pdf - application/pdf)
-        MimeDetector md = new MagicMimeMimeDetector();
-        Collection mimeTypes = md.getMimeTypes(content);
-        MimeType mimeType = MimeUtil2.getMostSpecificMimeType(mimeTypes);
-        if (mimeType != null) {
-            response.setContentType(mimeType.toString());
+        if (book.getContentType() != null &&
+                (book.getContentType().equals("application/octet-stream")
+                 || book.getContentType().equals("application/x-zip-compressed")
+                 || book.getContentType().equals("application/epub+zip")
+                )) {
+            return String.format("redirect:/books/bookInfo?bookId=%s&errorContent=%s", bookId, true);
+        } else if (book.getContentType() != null) {
+            response.setContentType(book.getContentType());
         } else {
-            response.setContentType("application/pdf");
+            return String.format("redirect:/books/bookInfo?bookId=%s&errorContent=%s", bookId, true);
         }
         /* "Content-Disposition : inline" will show viewable types [like images/text/pdf/anything viewable by browser] right on browser
         while others(zip e.g) will be directly downloaded [may provide save as popup, based on your browser setting.]*/
@@ -201,22 +198,17 @@ public class BookController extends BaseController{
         response.getOutputStream().write(content);
         response.getOutputStream().close();
         increaseBookViews(book, principal);
+        return String.format("redirect:/books/bookInfo?bookId=%s", bookId);
     }
 
 
     @RequestMapping(value = "downloadBookContent", method = RequestMethod.GET)
     public void downloadBookContent(@RequestParam("bookId") Long bookId, HttpServletResponse response, Principal principal) throws IOException {
-        Book book = bookService.find(bookId, false);
+        Book book = bookService.find(bookId, false, false);
         byte[] content = book.getContent();
 
-        //определяем mime-type (для pdf - application/pdf)
-        MimeDetector md = new MagicMimeMimeDetector();
-        Collection mimeTypes = md.getMimeTypes(content);
-        MimeType mimeType = MimeUtil2.getMostSpecificMimeType(mimeTypes);
-        if (mimeType != null) {
-            response.setContentType(mimeType.toString());
-        } else {
-            response.setContentType("application/pdf");
+        if (book.getContentType() != null) {
+            response.setContentType(book.getContentType());
         }
         /* "Content-Disposition : attachment" will be directly download, may provide save as popup, based on your browser setting*/
         response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s.%s\"", book.getName(), book.getFileExtension()));
@@ -229,7 +221,7 @@ public class BookController extends BaseController{
 
     @RequestMapping(value = "addToCart", method = RequestMethod.GET)
     public String addToCart(@RequestParam("bookId") Long bookId, Principal principal) {
-        Book book = bookService.find(bookId, false);
+        Book book = bookService.find(bookId, false, false);
         User user = userService.find(principal.getName(), "booksInCart");
         user.getCart().getBooks().add(book);
         userService.update(user);
@@ -247,6 +239,9 @@ public class BookController extends BaseController{
         modelAndView.addObject("unknownAuthor", unknownAuthor);
         modelAndView.addObject("publisherList", publishers);
         modelAndView.addObject("book", book);
+        if (!StringUtils.isEmpty(book.getFileExtension())) {
+            modelAndView.addObject("fileName", book.getName() + "." + book.getFileExtension());
+        }
     }
 
     private void increaseBookViews(Book book, Principal principal) {

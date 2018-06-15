@@ -147,7 +147,7 @@ public class AuthorController extends BaseController{
                 } else if (element instanceof Long) {
                     bookId = (Long) element;
                 }
-                return bookId != null ? bookService.find(bookId, false) : null;
+                return bookId != null ? bookService.find(bookId, false, false) : null;
             }
         });
     }

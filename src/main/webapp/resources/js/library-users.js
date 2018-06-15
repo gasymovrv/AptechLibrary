@@ -63,6 +63,22 @@ function checkBookInCart(bookId) {
     return result;
 }
 
+function checkBookInOrdersAllUsers(bookId) {
+    let result;
+    $.ajax({
+        type: 'GET',//тип запроса
+        url: getContextPath() + '/users/checkBookInOrdersAllUsers?bookId='+bookId,//url адрес обработчика
+        async: false,
+        success: function (data) {//принимаемое от сервера (Response)
+            result = data;
+        },
+        error: function () {
+            getAlert('Ошибка в checkBookInOrdersAllUsers');
+        }
+    });
+    return result;
+}
+
 function userValidation() {
     let spanButton = $('#submit-new-user');
     spanButton.attr('data-content', "Сначала заполните обязательные поля");

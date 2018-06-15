@@ -152,10 +152,26 @@ public class UserController extends BaseController{
     public Boolean checkBookInCart(@RequestParam Long bookId, Authentication authentication) {
         boolean result = false;
         if(authentication != null){
-            Book book = bookService.find(bookId, false);
+            Book book = bookService.find(bookId, false, true);
             User user = userService.find(authentication.getName(), "booksInCart");
             if (user.getCart().getBooks().contains(book)) {
                 result = true;
+            }
+        }
+        return result;
+    }
+    @RequestMapping(value = "checkBookInOrdersAllUsers", method = RequestMethod.GET)
+    @ResponseBody
+    public Boolean checkBookInOrdersAllUsers(@RequestParam Long bookId) {
+        boolean result = false;
+
+        Book book = bookService.find(bookId, false, true);
+        List<User> users = userService.findAll("booksInOrders");
+        for (User u :users) {
+            for (Order o : u.getOrders()) {
+                if (o.getBooks().contains(book)) {
+                    result = true;
+                }
             }
         }
         return result;

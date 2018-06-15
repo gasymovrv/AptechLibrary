@@ -39,9 +39,7 @@ public class UserService {
                     }
                     case "booksInOrders": {
                         Hibernate.initialize(u.getOrders());
-                        for (Order o : u.getOrders()) {
-                            Hibernate.initialize(o.getBooks());
-                        }
+                        u.getOrders().forEach((o)->Hibernate.initialize(o.getBooks()));
                         break;
                     }
                     case "orders": {
@@ -52,6 +50,31 @@ public class UserService {
             }
         }
         return u;
+    }
+
+    @Transactional(propagation= Propagation.REQUIRED)
+    public List<User> findAll(String... initSets) {
+        List<User> users = userDAO.find();
+        if (initSets != null && initSets.length > 0) {
+            for (String s : initSets) {
+                switch (s) {
+                    case "booksInCart": {
+                        users.forEach((u)->Hibernate.initialize(u.getCart().getBooks()));
+                        break;
+                    }
+                    case "booksInOrders": {
+                        users.forEach((u)->Hibernate.initialize(u.getOrders()));
+                        users.forEach((u)->u.getOrders().forEach((o)->Hibernate.initialize(o.getBooks())));
+                        break;
+                    }
+                    case "orders": {
+                        users.forEach((u)->Hibernate.initialize(u.getOrders()));
+                        break;
+                    }
+                }
+            }
+        }
+        return users;
     }
 
     @Transactional(propagation= Propagation.REQUIRED)

@@ -12,4 +12,4 @@ join publisher p on b.publisher_id=p.id;
 
 
 
-
+UPDATE book set content_type=NULL WHERE id=35;

@@ -294,7 +294,7 @@ function getCriteria() {
 }
 
 function confirmDeleteBook(bookId, bookName) {
-    if(booksIdInOrdersCurrentUser.indexOf(bookId) !== -1){
+    if(checkBookInOrdersAllUsers(bookId)){
         getAlert("Книга '" + bookName + "' куплена пользователями, ее нельзя удалить");
     } else if(checkBookInCart(bookId)){
         getConfirm("Книга '" + bookName + "' находится в корзине у некоторых пользователей, удалить все равно?", function(choose) {
@@ -312,21 +312,21 @@ function confirmDeleteBook(bookId, bookName) {
 }
 
 function confirmShowBookContent(bookId, bookName, price) {
-    let showBookContentLink = getContextPath() + '/books/showBookContent?bookId=' + bookId;
+    let showBookContentLink = getContextPath() + '/books/showBookContent?bookId=' + bookId/* + '&target=_blank'*/;
     if (!currentUserIsUser) {
         getConfirm("Чтобы читать книгу '" + bookName + "' Вам необходимо авторизоваться", function(choose) {
             if(choose){
-                window.location = showBookContentLink;
+                window.open(showBookContentLink);
             }
         });
     } else if(price>0.0){
         if (booksIdInOrdersCurrentUser.indexOf(bookId) !== -1) {
-            window.location = showBookContentLink;
+            window.open(showBookContentLink);
         } else {
             getAlert("Вы еще не купили книгу '" + bookName + "'");
         }
     } else if(price===0.0){
-        window.location = showBookContentLink;
+        window.open(showBookContentLink);
     }
 
 }

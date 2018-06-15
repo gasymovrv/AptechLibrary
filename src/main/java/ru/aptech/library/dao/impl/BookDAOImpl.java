@@ -32,7 +32,9 @@ public class BookDAOImpl implements CommonDAO<Book> {
                     "b.rating, " +
                     "b.voteCount," +
                     "b.views," +
-                    "b.price" +
+                    "b.price," +
+                    "b.fileExtension," +
+                    "b.contentType" +
                     ") from Book b";
     private final String BOOKS = "select b from Book b";
 
@@ -54,6 +56,26 @@ public class BookDAOImpl implements CommonDAO<Book> {
     public Book find(Long id) {
         Session session = sessionFactory.getCurrentSession();
         Query<Book> query = session.createQuery(BOOKS + " where b.id=:id", Book.class).setParameter("id", id);
+        try {
+            return query.getSingleResult();
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    public Book findWithoutContent(Long id) {
+        Session session = sessionFactory.getCurrentSession();
+        Query<Book> query = session.createQuery(BOOKS_WITHOUT_CONTENT + " where b.id=:id", Book.class).setParameter("id", id);
+        try {
+            return query.getSingleResult();
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    public byte[] findBookImage(Long id) {
+        Session session = sessionFactory.getCurrentSession();
+        Query<byte[]> query = session.createQuery("select image from Book where id=:id", byte[].class).setParameter("id", id);
         try {
             return query.getSingleResult();
         }catch (Exception e){

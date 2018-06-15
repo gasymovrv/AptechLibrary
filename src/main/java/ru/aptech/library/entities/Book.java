@@ -29,6 +29,7 @@ public class Book implements Serializable {
     private Set<Cart> carts = new HashSet<>(0);
     private Set<Order> orders = new HashSet<>(0);
     private String fileExtension;
+    private String contentType;
 
 
     public Book() {
@@ -49,7 +50,10 @@ public class Book implements Serializable {
                 Integer rating,
                 Long voteCount,
                 Long views,
-                Double price) {
+                Double price,
+                String fileExtension,
+                String contentType
+    ) {
         this.id = id;
         this.name = name;
         this.pageCount = pageCount;
@@ -65,6 +69,8 @@ public class Book implements Serializable {
         this.voteCount = voteCount;
         this.views = views;
         this.price = price;
+        this.fileExtension = fileExtension;
+        this.contentType = contentType;
     }
 
 
@@ -268,6 +274,16 @@ public class Book implements Serializable {
     }
 
 
+    public String getContentType() {
+        return contentType;
+    }
+
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -287,7 +303,8 @@ public class Book implements Serializable {
                 Objects.equals(voteCount, book.voteCount) &&
                 Objects.equals(views, book.views) &&
                 Objects.equals(price, book.price) &&
-                Objects.equals(fileExtension, book.fileExtension);
+                Objects.equals(fileExtension, book.fileExtension) &&
+                Objects.equals(contentType, book.contentType);
     }
 
 
