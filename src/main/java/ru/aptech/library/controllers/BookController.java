@@ -1,6 +1,7 @@
 package ru.aptech.library.controllers;
 
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -157,6 +158,7 @@ public class BookController extends BaseController{
     }
 
     @RequestMapping(value = "showBookImage", method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
     public void showImage(@RequestParam("bookId") Long bookId, HttpServletResponse response, HttpServletRequest request) throws IOException {
         byte[] bookImage = bookService.findImage(bookId);
         //получаем дефолтное изображение из статических ресурсов
@@ -176,7 +178,8 @@ public class BookController extends BaseController{
 
 
     @RequestMapping(value = "showBookContent", method = RequestMethod.GET)
-    public String showBookContent(@RequestParam("bookId") Long bookId, HttpServletResponse response, HttpServletRequest request, Principal principal) throws IOException {
+    @ResponseStatus(value = HttpStatus.OK)
+    public String showBookContent(@RequestParam("bookId") Long bookId, HttpServletResponse response, Principal principal) throws IOException {
         Book book = bookService.find(bookId, false, false);
         byte[] content = book.getContent();
 
@@ -198,11 +201,13 @@ public class BookController extends BaseController{
         response.getOutputStream().write(content);
         response.getOutputStream().close();
         increaseBookViews(book, principal);
-        return String.format("redirect:/books/bookInfo?bookId=%s", bookId);
+        //по факту редирект не работает, т.к. оутпут стрим записан и все равно будет отображен
+        return "redirect:";
     }
 
 
     @RequestMapping(value = "downloadBookContent", method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
     public void downloadBookContent(@RequestParam("bookId") Long bookId, HttpServletResponse response, Principal principal) throws IOException {
         Book book = bookService.find(bookId, false, false);
         byte[] content = book.getContent();

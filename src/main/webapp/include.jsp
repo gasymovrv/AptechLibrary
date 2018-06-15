@@ -7,6 +7,7 @@
 <c:set var="contextPathToRes" value="${contextPath}resources/" scope="request"/>
 <c:set var="serverHost" value="http://${pageContext.request.serverName}:${pageContext.request.serverPort}" scope="request"/>
 <c:set var="home" value="${contextPath}home" scope="request"/>
+<c:set var="aboutUs" value="${contextPath}aboutUs" scope="request"/>
 <c:set var="bookInfo" value="${contextPath}books/bookInfo" scope="request"/>
 <c:set var="editBook" value="${contextPath}books/editBookView" scope="request"/>
 <c:set var="showImg" value="${contextPath}books/showBookImage" scope="request"/>

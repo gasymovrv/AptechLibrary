@@ -10,24 +10,24 @@
 
                 <div class="row">
                     <form:form modelAttribute="criteriaAuthors" method="get">
-                        <div class="form-group col-xs-3">
+                        <div class="form-group col-sm-3">
                             <h1><tiles:getAsString name="top-panel-title"/></h1>
                         </div>
-                        <div class="form-group col-xs-4">
+                        <div class="form-group col-sm-4">
                             <form:input path="text" class="form-control"
                                         placeholder="Введите текст для выполнения поиска"/>
                         </div>
-                        <div class="form-group col-xs-1">
+                        <div class="form-group col-sm-1">
                             <button id="top-panel-search-button" type="submit" class="btn btn-md">Поиск</button>
                         </div>
                     </form:form>
                 </div>
 
                 <div class="row">
-                    <div class="form-group col-xs-3">
+                    <div class="form-group col-sm-3">
                         <h1>Сортировка</h1>
                     </div>
-                    <div class="form-group col-xs-3">
+                    <div class="form-group col-sm-3">
                         <select id="top-panel-form-select-sort" class="form-control">
                             <c:set var="sortType" value="${sessionScope.sortType}"/>
                             <c:forEach var="st" items="${sortTypeList}">

@@ -115,4 +115,12 @@
     </definition>
 
 
+    <!--account-->
+    <definition name="about-us-page" extends="base-layout-ns">
+        <put-attribute name="title" value="О нас"/>
+        <put-attribute name="top-panel-title" value="О нас" cascade="true"/>
+        <put-attribute name="main" value="/WEB-INF/views/about-us.jsp" cascade="true"/>
+    </definition>
+
+
 </tiles-definitions>

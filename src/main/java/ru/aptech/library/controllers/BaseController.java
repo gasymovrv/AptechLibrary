@@ -1,12 +1,10 @@
 package ru.aptech.library.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.aptech.library.entities.Genre;
 import ru.aptech.library.enums.SearchType;
@@ -53,6 +51,14 @@ public class BaseController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "aboutUs", method = RequestMethod.GET)
+    public ModelAndView aboutUs() {
+        ModelAndView modelAndView = new ModelAndView("about-us-page");
+        return modelAndView;
+    }
+
+
+
     /**
      * Методы для работы с ajax
      * */
@@ -62,6 +68,7 @@ public class BaseController {
         return (String)session.getAttribute("foundResultText");
     }
     @RequestMapping(value = "saveFoundResultText", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.OK)
     public void saveFoundResultText(@RequestParam(required = false) String foundResultText, HttpSession session) {
         session.setAttribute("foundResultText", foundResultText);
     }
@@ -71,6 +78,7 @@ public class BaseController {
         return (SortType)session.getAttribute("sortType");
     }
     @RequestMapping(value = "saveSortType", method = RequestMethod.POST, consumes = "application/json")
+    @ResponseStatus(value = HttpStatus.OK)
     public void saveSortType(@RequestParam SortType sortType, HttpSession session) {
         session.setAttribute("sortType", sortType);
     }

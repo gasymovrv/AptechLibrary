@@ -11,6 +11,7 @@
                     <li><a href="${home}">Главная</a></li>
                     <li><a href="${home}">Список книг</a></li>
                     <li><a href="${authorsPage}">Список авторов</a></li>
+                    <li><a href="${aboutUs}">О нас</a></li>
                 </ul>
             </div>
 
