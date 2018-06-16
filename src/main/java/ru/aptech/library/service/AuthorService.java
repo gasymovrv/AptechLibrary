@@ -89,6 +89,7 @@ public class AuthorService {
         }
         return authorDAO.save(author);
     }
+
     @Transactional(propagation=Propagation.REQUIRED, rollbackFor = Exception.class)
     public void update(Author author, Long authorId, String date) throws Exception {
         author.setBirthday(!date.equals("") ? LocalDate.parse(date, DATE_FORMAT) : null);

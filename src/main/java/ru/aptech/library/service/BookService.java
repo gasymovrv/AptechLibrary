@@ -17,6 +17,7 @@ import ru.aptech.library.entities.User;
 import ru.aptech.library.entities.UsersViews;
 import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaBooks;
+import ru.aptech.library.util.Utils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -76,6 +77,7 @@ public class BookService {
     @Transactional(propagation=Propagation.REQUIRED, rollbackFor = Exception.class)
     public void save(Book book, MultipartFile content, MultipartFile image) throws Exception {
         book.setContent(content.getBytes());
+        book.setName(book.getName().replaceAll("[\"\']", ""));
         String ext = FilenameUtils.getExtension(content.getOriginalFilename());
         book.setContentType(StringUtils.isEmpty(ext) ? null : content.getContentType());
         book.setFileExtension(ext);
@@ -89,6 +91,7 @@ public class BookService {
     @Transactional(propagation=Propagation.REQUIRED, rollbackFor = Exception.class)
     public void update(Book updatedBook, MultipartFile content, MultipartFile image, Long bookId) throws Exception {
         Book existBook = bookDAO.find(bookId);
+        updatedBook.setName(updatedBook.getName().replaceAll("[\"\']", ""));
         existBook.setAllField(updatedBook);
         if (content != null && content.getSize() > 0) {
             existBook.setContent(content.getBytes());

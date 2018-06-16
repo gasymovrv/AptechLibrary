@@ -176,7 +176,7 @@
                                 <tr>
                                     <td>Сумма</td>
                                     <td></td>
-                                    <td>${sumCart} р.</td>
+                                    <td><b><%=String.format(Locale.US, "%.2f", (double)pageContext.getAttribute("sumCart"))%> р.</b></td>
                                     <td></td>
                                 </tr>
                             </table>

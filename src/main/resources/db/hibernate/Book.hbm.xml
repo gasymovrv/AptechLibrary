@@ -28,7 +28,7 @@
             <column name="genre_id" sql-type="bigint(20)" not-null="true"/>
         </many-to-one>
 
-        <many-to-one name="author" class="Author" fetch="select" lazy="false">
+        <many-to-one name="author" class="Author" fetch="join" lazy="false">
             <column name="author_id" sql-type="bigint(20)" not-null="true"/>
         </many-to-one>
 

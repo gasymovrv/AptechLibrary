@@ -30,6 +30,7 @@
         <intercept-url pattern="/authors/addAuthorAction**" method="POST" access="hasRole('ROLE_ADMIN')" />
         <!--Страницы авторизованного юзера-->
         <intercept-url pattern="/books/showBookContent**" method="GET" access="hasRole('ROLE_USER')" />
+        <intercept-url pattern="/books/downloadBookContent**" method="GET" access="hasRole('ROLE_USER')" />
         <intercept-url pattern="/books/addToCart**" method="GET" access="hasRole('ROLE_USER')" />
         <!--Страницы авторизованного-->
         <intercept-url pattern="/users/account**" method="GET" access="isAuthenticated()" />

@@ -77,6 +77,26 @@ public class BookController extends BaseController{
         }
         return o;
     }
+    @RequestMapping(value = "isValidBookContent", method = RequestMethod.GET)
+    @ResponseBody
+    public Boolean isValidBookContent(@RequestParam("bookId") Long bookId) {
+        Book book = bookService.find(bookId, false, true);
+        if (book.getContentType() != null &&
+                (book.getContentType().equals("application/octet-stream")
+                        || book.getContentType().equals("application/x-zip-compressed")
+                        || book.getContentType().equals("application/epub+zip")
+                        || book.getContentType().equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                )) {
+            return false;
+        }
+        return book.getContentType() != null;
+    }
+    @RequestMapping(value = "isEmptyBookContent", method = RequestMethod.GET)
+    @ResponseBody
+    public Boolean isEmptyBookContent(@RequestParam("bookId") Long bookId) {
+        Book book = bookService.find(bookId, false, true);
+        return book.getContentType() == null;
+    }
 
 
     @RequestMapping(value = "bookInfo", method = RequestMethod.GET)
@@ -179,30 +199,21 @@ public class BookController extends BaseController{
 
     @RequestMapping(value = "showBookContent", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    public String showBookContent(@RequestParam("bookId") Long bookId, HttpServletResponse response, Principal principal) throws IOException {
+    public void showBookContent(@RequestParam("bookId") Long bookId, HttpServletResponse response, Principal principal) throws IOException {
         Book book = bookService.find(bookId, false, false);
         byte[] content = book.getContent();
-
-        if (book.getContentType() != null &&
-                (book.getContentType().equals("application/octet-stream")
-                 || book.getContentType().equals("application/x-zip-compressed")
-                 || book.getContentType().equals("application/epub+zip")
-                )) {
-            return String.format("redirect:/books/bookInfo?bookId=%s&errorContent=%s", bookId, true);
-        } else if (book.getContentType() != null) {
+        if (book.getContentType() != null) {
             response.setContentType(book.getContentType());
-        } else {
-            return String.format("redirect:/books/bookInfo?bookId=%s&errorContent=%s", bookId, true);
         }
+        String resultFileName = utils.transliterate(book.getName());
+        resultFileName = resultFileName.replaceAll(" ", "_");
         /* "Content-Disposition : inline" will show viewable types [like images/text/pdf/anything viewable by browser] right on browser
         while others(zip e.g) will be directly downloaded [may provide save as popup, based on your browser setting.]*/
-        response.setHeader("Content-Disposition", String.format("inline; filename=\"%s.%s\"", book.getName(),  book.getFileExtension()));
+        response.setHeader("Content-Disposition", String.format("inline; filename=\"%s\"", resultFileName));
         response.setContentLength(content.length);
         response.getOutputStream().write(content);
         response.getOutputStream().close();
         increaseBookViews(book, principal);
-        //по факту редирект не работает, т.к. оутпут стрим записан и все равно будет отображен
-        return "redirect:";
     }
 
 
@@ -211,12 +222,13 @@ public class BookController extends BaseController{
     public void downloadBookContent(@RequestParam("bookId") Long bookId, HttpServletResponse response, Principal principal) throws IOException {
         Book book = bookService.find(bookId, false, false);
         byte[] content = book.getContent();
-
         if (book.getContentType() != null) {
             response.setContentType(book.getContentType());
         }
+        String resultFileName = utils.transliterate(book.getName());
+        resultFileName = resultFileName.replaceAll(" ", "_");
         /* "Content-Disposition : attachment" will be directly download, may provide save as popup, based on your browser setting*/
-        response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s.%s\"", book.getName(), book.getFileExtension()));
+        response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", resultFileName + "." + book.getFileExtension()));
         response.setContentLength(content.length);
         response.getOutputStream().write(content);
         response.getOutputStream().close();
@@ -244,8 +256,11 @@ public class BookController extends BaseController{
         modelAndView.addObject("unknownAuthor", unknownAuthor);
         modelAndView.addObject("publisherList", publishers);
         modelAndView.addObject("book", book);
-        if (!StringUtils.isEmpty(book.getFileExtension())) {
+        if (!StringUtils.isEmpty(book.getFileExtension()) && book.getContent() != null && book.getContent().length > 0) {
             modelAndView.addObject("fileName", book.getName() + "." + book.getFileExtension());
+        }
+        if (book.getImage()!=null && book.getImage().length > 0) {
+            modelAndView.addObject("isImage", true);
         }
     }
 

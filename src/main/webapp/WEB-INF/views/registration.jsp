@@ -55,7 +55,7 @@
         <%--<p>Еще нет аккаунта? <a href="#">Зарегистрируйтесь здесь</a></p>--%>
     <%--</div>--%>
 <%--</div>--%>
-<script>
-    $(window).resize(fixedFooter);
-    $(document).ready(fixedFooter);
-</script>
+<%--<script>--%>
+    <%--$(window).resize(fixedFooter);--%>
+    <%--$(document).ready(fixedFooter);--%>
+<%--</script>--%>

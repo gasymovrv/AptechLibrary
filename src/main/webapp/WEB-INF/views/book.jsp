@@ -1,3 +1,5 @@
+<%@ page import="ru.aptech.library.entities.Book" %>
+<%@ page import="java.util.Locale" %>
 <%@include file="../../include.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -5,7 +7,14 @@
 <c:if test="${not empty errorContent and errorContent}">
     <div class="row">
         <div class="alert alert-warning info-message" role="alert" hidden>
-            Содержимое файла нельзя отобразить в браузере. Но вы можете скачать его
+            <c:choose>
+                <c:when test="${empty book.contentType}">
+                    Для данной книги не загружен файл
+                </c:when>
+                <c:otherwise>
+                    Содержимое файла нельзя отобразить в браузере. Но вы можете скачать его
+                </c:otherwise>
+            </c:choose>
         </div>
         <script>
             showInfoMessage(10);
@@ -116,6 +125,14 @@
                         <tr>
                             <td>Расширение файла</td>
                             <td>${book.fileExtension}</td>
+                        </tr>
+                        <tr>
+                            <td>Размер файла</td>
+                            <td>
+                                <c:if test="${not empty book.content}">
+                                    <%=String.format(Locale.US, "%.2f", (double) (((Book) request.getAttribute("book")).getContent().length) / 1000000D)%>Мб
+                                </c:if>
+                            </td>
                         </tr>
                         <tr>
                             <td>Рейтинг</td>

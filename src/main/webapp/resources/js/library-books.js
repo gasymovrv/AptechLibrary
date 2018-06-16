@@ -312,43 +312,85 @@ function confirmDeleteBook(bookId, bookName) {
 }
 
 function confirmShowBookContent(bookId, bookName, price) {
-    let showBookContentLink = getContextPath() + '/books/showBookContent?bookId=' + bookId/* + '&target=_blank'*/;
+    let authorizationLink = getContextPath() + '/users/authorization';
     if (!currentUserIsUser) {
         getConfirm("Чтобы читать книгу '" + bookName + "' Вам необходимо авторизоваться", function(choose) {
             if(choose){
-                window.open(showBookContentLink);
+                window.location = authorizationLink;
             }
         });
     } else if(price>0.0){
         if (booksIdInOrdersCurrentUser.indexOf(bookId) !== -1) {
-            window.open(showBookContentLink);
+            openValidBookContent(bookId);
         } else {
             getAlert("Вы еще не купили книгу '" + bookName + "'");
         }
     } else if(price===0.0){
-        window.open(showBookContentLink);
+        openValidBookContent(bookId);
     }
+}
 
+function openValidBookContent(bookId) {
+    let showBookContentLink = getContextPath() + '/books/showBookContent?bookId=' + bookId;
+    let bookInfoErrorLink = getContextPath() + '/books/bookInfo?bookId=' + bookId + "&errorContent=true";
+    let result;
+    $.ajax({
+        type: 'GET',//тип запроса
+        url: getContextPath() + '/books/isValidBookContent?bookId='+bookId,//url адрес обработчика
+        async: false,
+        success: function (data) {//принимаемое от сервера (Response)
+            result = data;
+        },
+        error: function () {
+            getAlert('Ошибка в openValidBookContent');
+        }
+    });
+    if (result) {
+        window.open(showBookContentLink);
+    } else {
+        window.location = bookInfoErrorLink;
+    }
 }
 
 function confirmDownloadBookContent(bookId, bookName, price) {
-    let downloadBookContentLink = getContextPath() + '/books/downloadBookContent?bookId=' + bookId;
+    let authorizationLink = getContextPath() + '/users/authorization';
     if (!currentUserIsUser) {
         getConfirm("Чтобы скачать книгу '" + bookName + "' Вам необходимо авторизоваться", function(choose) {
             if(choose){
-                window.location = downloadBookContentLink;
+                window.location = authorizationLink;
             }
         });
-    } else if(price>0.0){
+    } else if (price > 0.0) {
         if (booksIdInOrdersCurrentUser.indexOf(bookId) !== -1) {
-            window.location = downloadBookContentLink;
+            downloadValidBookContent(bookId);
         } else {
             getAlert("Вы еще не купили книгу '" + bookName + "'");
         }
-    } else if(price===0.0){
-        window.location = downloadBookContentLink;
+    } else if (price === 0.0) {
+        downloadValidBookContent(bookId);
     }
+}
 
+function downloadValidBookContent(bookId) {
+    let downloadBookContentLink = getContextPath() + '/books/downloadBookContent?bookId=' + bookId;
+    let bookInfoErrorLink = getContextPath() + '/books/bookInfo?bookId=' + bookId + "&errorContent=true";
+    let result;
+    $.ajax({
+        type: 'GET',//тип запроса
+        url: getContextPath() + '/books/isEmptyBookContent?bookId='+bookId,//url адрес обработчика
+        async: false,
+        success: function (data) {//принимаемое от сервера (Response)
+            result = data;
+        },
+        error: function () {
+            getAlert('Ошибка в isEmptyBookContent');
+        }
+    });
+    if (!result) {
+        window.location = downloadBookContentLink;
+    } else {
+        window.location = bookInfoErrorLink;
+    }
 }
 
 function confirmAddToCart(bookId, bookName) {

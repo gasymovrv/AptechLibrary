@@ -78,7 +78,7 @@ public class AuthorDAOImpl implements CommonDAO<Author> {
 
     public void update(Author author) {
         Session session = sessionFactory.getCurrentSession();
-        session.merge(author);
+        session.update(author);
     }
 
     public void delete(Author author) {

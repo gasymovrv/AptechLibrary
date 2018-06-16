@@ -120,7 +120,7 @@ public class BookDAOImpl implements CommonDAO<Book> {
 
     public void update(Book book) {
         Session session = sessionFactory.getCurrentSession();
-        session.merge(book);
+        session.update(book);
     }
 
     public void delete(Book book) {
