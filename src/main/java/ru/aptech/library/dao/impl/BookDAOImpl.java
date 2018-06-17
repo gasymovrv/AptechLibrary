@@ -119,8 +119,7 @@ public class BookDAOImpl implements CommonDAO<Book> {
         Session session = sessionFactory.getCurrentSession();
         return (Long)session.save(book);
     }
-
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    
     public void update(Book book) {
         Session session = sessionFactory.getCurrentSession();
         session.merge(book);
