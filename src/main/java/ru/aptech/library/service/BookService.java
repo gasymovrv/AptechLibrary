@@ -92,6 +92,16 @@ public class BookService {
     public void update(Book updatedBook, MultipartFile content, MultipartFile image, Long bookId) throws Exception {
         Book existBook = bookDAO.find(bookId);
         updatedBook.setName(updatedBook.getName().replaceAll("[\"\']", ""));
+
+        //вытягиваем по id перзистентного автора и обновляем просмотры у старого и нового
+        Author a = authorDAO.find(updatedBook.getAuthor().getId());
+        a.setViews(a.getViews()+existBook.getViews());
+        authorDAO.update(a);
+        Author oldAuthor = existBook.getAuthor();
+        oldAuthor.setViews(oldAuthor.getViews()-existBook.getViews());
+        authorDAO.update(oldAuthor);
+
+        updatedBook.setAuthor(a);
         existBook.setAllField(updatedBook);
         if (content != null && content.getSize() > 0) {
             existBook.setContent(content.getBytes());

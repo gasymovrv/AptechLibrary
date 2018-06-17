@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import ru.aptech.library.dao.CommonDAO;
 import ru.aptech.library.entities.Author;
 import ru.aptech.library.entities.Book;
@@ -69,10 +70,15 @@ public class AuthorService {
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Long save(Author author, String date) throws Exception {
+        if(StringUtils.isEmpty(author.getFio())){
+            throw new Exception();
+        }
         author.setBirthday(!date.equals("") ? LocalDate.parse(date, DATE_FORMAT) : null);
-        Set<Book> bookList = author.getBooks();
         updateViews(author);
         author.setCreated(LocalDateTime.now());
+        Long id = authorDAO.save(author);
+        Author savedAuthor = authorDAO.find(id);
+        Set<Book> bookList = savedAuthor.getBooks();
 
         //Карта: старый автор и количество просмотров которые надо у него вычесть после удаления книги
         Map<Author, Long> oldAuthors = new HashMap<>();
@@ -80,14 +86,14 @@ public class AuthorService {
             Author oldAuthor = b.getAuthor();
             //добавляем просмотры по ключу автор
             oldAuthors.put(oldAuthor, oldAuthors.get(oldAuthor) == null ? b.getViews() : oldAuthors.get(oldAuthor) + b.getViews());
-            b.setAuthor(author);
-            bookDAO.update(b);
+            b.setAuthor(savedAuthor);
         }
         for (Map.Entry<Author, Long> entry: oldAuthors.entrySet()) {
             removeViews(entry.getKey(), entry.getValue());
             authorDAO.update(entry.getKey());
         }
-        return authorDAO.save(author);
+        authorDAO.update(savedAuthor);
+        return id;
     }
 
     @Transactional(propagation=Propagation.REQUIRED, rollbackFor = Exception.class)

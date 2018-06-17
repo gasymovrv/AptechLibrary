@@ -5,6 +5,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.aptech.library.dao.CommonDAO;
 import ru.aptech.library.entities.Book;
 import ru.aptech.library.enums.SearchType;
@@ -118,9 +120,10 @@ public class BookDAOImpl implements CommonDAO<Book> {
         return (Long)session.save(book);
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void update(Book book) {
         Session session = sessionFactory.getCurrentSession();
-        session.update(book);
+        session.merge(book);
     }
 
     public void delete(Book book) {

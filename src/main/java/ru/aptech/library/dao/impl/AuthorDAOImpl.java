@@ -72,13 +72,12 @@ public class AuthorDAOImpl implements CommonDAO<Author> {
 
     public Long save(Author author) {
         Session session = sessionFactory.getCurrentSession();
-
         return (Long)session.save(author);
     }
 
     public void update(Author author) {
         Session session = sessionFactory.getCurrentSession();
-        session.update(author);
+        session.merge(author);
     }
 
     public void delete(Author author) {
