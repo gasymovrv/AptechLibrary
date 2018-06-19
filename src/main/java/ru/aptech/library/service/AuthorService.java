@@ -109,8 +109,6 @@ public class AuthorService {
                 bookDAO.update(oB);
             }
         }
-        existAuthor.setAllField(author);
-        updateViews(existAuthor);
 
         //Карта: старый автор и количество просмотров которые надо у него вычесть после удаления книги
         Map<Author, Long> oldAuthors = new HashMap<>();
@@ -128,6 +126,8 @@ public class AuthorService {
             removeViews(entry.getKey(), entry.getValue());
             authorDAO.update(entry.getKey());
         }
+        existAuthor.setAllField(author);
+        updateViews(existAuthor);
         authorDAO.update(existAuthor);
     }
 

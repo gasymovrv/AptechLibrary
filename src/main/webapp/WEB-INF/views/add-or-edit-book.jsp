@@ -6,7 +6,7 @@
 
 
         <div class="form-group row">
-            <label for="name" class="col-sm-2 col-form-label">Название</label>
+            <label for="name" class="col-sm-2 col-form-label">Название<sup style="color: red">*</sup></label>
             <div class="col-sm-10">
                 <form:input id='name' name='name' path="name" type="text" class="form-control"/>
             </div>
@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="form-group row">
-            <label for="isbn" class="col-sm-2 col-form-label">ISBN</label>
+            <label for="isbn" class="col-sm-2 col-form-label">ISBN<sup style="color: red">*</sup></label>
             <div class="col-sm-10">
                 <form:input id='isbn' name='isbn' path="isbn" type="text" class="form-control"/>
             </div>
@@ -152,3 +152,6 @@
                 <button type="reset" class="btn btn-sm">Отмена</button>
             </div>
         </div>
+<script>
+    addOrEditBookValidation();
+</script>

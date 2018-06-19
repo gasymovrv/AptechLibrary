@@ -410,3 +410,47 @@ function confirmAddToCart(bookId, bookName) {
         window.location = (addToCartLink + bookId);
     }
 }
+
+function addOrEditBookValidation() {
+    $("#pageCount").bind('keyup mouseup', function () {
+        if ($(this).val() < 0) {
+            $(this).val(0);
+        }
+    });
+    $("#publishYear").bind('keyup mouseup', function () {
+        if ($(this).val() < 0) {
+            $(this).val(0);
+        }
+        if($(this).val()>(new Date()).getFullYear()){
+            $(this).val((new Date()).getFullYear());
+        }
+    });
+    $("#price").bind('keyup mouseup', function () {
+        if ($(this).val() < 0) {
+            $(this).val(0);
+        }
+    });
+    let result = true;
+    $('#change-book-form').submit(function (event) {
+        $(".invalid-feedback").empty();
+        $("div.form-group").removeClass("has-error");
+
+        let numberInputs = [$("#pageCount"),$("#publishYear"),$("#price")];
+        for(let i in numberInputs) {
+            if (!numberInputs[i].val() || numberInputs[i].val() < 0) {
+                numberInputs[i].val(0);
+            }
+        }
+
+        let requiredInputs = [$("#name"),$("#isbn")];
+        for(let i in requiredInputs) {
+            if(!requiredInputs[i].val()){
+                requiredInputs[i].parents("div.form-group").addClass("has-error");
+                requiredInputs[i].after('<div class="invalid-feedback" style="color: red"><sup style="color: red">*</sup>Обязательное поле</div>');
+                result = false;
+            }
+        }
+       return result;
+    });
+
+}

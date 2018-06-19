@@ -21,7 +21,7 @@
             showInfoMessage();
         </script>
     </c:if>
-    <form:form method="post" modelAttribute="author" action="${contextPath}authors/editAuthorAction?authorId=${author.id}">
+    <form:form id="change-author-form" method="post" modelAttribute="author" action="${contextPath}authors/editAuthorAction?authorId=${author.id}">
         <jsp:include page="add-or-edit-author.jsp"/>
     </form:form>
 </div>

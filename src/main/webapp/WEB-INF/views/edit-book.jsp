@@ -21,7 +21,7 @@
             showInfoMessage();
         </script>
     </c:if>
-    <form:form method="post" modelAttribute="book" action="${contextPath}books/editBookAction?bookId=${book.id}"  enctype="multipart/form-data">
+    <form:form id="change-book-form" method="post" modelAttribute="book" action="${contextPath}books/editBookAction?bookId=${book.id}"  enctype="multipart/form-data">
         <jsp:include page="add-or-edit-book.jsp"/>
     </form:form>
 </div>

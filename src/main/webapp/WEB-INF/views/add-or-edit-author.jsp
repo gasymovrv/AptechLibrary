@@ -4,7 +4,7 @@
 
 
         <div class="form-group row">
-            <label for="fio" class="col-sm-2 col-form-label">Полное имя</label>
+            <label for="fio" class="col-sm-2 col-form-label">Полное имя<sup style="color: red">*</sup></label>
             <div class="col-sm-10">
                 <form:input id='fio' name='fio' path="fio" type="text" class="form-control"/>
             </div>
@@ -47,3 +47,6 @@
                 <button type="reset" class="btn btn-sm">Отмена</button>
             </div>
         </div>
+<script>
+    addOrEditAuthorValidation();
+</script>

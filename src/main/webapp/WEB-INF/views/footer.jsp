@@ -20,7 +20,7 @@
                 <p class="contact-us-details">
                     <b>Адрес:</b>г. Саратов, ул.Политехническая, 77<br/>
                     <b>Телефон:</b>+7(8452)123456<br/>
-                    <b>Email:</b> <a href="#">besmart@gmail.com</a>
+                    <b>Email:</b> <a href="mailto:besmart@gmail.com">besmart@gmail.com</a>
                 </p>
             </div>
         </div>
@@ -33,8 +33,8 @@
 </div>
 
 <script>
-    $(window).resize(fixedFooter);
-    $(document).on("click", ".tab-pane", fixedFooter);
-    $(document).on("click", "a", fixedFooter);
-    $(document).ready(fixedFooter);
+    // $(window).resize(fixedFooter);
+    // $(document).on("click", ".tab-pane", fixedFooter);
+    // $(document).on("click", "a", fixedFooter);
+    // $(document).ready(fixedFooter);
 </script>

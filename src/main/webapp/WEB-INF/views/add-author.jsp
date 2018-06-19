@@ -23,7 +23,7 @@
         </script>
     </c:if>
 
-    <form:form method="post" modelAttribute="author" action="${contextPath}authors/addAuthorAction">
+    <form:form id="change-author-form" method="post" modelAttribute="author" action="${contextPath}authors/addAuthorAction">
         <jsp:include page="add-or-edit-author.jsp"/>
     </form:form>
 </div>

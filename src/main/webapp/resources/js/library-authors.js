@@ -28,3 +28,22 @@ function searchBooksByAuthor(authorId, authorName) {
     saveFoundResultText(text);
     window.location = (getContextPath() + '/home?authorId=' + authorId);
 }
+
+function addOrEditAuthorValidation() {
+    let result = true;
+    $('#change-author-form').submit(function (event) {
+        $(".invalid-feedback").empty();
+        $("div.form-group").removeClass("has-error");
+
+        let requiredInputs = [$("#fio")];
+        for(let i in requiredInputs) {
+            if(!requiredInputs[i].val()){
+                requiredInputs[i].parents("div.form-group").addClass("has-error");
+                requiredInputs[i].after('<div class="invalid-feedback" style="color: red"><sup style="color: red">*</sup>Обязательное поле</div>');
+                result = false;
+            }
+        }
+        return result;
+    });
+
+}
