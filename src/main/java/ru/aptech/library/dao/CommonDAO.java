@@ -1,6 +1,7 @@
 package ru.aptech.library.dao;
 
 import org.springframework.transaction.annotation.Transactional;
+import ru.aptech.library.entities.BookContent;
 import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaAuthors;
 import ru.aptech.library.util.SearchCriteriaBooks;
@@ -53,4 +54,7 @@ public interface CommonDAO<T> extends DAO<T, Long> {
 
     @Transactional
     default void setViews(Long authorId, Long views){throw new UnsupportedOperationException();}
+
+    @Transactional
+    default void deleteBookContents(T t){throw new UnsupportedOperationException();}
 }

@@ -14,9 +14,14 @@
         <property name="name">
             <column name="name" sql-type="varchar(45)" length="45"/>
         </property>
-        <property name="content">
-            <column name="content" sql-type="longblob"/>
-        </property>
+
+        <set name="bookContents" table="book_content" cascade="save-update" lazy="true" fetch="select">
+            <key>
+                <column name="book_id" not-null="true"/>
+            </key>
+            <one-to-many class="ru.aptech.library.entities.BookContent" />
+        </set>
+
         <property name="pageCount">
             <column name="page_count" sql-type="int(11)"/>
         </property>
@@ -70,6 +75,9 @@
         </property>
         <property name="contentType">
             <column name="content_type" sql-type="varchar(45)"/>
+        </property>
+        <property name="fileSize">
+            <column name="file_size" sql-type="varchar(45)"/>
         </property>
 
         <set name="carts" table="carts_to_books" inverse="true" lazy="true" fetch="join">

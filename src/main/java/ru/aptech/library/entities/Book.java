@@ -1,8 +1,9 @@
 package ru.aptech.library.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.time.LocalDate;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
@@ -11,7 +12,14 @@ import java.util.Set;
 public class Book implements Serializable {
     private Long id;
     private String name;
-    private byte[] content;
+    /**
+     * Сделано отношением one-to-many для ленивой загрузки,
+     * улучшения производительности и уменьшения затрат памяти
+     * (для one-to-one - lazy не работает,
+     * а поле Blob всегда загружается - это возможно проблема MySQL)
+     * */
+    @JsonIgnore
+    private Set<BookContent> bookContents = new HashSet<>();
     private Integer pageCount;
     private String isbn;
     private Genre genre;
@@ -26,51 +34,22 @@ public class Book implements Serializable {
     private LocalDateTime created;
     private Long views;
     private Double price;
+    @JsonIgnore
     private Set<Cart> carts = new HashSet<>(0);
+    @JsonIgnore
     private Set<Order> orders = new HashSet<>(0);
+    /**
+     * Всегда равно пустой строке если контент не загружен
+     * */
     private String fileExtension;
+    /**
+     * Всегда равно null если контент не загружен
+     * */
     private String contentType;
+    private String fileSize;
 
 
     public Book() {
-    }
-
-
-    public Book(Long id,
-                String name,
-                Integer pageCount,
-                String isbn,
-                Genre genre,
-                Author author,
-                Integer publishYear,
-                Publisher publisher,
-                byte[] image,
-                String descr,
-                String bookcol,
-                Integer rating,
-                Long voteCount,
-                Long views,
-                Double price,
-                String fileExtension,
-                String contentType
-    ) {
-        this.id = id;
-        this.name = name;
-        this.pageCount = pageCount;
-        this.isbn = isbn;
-        this.genre = genre;
-        this.author = author;
-        this.publishYear = publishYear;
-        this.publisher = publisher;
-        this.image = image;
-        this.descr = descr;
-        this.bookcol = bookcol;
-        this.rating = rating;
-        this.voteCount = voteCount;
-        this.views = views;
-        this.price = price;
-        this.fileExtension = fileExtension;
-        this.contentType = contentType;
     }
 
 
@@ -94,13 +73,13 @@ public class Book implements Serializable {
     }
 
 
-    public byte[] getContent() {
-        return content;
+    public Set<BookContent> getBookContents() {
+        return bookContents;
     }
 
 
-    public void setContent(byte[] content) {
-        this.content = content;
+    public void setBookContents(Set<BookContent> bookContent) {
+        this.bookContents = bookContent;
     }
 
 
@@ -284,6 +263,16 @@ public class Book implements Serializable {
     }
 
 
+    public String getFileSize() {
+        return fileSize;
+    }
+
+
+    public void setFileSize(String fileSize) {
+        this.fileSize = fileSize;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -304,7 +293,8 @@ public class Book implements Serializable {
                 Objects.equals(views, book.views) &&
                 Objects.equals(price, book.price) &&
                 Objects.equals(fileExtension, book.fileExtension) &&
-                Objects.equals(contentType, book.contentType);
+                Objects.equals(contentType, book.contentType) &&
+                Objects.equals(fileSize, book.fileSize);
     }
 
 
@@ -315,10 +305,10 @@ public class Book implements Serializable {
         return result;
     }
 
-    public void setAllField(Book book) {
+    public void setAllField(Book book) throws SQLException {
         this.name = book.name;
-        if(book.content!=null && book.content.length>0){
-            this.content = book.content;
+        if(book.bookContents !=null && !book.bookContents.isEmpty() && book.bookContents.iterator().next().getContent().length()>0){
+            this.bookContents = book.bookContents;
         }
         this.pageCount = book.pageCount;
         this.isbn = book.isbn;

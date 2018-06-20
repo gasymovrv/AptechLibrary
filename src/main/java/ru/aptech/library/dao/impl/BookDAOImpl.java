@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.aptech.library.dao.CommonDAO;
 import ru.aptech.library.entities.Book;
+import ru.aptech.library.entities.BookContent;
 import ru.aptech.library.enums.SearchType;
 import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaBooks;
@@ -17,29 +18,7 @@ import java.util.List;
 
 @Repository("bookDAO")
 public class BookDAOImpl implements CommonDAO<Book> {
-    //с помощью JPQL исключаем поле контент
-    private final String BOOKS_WITHOUT_CONTENT =
-            "select new Book(" +
-                    "b.id, " +
-                    "b.name, " +
-                    "b.pageCount, " +
-                    "b.isbn, " +
-                    "b.genre, " +
-                    "b.author, " +
-                    "b.publishYear, " +
-                    "b.publisher, " +
-                    "b.image, " +
-                    "b.descr, " +
-                    "b.bookcol, " +
-                    "b.rating, " +
-                    "b.voteCount," +
-                    "b.views," +
-                    "b.price," +
-                    "b.fileExtension," +
-                    "b.contentType" +
-                    ") from Book b";
     private final String BOOKS = "select b from Book b";
-
     private final String ORDER_BY_NAME = " order by b.name";
     private final String ORDER_BY_CREATION = " order by b.created desc";
     private final String ORDER_BY_POPULARITY = " order by b.views desc";
@@ -50,7 +29,7 @@ public class BookDAOImpl implements CommonDAO<Book> {
 
     public List<Book> find() {
         Session session = sessionFactory.getCurrentSession();
-        List<Book> bookList = session.createQuery(BOOKS_WITHOUT_CONTENT + ORDER_BY_NAME,
+        List<Book> bookList = session.createQuery(BOOKS + ORDER_BY_NAME,
                 Book.class).getResultList();
         return bookList;
     }
@@ -58,16 +37,6 @@ public class BookDAOImpl implements CommonDAO<Book> {
     public Book find(Long id) {
         Session session = sessionFactory.getCurrentSession();
         Query<Book> query = session.createQuery(BOOKS + " where b.id=:id", Book.class).setParameter("id", id);
-        try {
-            return query.getSingleResult();
-        }catch (Exception e){
-            return null;
-        }
-    }
-
-    public Book findWithoutContent(Long id) {
-        Session session = sessionFactory.getCurrentSession();
-        Query<Book> query = session.createQuery(BOOKS_WITHOUT_CONTENT + " where b.id=:id", Book.class).setParameter("id", id);
         try {
             return query.getSingleResult();
         }catch (Exception e){
@@ -88,7 +57,7 @@ public class BookDAOImpl implements CommonDAO<Book> {
     public List<Book> find(Integer booksOnPage, Integer init, SortType sortType) {
         String sortSql = getSqlBySortType(sortType);
         Session session = sessionFactory.getCurrentSession();
-        List<Book> books = session.createQuery(BOOKS_WITHOUT_CONTENT + sortSql,
+        List<Book> books = session.createQuery(BOOKS + sortSql,
                     Book.class)
                     .setFirstResult(init).setMaxResults(booksOnPage).getResultList();
         return books;
@@ -97,7 +66,7 @@ public class BookDAOImpl implements CommonDAO<Book> {
     public List<Book> find(SearchCriteriaBooks criteria, Integer booksOnPage, Integer init, SortType sortType) {
         String sortSql = getSqlBySortType(sortType);
         Session session = sessionFactory.getCurrentSession();
-        List<Book> books = session.createQuery(BOOKS_WITHOUT_CONTENT +
+        List<Book> books = session.createQuery(BOOKS +
                             " where b.genre.id=:genre" +
                             " or b.publisher.id=:publisher" +
                             " or b.author.id=:author" +
@@ -129,6 +98,13 @@ public class BookDAOImpl implements CommonDAO<Book> {
         Session session = sessionFactory.getCurrentSession();
         session.clear();
         session.delete(book);
+    }
+
+    public void deleteBookContents(Book book) {
+        Session session = sessionFactory.getCurrentSession();
+        session.createQuery("delete BookContent where book.id=:bookId")
+                .setParameter("bookId", book.getId())
+                .executeUpdate();
     }
 
     public Long getQuantity() {

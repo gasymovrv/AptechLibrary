@@ -12,11 +12,11 @@
             </div>
         </div>
         <div class="form-group row">
-            <label for="content" class="col-sm-2 col-form-label">Загрузите книгу</label>
+            <label for="bookContent" class="col-sm-2 col-form-label">Загрузите книгу</label>
             <div class="col-sm-10">
                 <%--загружаем файл, используя библиотеку commons-fileupload и бин multipartResolver--%>
-                <input id="content" type="file" name="file1" class="form-control-file" />
-                <c:if test="${not empty fileName}"><p>Загружен файл: ${fileName} (<%=String.format(Locale.US, "%.2f",(double)(((Book)request.getAttribute("book")).getContent().length)/1000000D)%>Мб)</p></c:if>
+                <input id="bookContent" type="file" name="file1" class="form-control-file" />
+                <c:if test="${not empty fileName}"><p>Загружен файл: ${fileName} (${book.fileSize})</p></c:if>
             </div>
         </div>
         <div class="form-group row">
@@ -24,7 +24,7 @@
             <div class="col-sm-10">
                 <%--загружаем файл, используя библиотеку commons-fileupload и бин multipartResolver--%>
                 <input id="image" type="file" name="file2" class="form-control-file"/>
-                <c:if test="${not empty isImage and isImage}"><p>Загружена картинка (<%=String.format(Locale.US, "%.2f",(double)(((Book)request.getAttribute("book")).getImage()).length/1000000D)%>Мб)</p></c:if>
+                <c:if test="${not empty imageSize}"><p>Загружено (${imageSize})</p></c:if>
             </div>
         </div>
         <div class="form-group row">

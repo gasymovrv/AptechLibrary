@@ -32,9 +32,9 @@
     </div>
 </div>
 
-<script>
-    // $(window).resize(fixedFooter);
-    // $(document).on("click", ".tab-pane", fixedFooter);
-    // $(document).on("click", "a", fixedFooter);
-    // $(document).ready(fixedFooter);
-</script>
+<%--<script>--%>
+     <%--//$(window).resize(fixedFooter);--%>
+    <%--// $(document).on("click", ".tab-pane", fixedFooter);--%>
+    <%--// $(document).on("click", "a", fixedFooter);--%>
+    <%--// $(document).ready(fixedFooter);--%>
+<%--</script>--%>

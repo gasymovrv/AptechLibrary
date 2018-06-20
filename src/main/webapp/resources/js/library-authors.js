@@ -30,8 +30,8 @@ function searchBooksByAuthor(authorId, authorName) {
 }
 
 function addOrEditAuthorValidation() {
-    let result = true;
     $('#change-author-form').submit(function (event) {
+        let result = true;
         $(".invalid-feedback").empty();
         $("div.form-group").removeClass("has-error");
 

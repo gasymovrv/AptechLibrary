@@ -1,5 +1,3 @@
-<%@ page import="ru.aptech.library.entities.Book" %>
-<%@ page import="java.util.Locale" %>
 <%@include file="../../include.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -122,18 +120,16 @@
                             <td>ISBN</td>
                             <td>${book.isbn}</td>
                         </tr>
-                        <tr>
-                            <td>Расширение файла</td>
-                            <td>${book.fileExtension}</td>
-                        </tr>
-                        <tr>
-                            <td>Размер файла</td>
-                            <td>
-                                <c:if test="${not empty book.content}">
-                                    <%=String.format(Locale.US, "%.2f", (double) (((Book) request.getAttribute("book")).getContent().length) / 1000000D)%>Мб
-                                </c:if>
-                            </td>
-                        </tr>
+                        <c:if test="${not empty book.contentType}">
+                            <tr>
+                                <td>Расширение файла</td>
+                                <td>${book.fileExtension}</td>
+                            </tr>
+                            <tr>
+                                <td>Размер файла</td>
+                                <td>${book.fileSize}</td>
+                            </tr>
+                        </c:if>
                         <tr>
                             <td>Рейтинг</td>
                             <td>${book.rating}</td>

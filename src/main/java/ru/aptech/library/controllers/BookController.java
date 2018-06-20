@@ -18,7 +18,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.Principal;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("books/")
@@ -113,7 +116,7 @@ public class BookController extends BaseController{
     }
 
     @RequestMapping(value = "addBookView", method = RequestMethod.GET)
-    public ModelAndView addBookView() {
+    public ModelAndView addBookView() throws SQLException {
         ModelAndView modelAndView = new ModelAndView("add-book-page");
         addAttributesForAddOrEditBook(modelAndView, new Book());
         return modelAndView;
@@ -122,7 +125,7 @@ public class BookController extends BaseController{
     @RequestMapping(value = "addBookAction", method = RequestMethod.POST)
     public ModelAndView addBookAction(@ModelAttribute Book book,
                                       @RequestParam("file1") MultipartFile content,
-                                      @RequestParam("file2") MultipartFile image) {
+                                      @RequestParam("file2") MultipartFile image) throws SQLException {
         ModelAndView modelAndView = new ModelAndView("add-book-page");
         boolean isAdded;
         try {
@@ -138,7 +141,7 @@ public class BookController extends BaseController{
     }
 
     @RequestMapping(value = "editBookView", method = RequestMethod.GET)
-    public ModelAndView editBookView(@RequestParam Long bookId) {
+    public ModelAndView editBookView(@RequestParam Long bookId) throws SQLException {
         ModelAndView modelAndView = new ModelAndView("edit-book-page");
         addAttributesForAddOrEditBook(modelAndView, bookService.find(bookId, false, false));
         return modelAndView;
@@ -148,7 +151,7 @@ public class BookController extends BaseController{
     public ModelAndView editBookAction(@ModelAttribute Book book,
                                       @RequestParam("file1") MultipartFile content,
                                       @RequestParam("file2") MultipartFile image,
-                                       @RequestParam Long bookId) {
+                                       @RequestParam Long bookId) throws SQLException {
         ModelAndView modelAndView = new ModelAndView("edit-book-page");
         boolean isEdited;
         try {
@@ -199,12 +202,20 @@ public class BookController extends BaseController{
 
     @RequestMapping(value = "showBookContent", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    public void showBookContent(@RequestParam("bookId") Long bookId, HttpServletResponse response, Principal principal) throws IOException {
+    public void showBookContent(@RequestParam("bookId") Long bookId, HttpServletResponse response, Principal principal) throws IOException, SQLException {
         Book book = bookService.find(bookId, false, false);
-        byte[] content = book.getContent();
-        if (book.getContentType() != null) {
+        byte[] content = new byte[0];
+
+        BookContent bookContent = null;
+        if(book.getBookContents().iterator().hasNext()) {
+            bookContent = book.getBookContents().iterator().next();
+        }
+        if (book.getContentType() != null && bookContent!=null) {
+            Blob b = bookContent.getContent();
+            content = b.getBytes(1,(int)b.length());
             response.setContentType(book.getContentType());
         }
+
         String resultFileName = utils.transliterate(book.getName());
         resultFileName = resultFileName.replaceAll(" ", "_");
         /* "Content-Disposition : inline" will show viewable types [like images/text/pdf/anything viewable by browser] right on browser
@@ -219,12 +230,20 @@ public class BookController extends BaseController{
 
     @RequestMapping(value = "downloadBookContent", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    public void downloadBookContent(@RequestParam("bookId") Long bookId, HttpServletResponse response, Principal principal) throws IOException {
+    public void downloadBookContent(@RequestParam("bookId") Long bookId, HttpServletResponse response, Principal principal) throws IOException, SQLException {
         Book book = bookService.find(bookId, false, false);
-        byte[] content = book.getContent();
-        if (book.getContentType() != null) {
+        byte[] content = new byte[0];
+
+        BookContent bookContent = null;
+        if(book.getBookContents().iterator().hasNext()) {
+            bookContent = book.getBookContents().iterator().next();
+        }
+        if (book.getContentType() != null && bookContent!=null) {
+            Blob b = bookContent.getContent();
+            content = b.getBytes(1,(int)b.length());
             response.setContentType(book.getContentType());
         }
+
         String resultFileName = utils.transliterate(book.getName());
         resultFileName = resultFileName.replaceAll(" ", "_");
         /* "Content-Disposition : attachment" will be directly download, may provide save as popup, based on your browser setting*/
@@ -238,7 +257,7 @@ public class BookController extends BaseController{
 
     @RequestMapping(value = "addToCart", method = RequestMethod.GET)
     public String addToCart(@RequestParam("bookId") Long bookId, Principal principal) {
-        Book book = bookService.find(bookId, false, false);
+        Book book = bookService.find(bookId, false, true);
         User user = userService.find(principal.getName(), "booksInCart");
         user.getCart().getBooks().add(book);
         userService.update(user);
@@ -246,7 +265,7 @@ public class BookController extends BaseController{
     }
 
 
-    private void addAttributesForAddOrEditBook(ModelAndView modelAndView, Book book) {
+    private void addAttributesForAddOrEditBook(ModelAndView modelAndView, Book book) throws SQLException {
         List<Publisher> publishers = publisherService.find();
         List<Genre> genres = genreService.find();
         List<Author> authors = authorService.find();
@@ -256,11 +275,21 @@ public class BookController extends BaseController{
         modelAndView.addObject("unknownAuthor", unknownAuthor);
         modelAndView.addObject("publisherList", publishers);
         modelAndView.addObject("book", book);
-        if (!StringUtils.isEmpty(book.getFileExtension()) && book.getContent() != null && book.getContent().length > 0) {
+        BookContent bookContent = null;
+        if(book.getBookContents().iterator().hasNext()) {
+            bookContent = book.getBookContents().iterator().next();
+        }
+        if (!StringUtils.isEmpty(book.getFileExtension()) && bookContent!=null && bookContent.getContent().length() > 0) {
             modelAndView.addObject("fileName", book.getName() + "." + book.getFileExtension());
         }
         if (book.getImage()!=null && book.getImage().length > 0) {
-            modelAndView.addObject("isImage", true);
+            String imageSize;
+            if(book.getImage().length>1000000){
+                imageSize = String.format(Locale.US, "%.2f %s", (double) book.getImage().length/1000000D, "Мб");
+            } else {
+                imageSize = String.format(Locale.US, "%.2f %s", (double) book.getImage().length/1000D, "Кб");
+            }
+            modelAndView.addObject("imageSize", imageSize);
         }
     }
 

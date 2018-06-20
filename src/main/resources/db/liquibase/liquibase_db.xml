@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<databaseChangeLog 
-    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
-    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
     <!--Запускать через мавен-плагин, выполнить liquibase:update-->
 
@@ -273,4 +271,34 @@
         <sql>ALTER TABLE book MODIFY COLUMN name varchar(450) not null;</sql>
     </changeSet>
 
+    <changeSet author="rgasymov" id="20180619-01">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="aplib" tableName="book_content"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE TABLE book_content (
+            id bigint(20) NOT NULL AUTO_INCREMENT,
+            book_id bigint(20) NOT NULL,
+            content longblob NOT NULL,
+            PRIMARY KEY (id),
+            CONSTRAINT fk_book_content FOREIGN KEY (book_id) REFERENCES book (id) ON DELETE CASCADE
+            );
+            INSERT INTO book_content (book_id,content) SELECT id,content FROM book;
+            ALTER TABLE book DROP COLUMN content;
+        </sql>
+    </changeSet>
+
+    <changeSet author="rgasymov" id="20180620-01">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="aplib" tableName="book" columnName="file_size"/>
+            </not>
+        </preConditions>
+        <sql>
+            ALTER TABLE book ADD COLUMN file_size varchar(45) NULL;
+            UPDATE book b set b.file_size=(select OCTET_LENGTH(bc.content) FROM book_content bc WHERE b.id = bc.book_id)/1000000;
+        </sql>
+    </changeSet>
 </databaseChangeLog>

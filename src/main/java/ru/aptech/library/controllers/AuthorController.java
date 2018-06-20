@@ -130,7 +130,7 @@ public class AuthorController extends BaseController{
     private void addAttributesForAddOrEditAuthor(ModelAndView modelAndView, Author author) {
         String birthday = author.getBirthday() != null ? author.getBirthday().format(DATE_FORMAT) : "";
         modelAndView.addObject("author", author);
-        modelAndView.addObject("bookList", bookService.find());
+        modelAndView.addObject("bookList", bookService.find(false));
         modelAndView.addObject("date", birthday);
     }
 
@@ -147,7 +147,7 @@ public class AuthorController extends BaseController{
                 } else if (element instanceof Long) {
                     bookId = (Long) element;
                 }
-                return bookId != null ? bookService.find(bookId, false, false) : null;
+                return bookId != null ? bookService.find(bookId, false, true) : null;
             }
         });
     }

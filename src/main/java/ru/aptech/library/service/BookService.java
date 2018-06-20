@@ -11,16 +11,12 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ru.aptech.library.dao.CommonDAO;
 import ru.aptech.library.dao.UserDAO;
-import ru.aptech.library.entities.Author;
-import ru.aptech.library.entities.Book;
-import ru.aptech.library.entities.User;
-import ru.aptech.library.entities.UsersViews;
+import ru.aptech.library.entities.*;
 import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaBooks;
-import ru.aptech.library.util.Utils;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional(propagation=Propagation.REQUIRED)
@@ -41,17 +37,25 @@ public class BookService {
     protected UserService userService;
 
     @Transactional(propagation= Propagation.REQUIRED)
-    public List<Book> find() {
-        return bookDAO.find();
+    public List<Book> find(Boolean initSets) {
+        List<Book> allBooks = bookDAO.find();
+        if(initSets!=null && initSets){
+            for (Book b : allBooks) {
+                Hibernate.initialize(b.getOrders());
+                Hibernate.initialize(b.getCarts());
+            }
+        }
+        return allBooks;
     }
 
     @Transactional(propagation=Propagation.REQUIRED)
     public Book find(Long id, Boolean initSets, Boolean noContent) {
         Book b;
         if(noContent!=null && noContent){
-            b = bookDAO.findWithoutContent(id);
+            b = bookDAO.find(id);
         } else {
             b = bookDAO.find(id);
+            Hibernate.initialize(b.getBookContents());
         }
         if(initSets!=null && initSets){
             Hibernate.initialize(b.getOrders());
@@ -76,11 +80,23 @@ public class BookService {
 
     @Transactional(propagation=Propagation.REQUIRED, rollbackFor = Exception.class)
     public void save(Book book, MultipartFile content, MultipartFile image) throws Exception {
-        book.setContent(content.getBytes());
+        BookContent c = new BookContent();
+        c.setBook(book);
+        c.setContent(new javax.sql.rowset.serial.SerialBlob(content.getBytes()));
+        book.getBookContents().add(c);
+
         book.setName(book.getName().replaceAll("[\"\']", ""));
+        //если файл пуст, то ext=""
         String ext = FilenameUtils.getExtension(content.getOriginalFilename());
         book.setContentType(StringUtils.isEmpty(ext) ? null : content.getContentType());
         book.setFileExtension(ext);
+        String fileSize;
+        if(content.getSize()>1000000){
+            fileSize = String.format(Locale.US, "%.2f %s", (double) content.getSize()/1000000D, "Мб");
+        } else {
+            fileSize = String.format(Locale.US, "%.2f %s", (double) content.getSize()/1000D, "Кб");
+        }
+        book.setFileSize(fileSize);
         book.setImage(image.getBytes());
         if(book.getViews()==null){book.setViews(0L);}
         book.setCreated(LocalDateTime.now());
@@ -103,15 +119,27 @@ public class BookService {
 
         updatedBook.setAuthor(a);
         existBook.setAllField(updatedBook);
+
+        //Обновляем старый контент только если новый не пустой
         if (content != null && content.getSize() > 0) {
-            existBook.setContent(content.getBytes());
+            //у созданной книги обязательно должен быть контент (может с пустым блобом но это не важно) поэтому проверки не нужны
+            existBook.getBookContents().iterator().next().setContent(new javax.sql.rowset.serial.SerialBlob(content.getBytes()));
             String ext = FilenameUtils.getExtension(content.getOriginalFilename());
             existBook.setContentType(StringUtils.isEmpty(ext) ? null : content.getContentType());
             existBook.setFileExtension(ext);
+            String fileSize;
+            if(content.getSize()>1000000){
+                fileSize = String.format(Locale.US, "%.2f %s", (double) content.getSize()/1000000D, "Мб");
+            } else {
+                fileSize = String.format(Locale.US, "%.2f %s", (double) content.getSize()/1000D, "Кб");
+            }
+            existBook.setFileSize(fileSize);
         }
+
         if (image != null && image.getSize() > 0) {
             existBook.setImage(image.getBytes());
         }
+
         bookDAO.update(existBook);
     }
 
@@ -128,6 +156,7 @@ public class BookService {
             }
         }
         usersViewsDAO.delete(book);
+        bookDAO.deleteBookContents(book);
         bookDAO.delete(book);
     }
 

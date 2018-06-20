@@ -29,3 +29,25 @@ SELECT * FROM book b WHERE b.id in (
     WHERE o.username = 'newUser'
   )
 );
+
+
+INSERT INTO content1 (book_id,content) SELECT id,content FROM book;
+ALTER TABLE book DROP COLUMN content;
+ALTER TABLE book add content longblob NOT NULL;
+INSERT INTO book_content (book_id,content) SELECT book_id,content FROM content1;
+
+CREATE TABLE content (
+  id bigint(20) NOT NULL AUTO_INCREMENT,
+  book_id bigint(20) NOT NULL,
+  content longblob NOT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT fk_content FOREIGN KEY (book_id) REFERENCES book (id)
+);
+
+
+UPDATE book b set b.file_size=(select OCTET_LENGTH(bc.content) FROM book_content bc WHERE b.id = bc.book_id)/1000000;
+
+ALTER TABLE book_content DROP FOREIGN KEY `fk_book_content`;
+
+ALTER TABLE book_content
+  ADD CONSTRAINT fk_book_content FOREIGN KEY (book_id) REFERENCES book (id) ON DELETE CASCADE;

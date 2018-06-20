@@ -13,9 +13,7 @@ import ru.aptech.library.entities.*;
 import ru.aptech.library.enums.RoleType;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Handles requests for the application home page.
@@ -80,6 +78,7 @@ public class UserController extends BaseController{
                                 Principal principal) {
         ModelAndView modelAndView = new ModelAndView("account-page");
         User user = userService.find(principal.getName(), "booksInCart", "booksInOrders");
+
         if(addMoney!=null && addMoney){
             user.setMoney(user.getMoney()+1000);//просто увеличиваем баланс на 1000 пока нет системы оплаты
             userService.update(user);

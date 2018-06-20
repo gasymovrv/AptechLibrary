@@ -6,3 +6,9 @@
 
     <context-root>/aptech-library</context-root>
 </jboss-web>
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<subsystem xmlns="urn:jboss:domain:jca:1.1"-->
+           <!--xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+           <!--xsi:schemaLocation="urn:jboss:domain:jca:1.1 ">-->
+<!--<cached-connection-manager debug="true"/>-->
+<!--</subsystem>-->

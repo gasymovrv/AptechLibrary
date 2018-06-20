@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="ru.aptech.library.entities">
+    <class name="ru.aptech.library.entities.BookContent" table="book_content" schema="aplib">
+        <id name="id">
+            <column name="id" sql-type="bigint(20)"/>
+            <generator class="identity"/>
+        </id>
+
+        <many-to-one name="book" class="Book" fetch="select" lazy="false">
+            <column name="book_id" sql-type="bigint(20)" not-null="true"/>
+        </many-to-one>
+
+        <property name="content">
+            <column name="content" sql-type="longblob" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -430,8 +430,8 @@ function addOrEditBookValidation() {
             $(this).val(0);
         }
     });
-    let result = true;
     $('#change-book-form').submit(function (event) {
+        let result = true;
         $(".invalid-feedback").empty();
         $("div.form-group").removeClass("has-error");
 
