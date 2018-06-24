@@ -11,8 +11,7 @@ import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaAuthors;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 @RequestMapping("authors/")
@@ -59,7 +58,9 @@ public class AuthorController extends BaseController{
 
         modelAndView.addObject("criteriaAuthors", session.getAttribute("criteriaAuthors"));
         modelAndView.addObject("authorList", authors);
-        modelAndView.addObject("sortTypeList", SortType.values());
+        List<SortType> sortTypeList = new ArrayList<>(Arrays.asList(SortType.values()));
+        sortTypeList.remove(SortType.PRICE);
+        modelAndView.addObject("sortTypeList", sortTypeList);
         modelAndView.addObject("selectedPage", selectedPage);
         modelAndView.addObject("quantityAuthors", authorService.getQuantityAuthors((SearchCriteriaAuthors)session.getAttribute("criteriaAuthors")));
         return modelAndView;

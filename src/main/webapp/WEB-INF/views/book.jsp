@@ -41,10 +41,7 @@
                 </c:otherwise>
             </c:choose>
         </div>
-        <h5>Краткое описание</h5>
-        <p>
-            ${book.descr}
-        </p>
+
         <h5>Действия</h5>
         <!-- Operations -->
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
@@ -82,16 +79,20 @@
         <div class="tabbable">
             <!-- Tabs -->
             <ul class="nav nav-tabs product-details-nav">
-                <li class="active"><a href="#tab1" data-toggle="tab">Описание</a></li>
+                <li class="active"><a href="#tab1" data-toggle="tab">Аннотация</a></li>
                 <li><a href="#tab2" data-toggle="tab">Сведения</a></li>
             </ul>
             <!-- Tab Content (Full Description) -->
             <div class="tab-content product-detail-info">
                 <div class="tab-pane active" id="tab1">
-                    <h4>Рецензия</h4>
-                    <p>
-                        ${book.descr}
-                    </p>
+                    <c:choose>
+                        <c:when test="${empty book.descr}">
+                            <h4>Отстутствует</h4>
+                        </c:when>
+                        <c:otherwise>
+                            <p>${book.descr}</p>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
                 <!-- Tab Content (Specification) -->
                 <div class="tab-pane" id="tab2">
