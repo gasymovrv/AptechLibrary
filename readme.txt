@@ -41,6 +41,9 @@
         2) накатить db/liquibase/liquibase_db.xml
            (Запускать через мавен-плагин, выполнить liquibase:update)
 
+Инструмент сборки
+    Apache Maven 3
+    
 Сервер приложений
     wildfly-11.0.0.Final
 
