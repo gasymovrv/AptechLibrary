@@ -35,11 +35,7 @@
         установлено на VirtualBox,
         подключение по TCP/IP с локальной машины
 + liquibase
-     + для хранения истории изменений БД и восстановления структуры
-+ БД можно восстановить так:
-    + Импортировать скрипт db/dump(struct-and-data).sql
-    + Накатить db/liquibase/liquibase_db.xml
-   (Запускать через мавен-плагин, выполнить liquibase:update)
+     + Инструмент миграции БД
 
 # Инструмент сборки
 Apache Maven 3
@@ -48,7 +44,7 @@ Apache Maven 3
 wildfly-11.0.0.Final
 
 # Действия, необходимые для заупска
-+ Подключить в VirtualBox готовый диск **ub-serv-with-mysql.vbox** или создать новую ВМ **ubuntu-16.04.3-server-amd64** с установленным MySQL и настройками сети:
++ Подключить в VirtualBox готовый диск **ub-serv-with-mysql.vbox** (логин/пароль/ip - rgasimov/4/192.168.56.200) или создать новую ВМ **ubuntu-16.04.3-server-amd64** с установленным MySQL и настройками сети:
     + Host-only adapter: VirtualBox Host-Only Ethernet Adapter #2
     + В глобальных настройках для 'VirtualBox Host-Only Ethernet Adapter #2' указан IPv4 addres = 192.168.56.1
     + Файл настроек сети на ubuntu **/etc/network/interfaces**
@@ -70,7 +66,8 @@ wildfly-11.0.0.Final
         address 192.168.56.200
         netmask 255.255.255.0
         ```
-+ **MySQL** на ВМ с настройками:
++ **MySQL** на ВМ с настройками (если **НЕ** подключен диск **ub-serv-with-mysql.vbox**):
+    + Логин/пароль - root/4
     + Кодировка. Изменить файл настроек MySQL:
         sudo nano **/etc/mysql/my.cnf**
         если там нет такой секции, то в файле:
@@ -93,6 +90,18 @@ wildfly-11.0.0.Final
         И в файле **/etc/mysql/mysql.conf.d/mysqld.cnf** добавляем строку:
         skip-grant-tables
         Перезагружаем: service mysql restart
++ **MySQLWorkbench** - если **НЕ** подключен диск **ub-serv-with-mysql.vbox**, то потребуется для дампа данных в БД, иначе по желанию.
++ **База данных**. БД можно восстановить так (если **НЕ** подключен диск **ub-serv-with-mysql.vbox**):
+    + Через MySQLWorkbench импортировать скрипты:
+        Если требуются данные, то: db/dump(struct-and-data).sql
+        Если только структура, то: dump(struct).sql
+        Настройки подключения через MySQLWorkbench:
+        Host: 192.168.56.200
+        Port: 3306
+        Username: root
+        Password: 4
+    + Накатить db/liquibase/liquibase_db.xml
+    (Запускать через мавен-плагин, выполнить liquibase:update)
 + **wildfly-11.0.0.Final** с настройками:
      + В ...\wildfly-11.0.0.Final\standalone\configuration\standalone.xml
      для увеличения размера переваемых файлов до 500 Мб прописать:
@@ -107,6 +116,8 @@ wildfly-11.0.0.Final
         ```
     + Задеплоить mysql-connector-java-5.1.46.jar
     + В 'Configuration: Subsystems    Subsystem: Datasources    Type: Non-XA' указать
+        + User name: root
+        + Password: 4
         + JNDI: java:/ApLib
         + Connection URL: jdbc:mysql://192.168.56.200:3306/aplib
 + **Maven 3**

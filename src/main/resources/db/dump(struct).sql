@@ -25,9 +25,11 @@ DROP TABLE IF EXISTS `author`;
 CREATE TABLE `author` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `fio` varchar(300) NOT NULL,
-  `birthday` date NOT NULL,
+  `birthday` date DEFAULT NULL,
+  `views` bigint(20) NOT NULL DEFAULT '0',
+  `created` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=141 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,8 +41,7 @@ DROP TABLE IF EXISTS `book`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `book` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `content` longblob NOT NULL,
+  `name` varchar(450) NOT NULL,
   `page_count` int(11) NOT NULL,
   `isbn` varchar(100) NOT NULL,
   `genre_id` bigint(20) NOT NULL,
@@ -52,6 +53,12 @@ CREATE TABLE `book` (
   `bookcol` varchar(45) DEFAULT NULL,
   `rating` int(5) DEFAULT '0',
   `vote_count` bigint(20) DEFAULT '0',
+  `views` bigint(20) NOT NULL DEFAULT '0',
+  `created` datetime DEFAULT NULL,
+  `price` decimal(16,2) NOT NULL,
+  `file_extension` varchar(20) NOT NULL DEFAULT 'pdf',
+  `content_type` varchar(450) DEFAULT 'application/pdf',
+  `file_size` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `isbn_UNIQUE` (`isbn`),
@@ -61,7 +68,55 @@ CREATE TABLE `book` (
   CONSTRAINT `fk_author` FOREIGN KEY (`author_id`) REFERENCES `author` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_genre` FOREIGN KEY (`genre_id`) REFERENCES `genre` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_publisher` FOREIGN KEY (`publisher_id`) REFERENCES `publisher` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `book_content`
+--
+
+DROP TABLE IF EXISTS `book_content`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `book_content` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `book_id` bigint(20) NOT NULL,
+  `content` longblob NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_book_content` (`book_id`),
+  CONSTRAINT `fk_book_content` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `cart`
+--
+
+DROP TABLE IF EXISTS `cart`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cart` (
+  `username` varchar(45) NOT NULL,
+  PRIMARY KEY (`username`),
+  CONSTRAINT `fk_cart_to_user` FOREIGN KEY (`username`) REFERENCES `user` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `carts_to_books`
+--
+
+DROP TABLE IF EXISTS `carts_to_books`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `carts_to_books` (
+  `username` varchar(45) NOT NULL,
+  `book_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`username`,`book_id`),
+  KEY `fk_c_to_book` (`book_id`),
+  CONSTRAINT `fk_c_to_book` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`),
+  CONSTRAINT `fk_cart` FOREIGN KEY (`username`) REFERENCES `cart` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -79,6 +134,40 @@ CREATE TABLE `genre` (
   KEY `fk_parent_idx` (`parent`),
   CONSTRAINT `fk_parent` FOREIGN KEY (`parent`) REFERENCES `genre` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `order_`
+--
+
+DROP TABLE IF EXISTS `order_`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `order_` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `username` varchar(45) NOT NULL,
+  `created` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_order_to_user` (`username`),
+  CONSTRAINT `fk_order_to_user` FOREIGN KEY (`username`) REFERENCES `user` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `orders_to_books`
+--
+
+DROP TABLE IF EXISTS `orders_to_books`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `orders_to_books` (
+  `order_id` bigint(20) NOT NULL,
+  `book_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`order_id`,`book_id`),
+  KEY `fk_o_to_book` (`book_id`),
+  CONSTRAINT `fk_o_to_book` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`),
+  CONSTRAINT `fk_order` FOREIGN KEY (`order_id`) REFERENCES `order_` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -122,6 +211,7 @@ CREATE TABLE `user` (
   `username` varchar(45) NOT NULL,
   `password` varchar(64) NOT NULL,
   `enabled` tinyint(4) NOT NULL DEFAULT '1',
+  `money` decimal(16,2) NOT NULL DEFAULT '0.00',
   PRIMARY KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -141,7 +231,27 @@ CREATE TABLE `user_role` (
   UNIQUE KEY `uni_username_role` (`role`,`username`),
   KEY `fk_username_idx` (`username`),
   CONSTRAINT `fk_username` FOREIGN KEY (`username`) REFERENCES `user` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `users_views`
+--
+
+DROP TABLE IF EXISTS `users_views`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users_views` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `username` varchar(45) NOT NULL,
+  `book_id` bigint(20) NOT NULL,
+  `views` bigint(20) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_book_unq` (`username`,`book_id`),
+  KEY `fk_book` (`book_id`),
+  CONSTRAINT `fk_book` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`),
+  CONSTRAINT `fk_user` FOREIGN KEY (`username`) REFERENCES `user` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -173,4 +283,4 @@ CREATE TABLE `vote` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-05-25 12:20:06
+-- Dump completed on 2018-06-27 10:36:16
