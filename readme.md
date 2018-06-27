@@ -69,27 +69,20 @@ wildfly-11.0.0.Final
 + **MySQL** на ВМ с настройками (если **НЕ** подключен диск **ub-serv-with-mysql.vbox**):
     + Логин/пароль - root/4
     + Кодировка. Изменить файл настроек MySQL:
-        sudo nano **/etc/mysql/my.cnf**
-        если там нет такой секции, то в файле:
-        **/etc/mysql/mysql.conf.d/mysqld.cnf**
-        ```
-        skip-character-set-client-handshake
-        character-set-server = utf8
-        init-connect='SET NAMES utf8'
-        collation-server=utf8_general_ci
-        ```
+        + ```sudo nano /etc/mysql/my.cnf``` или, если там пусто, то: ```sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf```
+        + Изменить или добавить код в конце, если таких строк не будет:
+            ```
+            skip-character-set-client-handshake
+            character-set-server = utf8
+            init-connect='SET NAMES utf8'
+            collation-server=utf8_general_ci
+            ```
     + Сеть.
         Изменяем адреса, которые будет слушать mysql в файле в секции [mysqlid]:
-        sudo nano **/etc/mysql/my.cnf**
-        если там нет такой секции, то в файле:
-        **/etc/mysql/mysql.conf.d/mysqld.cnf**
-        Вместо: 
-        bind address=127.0.0.1
-        Вписываем: 
-        bind address=0.0.0.0
-        И в файле **/etc/mysql/mysql.conf.d/mysqld.cnf** добавляем строку:
-        skip-grant-tables
-        Перезагружаем: service mysql restart
+        + ```sudo nano /etc/mysql/my.cnf``` или, если там нет такой секции, то ```sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf```
+        + Вместо: ```bind address=127.0.0.1``` вписываем: ```bind address=0.0.0.0```
+        + Добавляем строку: ```skip-grant-tables```
+        + Перезагружаем: ```service mysql restart```
 + **MySQLWorkbench** - если **НЕ** подключен диск **ub-serv-with-mysql.vbox**, то потребуется для дампа данных в БД, иначе по желанию.
 + **База данных**. БД можно восстановить так (если **НЕ** подключен диск **ub-serv-with-mysql.vbox**):
     + Через MySQLWorkbench импортировать скрипты:
@@ -115,7 +108,7 @@ wildfly-11.0.0.Final
         />
         ```
     + Задеплоить mysql-connector-java-5.1.46.jar
-    + В 'Configuration: Subsystems    Subsystem: Datasources    Type: Non-XA' указать
+    + В 'Configuration: Subsystems    Subsystem: Datasources    Type: Non-XA' добавить datasource с задеплоенным jdbc и указать настройки:
         + User name: root
         + Password: 4
         + JNDI: java:/ApLib
