@@ -93,13 +93,13 @@ wildfly-11.0.0.Final
 + **MySQLWorkbench** - если **НЕ** подключен диск **ub-serv-with-mysql.vbox**, то потребуется для дампа данных в БД, иначе по желанию.
 + **База данных**. БД можно восстановить так (если **НЕ** подключен диск **ub-serv-with-mysql.vbox**):
     + Через MySQLWorkbench импортировать скрипты:
-        Если требуются данные, то: db/dump(struct-and-data).sql
-        Если только структура, то: dump(struct).sql
-        Настройки подключения через MySQLWorkbench:
-        Host: 192.168.56.200
-        Port: 3306
-        Username: root
-        Password: 4
+        + Настройки подключения через MySQLWorkbench:
+            + Host: 192.168.56.200
+            + Port: 3306
+            + Username: root
+            + Password: 4
+        + Если требуются данные, то: db/dump(struct-and-data).sql
+        + Если только структура, то: dump(struct).sql
     + Накатить db/liquibase/liquibase_db.xml
     (Запускать через мавен-плагин, выполнить liquibase:update)
 + **wildfly-11.0.0.Final** с настройками:
