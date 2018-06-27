@@ -1,56 +1,114 @@
-#Тема:
-    Онлайн библиотека с возможностью покупки книг
+# Тема: Онлайн-библиотека с возможностью покупки книг
+![](https://github.com/gasymovrv/AptechLibrary/blob/master/src/main/webapp/resources/img/BeSmart-logo.png)
 
-Бэк-технологии:
-    commons-fileupload
-    com.fasterxml.jackson.core
-    java SE 8
-    javax.servlet
-    javax.servlet.jsp
-    jstl
-    log4j // только зависимость в pom.xml, пока не использовал
-    mysql
-    org.apache.tiles
-    org.hibernate
-    org.slf4j // только зависимость в pom.xml, пока не использовал
-    org.springframework:
-        spring-context
-        spring-orm
-        spring-webmvc
-    org.springframework.webflow //настроено, но пока нигде не используется
-    org.springframework.security
-        spring-security-taglibs
+# Бэк-технологии
++ commons-fileupload
++ com.fasterxml.jackson.core
++ java SE 8
++ javax.servlet
++ javax.servlet.jsp
++ jstl
++ log4j (только зависимость в pom.xml, пока не использовал)
++ mysql
++ org.apache.tiles
++ org.hibernate
++ org.slf4j (только зависимость в pom.xml, пока не использовал)
++ org.springframework:
+    + spring-context
+    + spring-orm
+    + spring-webmvc
++ org.springframework.webflow (настроено, но пока нигде не используется)
++ org.springframework.security
+    + spring-security-taglibs
 
-Фронт-технологии:
-    css
-    html //только в связке с jsp
-    jsp //связка с сервером, получение данных из модели
-    js/jquery/ajax //динамика на страницах, поиск книг сделан полностью на ajax
-    org.apache.tiles //сборка страниц из jsp-файлов
-    Twitter Bootstrap 3 //включает готовые стили, используется кастомный шаблон
+# Фронт-технологии
++ css
++ html
++ jsp
++ js/jquery/ajax (поиск книг сделан полностью на ajax)
++ org.apache.tiles (сборка страниц из jsp-файлов)
++ Twitter Bootstrap 3 (включает готовые стили, используется кастомный шаблон)
 
-БД
-    mysql
-        Размещен на ubuntu-16.04.3-server-amd64,
+# БД
++ mysql
+    + Размещен на ubuntu-16.04.3-server-amd64,
         установлено на VirtualBox,
         подключение по TCP/IP с локальной машины
-    liquibase
-        для хранения истории изменений БД и восстановления структуры
-    БД можно восстановить так:
-        1) импортировать скрипт db/dump(struct-and-data).sql
-        2) накатить db/liquibase/liquibase_db.xml
-           (Запускать через мавен-плагин, выполнить liquibase:update)
++ liquibase
+     + для хранения истории изменений БД и восстановления структуры
++ БД можно восстановить так:
+    + Импортировать скрипт db/dump(struct-and-data).sql
+    + Накатить db/liquibase/liquibase_db.xml
+   (Запускать через мавен-плагин, выполнить liquibase:update)
 
-Инструмент сборки
-    Apache Maven 3
+# Инструмент сборки
+Apache Maven 3
+
+# Сервер приложений
+wildfly-11.0.0.Final
+
+# Действия, необходимые для заупска
++ Подключить в VirtualBox готовый диск **ub-serv-with-mysql.vbox** или создать новую ВМ **ubuntu-16.04.3-server-amd64** с установленным MySQL и настройками сети:
+    + Host-only adapter: VirtualBox Host-Only Ethernet Adapter #2
+    + В глобальных настройках для 'VirtualBox Host-Only Ethernet Adapter #2' указан IPv4 addres = 192.168.56.1
+    + Файл настроек сети на ubuntu **/etc/network/interfaces**
+    должен выглядеть примерно так (главное чтобы совпадали адреса):
+        ```
+        source /etc/network/interfaces.d/*
     
-Сервер приложений
-    wildfly-11.0.0.Final
-
-
-Действия, необходимые для заупска
-    Наличие wildfly-11.0.0.Final с настройками:
-        Настройка 
-        wildfly-11.0.0.Final\standalone\configuration\standalone.xml
-
-
+        # The loopback network interface
+        auto lo
+        iface lo inet loopback
+        
+        # The primary network interface
+        #auto enp0s3
+        #iface enp0s3 inet dhcp
+        
+        # My host-only adapter (for 1: enp0s3, fro 2: enp0s8)
+        auto enp0s3
+        iface enp0s3 inet static
+        address 192.168.56.200
+        netmask 255.255.255.0
+        ```
++ **MySQL** на ВМ с настройками:
+    + Кодировка. Изменить файл настроек MySQL:
+        sudo nano **/etc/mysql/my.cnf**
+        если там нет такой секции, то в файле:
+        **/etc/mysql/mysql.conf.d/mysqld.cnf**
+        ```
+        skip-character-set-client-handshake
+        character-set-server = utf8
+        init-connect='SET NAMES utf8'
+        collation-server=utf8_general_ci
+        ```
+    + Сеть.
+        Изменяем адреса, которые будет слушать mysql в файле в секции [mysqlid]:
+        sudo nano **/etc/mysql/my.cnf**
+        если там нет такой секции, то в файле:
+        **/etc/mysql/mysql.conf.d/mysqld.cnf**
+        Вместо: 
+        bind address=127.0.0.1
+        Вписываем: 
+        bind address=0.0.0.0
+        И в файле **/etc/mysql/mysql.conf.d/mysqld.cnf** добавляем строку:
+        skip-grant-tables
+        Перезагружаем: service mysql restart
++ **wildfly-11.0.0.Final** с настройками:
+     + В ...\wildfly-11.0.0.Final\standalone\configuration\standalone.xml
+     для увеличения размера переваемых файлов до 500 Мб прописать:
+        ```xml
+        <http-listener
+            name="default"
+            socket-binding="http"
+            max-post-size="504857600"
+            redirect-socket="https"
+            enable-http2="true"
+        />
+        ```
+    + Задеплоить mysql-connector-java-5.1.46.jar
+    + В 'Configuration: Subsystems    Subsystem: Datasources    Type: Non-XA' указать
+        + JNDI: java:/ApLib
+        + Connection URL: jdbc:mysql://192.168.56.200:3306/aplib
++ **Maven 3**
++ **Java 8**
++ **Исходный код**. Можно сфетчить с GitHub или скачать в архиве. Запустить в Intellij IDEA или любой другой среде (хотя возможно потребуются доп. действия). Можно просто собрать мавеном, не используя среду разрабоотки . Код компилируется в war-файл, который небоходимо разместить на WildFly. Затем перейти по ссылке http://localhost:8080/aptech-library/home
