@@ -10,3 +10,7 @@
 .orders-table table td{
     width: 0 !important;
 }
+
+.shop-item img{
+    height: 300px;
+}
