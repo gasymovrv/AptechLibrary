@@ -7,4 +7,3 @@
 *.iml
 target
 src/main/resources/db/dump(struct-and-data).sql
-src/test/

@@ -172,4 +172,14 @@ public class BookService {
     public void increaseView(Long bookId){
         bookDAO.increaseView(bookId);
     }
+
+
+    public CommonDAO<Book> getBookDAO() {
+        return bookDAO;
+    }
+
+
+    public void setBookDAO(CommonDAO<Book> bookDAO) {
+        this.bookDAO = bookDAO;
+    }
 }
