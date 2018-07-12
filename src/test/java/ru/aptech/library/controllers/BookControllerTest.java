@@ -42,9 +42,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class) // это инициализирует контекст спринга
 @WebAppConfiguration()
-@ContextConfiguration(classes = {TestContext.class})
+@ContextConfiguration(classes = {TestContext.class}) //путь к настройкам контекста, там же перечень бинов
 public class BookControllerTest extends BaseTest {
     @Autowired
     WebApplicationContext wac;

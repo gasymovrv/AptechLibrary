@@ -27,14 +27,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.class) //это делает инит моков вместо MockitoAnnotations.initMocks(this);
 public class StandaloneBookControllerTest extends BaseTest {
     private MockMvc mockMvc;
     @Mock
     private BookService bookService;
 
     @InjectMocks
-    private BookController bookController;
+    private BookController bookController; //объект в который будем инжектить моки
 
     private List<Book> books = new ArrayList<>();
 

@@ -38,7 +38,7 @@ public class BookServiceTest extends BaseTest {
     private CommonDAO<Book> bookDAO;
 
     @InjectMocks
-    private BookService bookService;
+    private BookService bookService; //объект в который будем инжектить моки
 
     @Before
     public void init() {
