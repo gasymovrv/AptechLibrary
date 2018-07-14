@@ -15,7 +15,7 @@
     <!--<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource">-->
         <!--<property name="driverClassName" value="com.mysql.jdbc.Driver"/>-->
         <!--<property name="url" value="jdbc:mysql://192.168.56.200:3306/aplib"/>-->
-        <!--<property name="username" value="root"/>-->
+        <!--<property name="username" value="aplib_owner"/>-->
         <!--<property name="password" value="4"/>-->
     <!--</bean>-->
 

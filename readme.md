@@ -67,7 +67,7 @@ wildfly-11.0.0.Final
         netmask 255.255.255.0
         ```
 + **MySQL** на ВМ с настройками (если **НЕ** подключен диск **ub-serv-with-mysql.vbox**):
-    + Логин/пароль - root/4
+    + Логин/пароль - aplib_owner/4
     + Кодировка. Изменить файл настроек MySQL:
         + ```sudo nano /etc/mysql/my.cnf``` или, если там пусто, то: ```sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf```
         + Изменить или добавить код в конце, если таких строк не будет:
@@ -81,15 +81,25 @@ wildfly-11.0.0.Final
         Изменяем адреса, которые будет слушать mysql в файле в секции [mysqlid]:
         + ```sudo nano /etc/mysql/my.cnf``` или, если там нет такой секции, то ```sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf```
         + Вместо: ```bind address=127.0.0.1``` вписываем: ```bind address=0.0.0.0```
-        + Добавляем строку: ```skip-grant-tables```
         + Перезагружаем: ```service mysql restart```
+    + Привелегии.
+        Заходим в mysql через консоль и создаем пользователей:
+        + Если при установке mysql был задан пароль для root, то входим так ```sudo mysql --user=root --password=4```
+        + Создаем юзеров и права для них:
+            ```
+            CREATE USER 'owner' IDENTIFIED BY '4';
+            CREATE USER 'aplib_owner' IDENTIFIED BY '4';
+            GRANT ALL PRIVILEGES ON *.* TO 'owner';
+            GRANT ALL PRIVILEGES ON aplib.* TO 'aplib_owner';
+            FLUSH PRIVILEGES;
+            ```
 + **MySQLWorkbench** - если **НЕ** подключен диск **ub-serv-with-mysql.vbox**, то потребуется для дампа данных в БД, иначе по желанию.
 + **База данных**. БД можно восстановить так (если **НЕ** подключен диск **ub-serv-with-mysql.vbox**):
     + Через MySQLWorkbench импортировать скрипты:
         + Настройки подключения через MySQLWorkbench:
             + Host: 192.168.56.200
             + Port: 3306
-            + Username: root
+            + Username: aplib_owner
             + Password: 4
         + Если требуются данные, то: db/dump(struct-and-data).sql
         + Если только структура, то: dump(struct).sql
@@ -109,7 +119,7 @@ wildfly-11.0.0.Final
         ```
     + Задеплоить mysql-connector-java-5.1.46.jar
     + В 'Configuration: Subsystems    Subsystem: Datasources    Type: Non-XA' добавить datasource с задеплоенным jdbc и указать настройки:
-        + User name: root
+        + User name: aplib_owner
         + Password: 4
         + JNDI: java:/ApLib
         + Connection URL: jdbc:mysql://192.168.56.200:3306/aplib

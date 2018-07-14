@@ -51,3 +51,13 @@ ALTER TABLE book_content DROP FOREIGN KEY `fk_book_content`;
 
 ALTER TABLE book_content
   ADD CONSTRAINT fk_book_content FOREIGN KEY (book_id) REFERENCES book (id) ON DELETE CASCADE;
+
+# Авторизация в MySQL:
+# sudo mysql --user=root --password=4
+# Для выхода:
+# exit
+CREATE USER 'owner' IDENTIFIED BY '4';
+CREATE USER 'aplib_owner' IDENTIFIED BY '4';
+GRANT ALL PRIVILEGES ON *.* TO 'owner';
+GRANT ALL PRIVILEGES ON aplib.* TO 'aplib_owner';
+FLUSH PRIVILEGES;
