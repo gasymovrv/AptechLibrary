@@ -268,7 +268,7 @@
                     <changeLogFile>src/main/resources/db/liquibase/liquibase_db.xml</changeLogFile>
                     <driver>com.mysql.jdbc.Driver</driver>
                     <url>jdbc:mysql://192.168.56.200:3306/aplib</url>
-                    <username>root</username>
+                    <username>aplib_owner</username>
                     <password>4</password>
                 </configuration>
                 <executions>
