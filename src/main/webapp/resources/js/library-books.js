@@ -122,20 +122,22 @@ function itemsPagination(items, itemsOnPage, criteria) {
 
 function getItemsByAjax(page, itemsOnPage, criteria, async, items) {
     if (!criteria) {criteria = {};}
-    $.ajax({
-        type: 'POST',//тип запроса
-        contentType: 'application/json', //отправляемый тип
-        dataType: 'json',//принимаемый тип (из контроллера)
-        url: getContextPath() + '/books/searchByCriteria?selectedPage=' + page + '&booksOnPage=' + itemsOnPage,//url адрес обработчика
-        data: JSON.stringify(criteria),//отправляемое отсюда (Request)
-        async: async,
-        success: function (data) {//принимаемое от сервера (Response)
-            createHtmlItemsList(data, items);
+    let options = {
+        method: 'POST',//тип запроса
+        headers: {
+            'Content-Type': 'application/json', //отправляемый тип
+            'Accept': 'application/json' //принимаемый тип (из контроллера)
         },
-        error: function () {
-            getAlert('Ошибка в getItemsByAjax');
-        }
-    });
+        body: JSON.stringify(criteria)//отправляемое отсюда (Request)
+    }
+    fetch(`${getContextPath()}/books/searchByCriteria?selectedPage=${page}&booksOnPage=${itemsOnPage}`, options)
+        .then(response => {
+            return response.json();
+        })
+        .then(bookList => {
+            createHtmlItemsList(bookList, items);
+        })
+        .catch((er)=>{getAlert(`Ошибка в getItemsByAjax: ${er}`);});
 }
 
 function createHtmlItemsList(bookList, items) {
