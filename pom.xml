@@ -273,7 +273,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>process-resources</phase>
+                        <phase>none</phase>
                         <goals>
                             <goal>update</goal>
                         </goals>
