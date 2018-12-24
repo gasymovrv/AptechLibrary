@@ -12,16 +12,16 @@
     <tx:annotation-driven transaction-manager="txManager"/>
 
     <!-- Для тестового соединения с БД -->
-    <!--<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource">-->
-        <!--<property name="driverClassName" value="com.mysql.jdbc.Driver"/>-->
-        <!--<property name="url" value="jdbc:mysql://192.168.56.200:3306/aplib"/>-->
-        <!--<property name="username" value="aplib_owner"/>-->
-        <!--<property name="password" value="4"/>-->
-    <!--</bean>-->
+    <bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://ec2-54-247-74-131.eu-west-1.compute.amazonaws.com:5432/d2onitpbtc9vgf?sslmode=require"/>
+        <property name="username" value="rxkgylttnqggpz"/>
+        <property name="password" value="8fbe0b577380deeae2b18a0c2c696c7e3c7e8fc9f4fcc2c77edb6279c11c6cae"/>
+    </bean>
 
     <!-- Create datasource from JNDI DataSource -->
     <!-- Тип приводим к javax.sql.DataSource, чтобы можно было передать в remember-me (security) -->
-    <jee:jndi-lookup id="dataSource" expected-type="javax.sql.DataSource" jndi-name="java:/ApLib"/>
+    <!--<jee:jndi-lookup id="dataSource" expected-type="javax.sql.DataSource" jndi-name="java:/ApLib"/>-->
 
     <bean id="txManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"/>
@@ -32,7 +32,7 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQL9Dialect</prop>
                 <prop key="hibernate.show_sql">true</prop>
                 <!--<prop key="hibernate.format_sql">true</prop>-->
                 <prop key="hibernate.hbm2dll.auto">update</prop>
