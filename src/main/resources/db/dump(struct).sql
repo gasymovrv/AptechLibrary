@@ -85,7 +85,7 @@ DROP TABLE IF EXISTS "user";
 CREATE TABLE "user" (
   "username" varchar(45) NOT NULL,
   "password" varchar(64) NOT NULL,
-  "enabled" smallint NOT NULL DEFAULT '1',
+  "enabled" boolean NOT NULL DEFAULT TRUE,
   "money" decimal(16,2) NOT NULL DEFAULT '0.00',
   PRIMARY KEY ("username")
 );

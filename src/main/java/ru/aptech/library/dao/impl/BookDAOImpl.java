@@ -5,11 +5,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import ru.aptech.library.dao.CommonDAO;
 import ru.aptech.library.entities.Book;
-import ru.aptech.library.entities.BookContent;
 import ru.aptech.library.enums.SearchType;
 import ru.aptech.library.enums.SortType;
 import ru.aptech.library.util.SearchCriteriaBooks;
@@ -66,22 +63,39 @@ public class BookDAOImpl implements CommonDAO<Book> {
     public List<Book> find(SearchCriteriaBooks criteria, Integer booksOnPage, Integer init, SortType sortType) {
         String sortSql = getSqlBySortType(sortType);
         Session session = sessionFactory.getCurrentSession();
-        List<Book> books = session.createQuery(BOOKS +
+
+        String letterSql = "";
+        String textSql = "";
+        if(criteria.getLetter()!=null){
+            letterSql = " or LOWER(b.name) like LOWER(CONCAT(:letter, '%'))";
+        } else if(criteria.getText()!=null){
+            textSql = " or LOWER(" + getSqlBySearchType(criteria.getSearchType()) + ") like LOWER(CONCAT('%', :text, '%'))";
+        }
+
+        Query<Book> query = session.createQuery(BOOKS +
                             " where b.genre.id=:genre" +
                             " or b.publisher.id=:publisher" +
                             " or b.author.id=:author" +
-                            " or b.name like CONCAT(:letter, '%')" +
-                            " or " + getSqlBySearchType(criteria.getSearchType()) +
-                            " like CONCAT('%', :text, '%')" +
+                            letterSql +
+                            textSql +
                             sortSql,
-                    Book.class)
-                    .setParameter("genre", criteria.getGenreId())
-                    .setParameter("publisher", criteria.getPublisherId())
-                    .setParameter("author", criteria.getAuthorId())
-                    .setParameter("letter", criteria.getLetter())
-                    .setParameter("text", criteria.getText())
-                    .setFirstResult(init).setMaxResults(booksOnPage).getResultList();
-        return books;
+                    Book.class);
+
+        query.setParameter("genre", criteria.getGenreId())
+                .setParameter("publisher", criteria.getPublisherId())
+                .setParameter("author", criteria.getAuthorId());
+
+        query.setParameter("genre", criteria.getGenreId())
+                .setParameter("publisher", criteria.getPublisherId())
+                .setParameter("author", criteria.getAuthorId());
+
+        if (criteria.getLetter() != null) {
+            query.setParameter("letter", criteria.getLetter());
+        }
+        if (criteria.getText() != null) {
+            query.setParameter("text", criteria.getText());
+        }
+        return query.setFirstResult(init).setMaxResults(booksOnPage).getResultList();
     }
 
     public Long save(Book book) {
@@ -114,20 +128,35 @@ public class BookDAOImpl implements CommonDAO<Book> {
 
     public Long getQuantity(SearchCriteriaBooks criteria) {
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("select count(*) from Book b" +
+
+        String letterSql = "";
+        String textSql = "";
+        if (criteria.getLetter() != null) {
+            letterSql = " or LOWER(b.name) like LOWER(CONCAT(:letter, '%'))";
+        }
+        if (criteria.getText() != null) {
+            textSql = " or LOWER(" + getSqlBySearchType(criteria.getSearchType()) + ") like LOWER(CONCAT('%', :text, '%'))";
+        }
+
+        Query<Long> query = session.createQuery("select count(*) from Book b" +
                         " where b.genre.id=:genre" +
                         " or b.publisher.id=:publisher" +
                         " or b.author.id=:author" +
-                        " or b.name like CONCAT(:letter, '%')" +
-                        " or " + getSqlBySearchType(criteria.getSearchType()) +
-                        " like CONCAT('%', :text, '%')",
-                Long.class)
-                .setParameter("genre", criteria.getGenreId())
+                        letterSql +
+                        textSql,
+                Long.class);
+
+        query.setParameter("genre", criteria.getGenreId())
                 .setParameter("publisher", criteria.getPublisherId())
-                .setParameter("author", criteria.getAuthorId())
-                .setParameter("letter", criteria.getLetter())
-                .setParameter("text", criteria.getText())
-                .getSingleResult();
+                .setParameter("author", criteria.getAuthorId());
+
+        if (criteria.getLetter() != null) {
+            query.setParameter("letter", criteria.getLetter());
+        }
+        if (criteria.getText() != null) {
+            query.setParameter("text", criteria.getText());
+        }
+        return query.getSingleResult();
     }
 
     private String getSqlBySearchType(SearchType searchType){

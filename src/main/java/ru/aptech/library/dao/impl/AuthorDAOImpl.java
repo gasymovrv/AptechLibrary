@@ -61,7 +61,7 @@ public class AuthorDAOImpl implements CommonDAO<Author> {
         String sortSql = getSqlBySortType(sortType);
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery(AUTHORS +
-                        " where a.fio like CONCAT('%', :text, '%')" +
+                        " where LOWER(a.fio) like LOWER(CONCAT('%',:text, '%'))" +
                         " and fio != 'Неизвестный автор'" +
                         sortSql,
                 Author.class)
@@ -93,7 +93,7 @@ public class AuthorDAOImpl implements CommonDAO<Author> {
     public Long getQuantity(SearchCriteriaAuthors criteria) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select count(*) from Author a" +
-                        " where a.fio like CONCAT('%', :text, '%')" +
+                        " where LOWER(a.fio) like LOWER(CONCAT('%', :text, '%'))" +
                         " and fio != 'Неизвестный автор'",
                 Long.class)
                 .setParameter("text", criteria.getText())

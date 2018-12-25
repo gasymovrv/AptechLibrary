@@ -97,7 +97,8 @@ function printItemsWithPagination(criteria, itemsOnPage) {
         success: function (items) {//принимаемое от сервера (Response)
             itemsPagination(items, itemsOnPage, criteria);
         },
-        error: function () {
+        error: function (er) {
+            console.log(er);
             getAlert('Ошибка в printItemsWithPagination');
         }
     });
@@ -137,7 +138,10 @@ function getItemsByAjax(page, itemsOnPage, criteria, async, items) {
         .then(bookList => {
             createHtmlItemsList(bookList, items);
         })
-        .catch((er)=>{getAlert(`Ошибка в getItemsByAjax: ${er}`);});
+        .catch((er)=>{
+            console.log(er);
+            getAlert(`Ошибка в getItemsByAjax: ${er}`);
+        });
 }
 
 function createHtmlItemsList(bookList, items) {

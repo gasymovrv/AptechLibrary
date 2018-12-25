@@ -102,10 +102,10 @@ function itemsOnPageValidation() {
     });
 }
 
-//метод для получения контекстного пути '/aptech-library'
-//!!! работает только с корневым именем, не содержащим '/'
+//заглушка для tomcat
 function getContextPath() {
-    return window.location.pathname.substring(0, window.location.pathname.indexOf("/", 2));
+    // return window.location.pathname.substring(0, window.location.pathname.indexOf("/", 2));
+    return ""
 }
 
 function fixedFooter() {
