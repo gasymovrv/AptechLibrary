@@ -143,7 +143,7 @@ public class BookController extends BaseController{
     @RequestMapping(value = "editBookView", method = RequestMethod.GET)
     public ModelAndView editBookView(@RequestParam Long bookId) throws SQLException {
         ModelAndView modelAndView = new ModelAndView("edit-book-page");
-        addAttributesForAddOrEditBook(modelAndView, bookService.find(bookId, false, false));
+        addAttributesForAddOrEditBook(modelAndView, bookService.find(bookId, false, true));
         return modelAndView;
     }
 
@@ -162,7 +162,7 @@ public class BookController extends BaseController{
             e.printStackTrace();
         }
         modelAndView.addObject("isEdited", isEdited);
-        addAttributesForAddOrEditBook(modelAndView, bookService.find(bookId, false, false));
+        addAttributesForAddOrEditBook(modelAndView, bookService.find(bookId, false, true));
         return modelAndView;
     }
 
@@ -273,11 +273,7 @@ public class BookController extends BaseController{
         modelAndView.addObject("unknownAuthor", unknownAuthor);
         modelAndView.addObject("publisherList", publishers);
         modelAndView.addObject("book", book);
-        BookContent bookContent = null;
-        if(book.getBookContents().iterator().hasNext()) {
-            bookContent = book.getBookContents().iterator().next();
-        }
-        if (!StringUtils.isEmpty(book.getFileExtension()) && bookContent!=null && bookContent.getContent().length > 0) {
+        if (!StringUtils.isEmpty(book.getFileExtension()) && book.getContentType()!=null) {
             modelAndView.addObject("fileName", book.getName() + "." + book.getFileExtension());
         }
         if (book.getImage()!=null && book.getImage().length > 0) {
