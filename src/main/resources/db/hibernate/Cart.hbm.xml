@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="ru.aptech.library.entities">
-    <class name="Cart" table="cart" schema="aplib">
+    <class name="Cart" table="cart" schema="public">
 
         <id name="username" type="java.lang.String">
             <column name="username" />

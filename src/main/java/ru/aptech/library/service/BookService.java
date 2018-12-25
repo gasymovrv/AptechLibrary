@@ -2,6 +2,9 @@ package ru.aptech.library.service;
 
 import org.apache.commons.io.FilenameUtils;
 import org.hibernate.Hibernate;
+import org.hibernate.SessionFactory;
+import org.postgresql.largeobject.LargeObject;
+import org.postgresql.largeobject.LargeObjectManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -82,7 +85,7 @@ public class BookService {
     public void save(Book book, MultipartFile content, MultipartFile image) throws Exception {
         BookContent c = new BookContent();
         c.setBook(book);
-        c.setContent(new javax.sql.rowset.serial.SerialBlob(content.getBytes()));
+        c.setContent(content.getBytes());
         book.getBookContents().add(c);
 
         book.setName(book.getName().replaceAll("[\"\']", ""));
@@ -123,7 +126,7 @@ public class BookService {
         //Обновляем старый контент только если новый не пустой
         if (content != null && content.getSize() > 0) {
             //у созданной книги обязательно должен быть контент (может с пустым блобом но это не важно) поэтому проверки не нужны
-            existBook.getBookContents().iterator().next().setContent(new javax.sql.rowset.serial.SerialBlob(content.getBytes()));
+            existBook.getBookContents().iterator().next().setContent(content.getBytes());
             String ext = FilenameUtils.getExtension(content.getOriginalFilename());
             existBook.setContentType(StringUtils.isEmpty(ext) ? null : content.getContentType());
             existBook.setFileExtension(ext);

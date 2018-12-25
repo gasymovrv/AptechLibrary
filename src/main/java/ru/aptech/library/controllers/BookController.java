@@ -211,8 +211,7 @@ public class BookController extends BaseController{
             bookContent = book.getBookContents().iterator().next();
         }
         if (book.getContentType() != null && bookContent!=null) {
-            Blob b = bookContent.getContent();
-            content = b.getBytes(1,(int)b.length());
+            content = bookContent.getContent();
             response.setContentType(book.getContentType());
         }
 
@@ -239,8 +238,7 @@ public class BookController extends BaseController{
             bookContent = book.getBookContents().iterator().next();
         }
         if (book.getContentType() != null && bookContent!=null) {
-            Blob b = bookContent.getContent();
-            content = b.getBytes(1,(int)b.length());
+            content = bookContent.getContent();
             response.setContentType(book.getContentType());
         }
 
@@ -279,7 +277,7 @@ public class BookController extends BaseController{
         if(book.getBookContents().iterator().hasNext()) {
             bookContent = book.getBookContents().iterator().next();
         }
-        if (!StringUtils.isEmpty(book.getFileExtension()) && bookContent!=null && bookContent.getContent().length() > 0) {
+        if (!StringUtils.isEmpty(book.getFileExtension()) && bookContent!=null && bookContent.getContent().length > 0) {
             modelAndView.addObject("fileName", book.getName() + "." + book.getFileExtension());
         }
         if (book.getImage()!=null && book.getImage().length > 0) {

@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="ru.aptech.library.entities">
-    <class name="UserRole" table="user_role" schema="aplib">
+    <class name="UserRole" table="user_role" schema="public">
         <id name="userRoleId" type="java.lang.Integer">
             <column name="user_role_id" />
             <generator class="identity" />

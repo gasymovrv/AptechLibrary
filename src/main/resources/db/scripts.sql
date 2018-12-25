@@ -61,3 +61,22 @@ CREATE USER 'aplib_owner' IDENTIFIED BY '4';
 GRANT ALL PRIVILEGES ON *.* TO 'owner';
 GRANT ALL PRIVILEGES ON aplib.* TO 'aplib_owner';
 FLUSH PRIVILEGES;
+
+INSERT INTO genre (id, name, parent) VALUES (10, 'Детектив', null);
+INSERT INTO genre (id, name, parent) VALUES (11, 'Мистика', null);
+INSERT INTO genre (id, name, parent) VALUES (12, 'Юмор', null);
+INSERT INTO genre (id, name, parent) VALUES (13, 'Исторический', null);
+INSERT INTO genre (id, name, parent) VALUES (14, 'Роман', null);
+INSERT INTO genre (id, name, parent) VALUES (15, 'Сказка', null);
+INSERT INTO genre (id, name, parent) VALUES (16, 'Приключения', null);
+INSERT INTO genre (id, name, parent) VALUES (17, 'Бизнес', null);
+INSERT INTO genre (id, name, parent) VALUES (18, 'Боевик', null);
+INSERT INTO genre (id, name, parent) VALUES (19, 'Религия', null);
+INSERT INTO genre (id, name, parent) VALUES (20, 'Компьютеры', null);
+INSERT INTO genre (id, name, parent) VALUES (21, 'Семья', null);
+INSERT INTO genre (id, name, parent) VALUES (22, 'Психология', null);
+
+INSERT INTO publisher (id, name) VALUES (8, 'Весь');
+INSERT INTO publisher (id, name) VALUES (9, 'Эксмо');
+INSERT INTO publisher (id, name) VALUES (10, 'Литер');
+INSERT INTO publisher (id, name) VALUES (11, 'Азбука');

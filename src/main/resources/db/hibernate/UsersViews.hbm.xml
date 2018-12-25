@@ -4,7 +4,7 @@
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="ru.aptech.library.entities">
 
-    <class name="UsersViews" table="users_views" schema="aplib">
+    <class name="UsersViews" table="users_views" schema="public">
         <id name="id">
             <column name="id" sql-type="bigint(20)"/>
             <generator class="identity"/>

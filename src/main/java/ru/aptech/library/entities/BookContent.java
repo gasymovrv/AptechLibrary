@@ -1,5 +1,7 @@
 package ru.aptech.library.entities;
 
+import org.postgresql.largeobject.LargeObject;
+
 import java.io.Serializable;
 import java.sql.Blob;
 import java.util.Objects;
@@ -7,7 +9,7 @@ import java.util.Objects;
 public class BookContent implements Serializable {
     private Long id;
     private Book book;
-    private Blob content;
+    private byte[] content;
 
 
     public BookContent() {
@@ -34,12 +36,12 @@ public class BookContent implements Serializable {
     }
 
 
-    public Blob getContent() {
+    public byte[] getContent() {
         return content;
     }
 
 
-    public void setContent(Blob content) {
+    public void setContent(byte[] content) {
         this.content = content;
     }
 

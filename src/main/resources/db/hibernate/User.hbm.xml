@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="ru.aptech.library.entities">
-    <class name="User" table="user" schema="aplib">
+    <class name="User" table="user" schema="public">
 
         <id name="username" type="string">
             <column name="username" length="45" />

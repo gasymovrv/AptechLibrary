@@ -307,7 +307,7 @@ public class Book implements Serializable {
 
     public void setAllField(Book book) throws SQLException {
         this.name = book.name;
-        if(book.bookContents !=null && !book.bookContents.isEmpty() && book.bookContents.iterator().next().getContent().length()>0){
+        if(book.bookContents !=null && !book.bookContents.isEmpty() && book.bookContents.iterator().next().getContent() != null){
             this.bookContents = book.bookContents;
         }
         this.pageCount = book.pageCount;

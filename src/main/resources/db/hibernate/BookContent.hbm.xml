@@ -3,7 +3,7 @@
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="ru.aptech.library.entities">
-    <class name="ru.aptech.library.entities.BookContent" table="book_content" schema="aplib">
+    <class name="ru.aptech.library.entities.BookContent" table="book_content" schema="public">
         <id name="id">
             <column name="id" sql-type="bigint(20)"/>
             <generator class="identity"/>
@@ -14,7 +14,7 @@
         </many-to-one>
 
         <property name="content">
-            <column name="content" sql-type="longblob" not-null="true"/>
+            <column name="content" sql-type="bytea" not-null="true"/>
         </property>
     </class>
 </hibernate-mapping>
