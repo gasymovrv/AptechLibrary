@@ -1,6 +1,11 @@
 # Тема: Онлайн-библиотека с возможностью покупки книг
 ![](https://github.com/gasymovrv/AptechLibrary/blob/master/src/main/webapp/resources/img/BeSmart-logo.png)
 
+# Просмотр
++ Приложение размещено на бесплатном хостинге ```heroku```
++ Можно посмотреть перейдя по https://gasymovrv-libmvc.herokuapp.com
++ Данный хостинг засыпает через полчаса бездействия, поэтому при переходе по ссылке сначала будет ошибка - следует подождать минут 5-7 пока приложение запустится на сервере и обновить страницу
+
 # Бэк-технологии
 + commons-fileupload
 + com.fasterxml.jackson.core
