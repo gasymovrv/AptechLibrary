@@ -1,4 +1,4 @@
--------------------------------------------- STRUCTURE -----------------------------------------
+-- ------------------------------------------ STRUCTURE -----------------------------------------
 
 DROP TABLE IF EXISTS "author";
 CREATE TABLE author (
@@ -181,8 +181,18 @@ CREATE TABLE "vote" (
 CREATE INDEX "fk_book_id_idx" ON "vote" ("book_id");
 CREATE INDEX "fk_user_id_idx" ON "vote" ("username");
 
+-- Таблица для приема данных от тестовых XSS-инъекций
+DROP TABLE IF EXISTS "xss_data";
+CREATE TABLE "xss_data" (
+  "id" SERIAL,
+  "location" varchar(1000) NULL,
+  "data" varchar(10000) NULL,
+  "created" timestamp(0) DEFAULT current_timestamp,
+  PRIMARY KEY ("id")
+);
 
------------------------------------------ DATA ----------------------------------------------------
+
+-- --------------------------------------- DATA ----------------------------------------------------
 -- username:admin password:q
 INSERT INTO "user"(username, password, enabled) VALUES ('admin', '$2a$05$IHUj33qfJo7veMhOY06CxOEt6Y6IPZX5cB3zbxuz.EVdUvd.XNrou', TRUE );
 -- username:user password:q

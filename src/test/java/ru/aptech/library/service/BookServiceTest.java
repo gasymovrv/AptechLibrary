@@ -1,6 +1,7 @@
 package ru.aptech.library.service;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
@@ -27,6 +28,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+@Ignore
 @RunWith(MockitoJUnitRunner.class) //это делает инит моков вместо MockitoAnnotations.initMocks(this);
 public class BookServiceTest extends BaseTest {
     private Book b1 = new Book();

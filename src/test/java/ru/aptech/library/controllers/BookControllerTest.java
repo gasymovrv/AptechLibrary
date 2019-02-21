@@ -42,7 +42,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class) // это инициализирует контекст спринга
 @WebAppConfiguration()
 @ContextConfiguration(classes = {TestContext.class}) //путь к настройкам контекста, там же перечень бинов

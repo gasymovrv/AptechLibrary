@@ -44,7 +44,8 @@
         />
         <logout logout-success-url="/users/authorization" delete-cookies="JSESSIONID"/>
         <csrf disabled="true"/>
-
+        <!-- TOMCAT ИЗ-ЗА ЭТОГО ПАДАЕТ! -->
+        <!--<cors />-->
         <!--
             Запомнить пользователя на 2 недели, хранится в БД (persistent_logins).
             Стирание куков браузера выбрасывает из авторизации,
