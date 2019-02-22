@@ -29,6 +29,11 @@ public class XssController{
         String url = "https://www.google.com";
         if(!StringUtils.isEmpty(location) && location.startsWith("http")){
             url = location;
+            if(url.contains("?")){
+                url+="&xssredirect=1";
+            } else {
+                url+="?xssredirect=1";
+            }
         }
         return "redirect:"+url;
     }
